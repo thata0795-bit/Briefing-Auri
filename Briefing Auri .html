@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Briefing — Auri Studio</title>
+<style>
+:root{
+  --bg:#F5F3EE;--card:#FAFAF7;--olive:#6B7A3E;--olive-d:#4A5628;
+  --olive-bg:#EEF1E4;--border:#CDD4AC;--txt:#2C2C2A;--muted:#6B6B66;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:var(--txt);padding:0 0 60px;
+}
+
+/* Header */
+.hdr{
+  background:var(--olive);
+  padding:28px 20px 22px;
+  text-align:center;
+}
+.hdr .tag{
+  display:inline-block;
+  background:rgba(255,255,255,0.18);
+  color:#F5F3EE;font-size:10px;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;
+  padding:3px 12px;border-radius:20px;margin-bottom:10px;
+}
+.hdr h1{color:#F5F3EE;font-size:20px;font-weight:500;margin-bottom:6px;}
+.hdr p{color:rgba(245,243,238,.75);font-size:12px;line-height:1.6;}
+
+/* Conteúdo */
+.wrap{max-width:520px;margin:0 auto;padding:0 16px;}
+
+/* Seção */
+.sec{margin-top:28px;}
+.sec-head{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:4px;
+}
+.sec-num{
+  width:26px;height:26px;border-radius:50%;
+  background:var(--olive);color:#F5F3EE;
+  font-size:12px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.sec-title{font-size:15px;font-weight:600;color:var(--olive-d);}
+.sec-desc{font-size:12px;color:var(--muted);margin-left:36px;margin-bottom:14px;line-height:1.5;}
+
+/* Card de pergunta */
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:10px;
+}
+.q-label{font-size:13px;font-weight:600;color:var(--txt);display:block;margin-bottom:4px;}
+.q-hint{font-size:11px;color:var(--muted);display:block;margin-bottom:8px;line-height:1.5;}
+.req{color:var(--olive);}
+
+/* Inputs */
+input[type=text],input[type=url],textarea{
+  width:100%;background:var(--bg);
+  border:1px solid var(--border);border-radius:8px;
+  padding:10px 12px;font-size:14px;color:var(--txt);
+  font-family:inherit;outline:none;
+  -webkit-appearance:none;
+  transition:border-color .2s;
+}
+input:focus,textarea:focus{border-color:var(--olive);}
+textarea{resize:vertical;min-height:80px;line-height:1.5;}
+
+/* Pills */
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+.pill{
+  padding:8px 14px;border-radius:20px;
+  border:1px solid var(--border);background:var(--bg);
+  font-size:13px;color:var(--muted);
+  cursor:pointer;user-select:none;font-family:inherit;
+  line-height:1;transition:all .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.pill:active{transform:scale(.96);}
+.pill.on{
+  background:var(--olive-bg);border-color:var(--olive);
+  color:var(--olive-d);font-weight:600;
+}
+
+/* Divisor */
+.divider{
+  height:1px;background:var(--border);
+  margin:28px 0 0;
+}
+
+/* Botão gerar */
+.btn-gerar{
+  display:block;width:100%;
+  margin-top:28px;padding:15px;
+  background:var(--olive);color:#F5F3EE;
+  border:none;border-radius:12px;
+  font-size:15px;font-weight:600;
+  font-family:inherit;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:background .2s;
+}
+.btn-gerar:active{background:var(--olive-d);}
+
+/* Resultado */
+#resultado{display:none;margin-top:24px;}
+.res-titulo{
+  font-size:15px;font-weight:600;color:var(--olive-d);
+  margin-bottom:14px;text-align:center;
+}
+.res-bloco{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:14px;margin-bottom:10px;
+}
+.res-bloco h3{
+  font-size:10px;font-weight:700;color:var(--olive);
+  text-transform:uppercase;letter-spacing:.1em;
+  margin-bottom:10px;padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+.res-row{display:flex;flex-direction:column;gap:2px;margin-bottom:8px;}
+.res-row:last-child{margin-bottom:0;}
+.res-k{font-size:11px;color:var(--muted);}
+.res-v{font-size:13px;font-weight:600;color:var(--txt);line-height:1.4;}
+
+.btn-copiar{
+  display:block;width:100%;
+  margin-top:14px;padding:15px;
+  background:var(--olive);color:#F5F3EE;
+  border:none;border-radius:12px;
+  font-size:15px;font-weight:600;
+  font-family:inherit;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn-copiar:active{background:var(--olive-d);}
+.btn-novo{
+  display:block;width:100%;
+  margin-top:10px;padding:13px;
+  background:transparent;color:var(--olive-d);
+  border:1px solid var(--olive);border-radius:12px;
+  font-size:14px;font-family:inherit;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:var(--olive-d);color:#F5F3EE;
+  padding:10px 22px;border-radius:24px;
+  font-size:13px;opacity:0;pointer-events:none;
+  transition:opacity .3s;z-index:999;white-space:nowrap;
+}
+.toast.show{opacity:1;}
+
+/* Formulário hidden quando resultado aparece */
+#formulario.hidden{display:none;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="tag">Auri Studio</div>
+  <h1>Briefing do cliente</h1>
+  <p>Responda com objetividade.<br>Suas respostas guiam todo o processo criativo.</p>
+</div>
+
+<div class="wrap">
+<div id="formulario">
+
+<!-- ─── SEÇÃO 1 ─────────────────────────────────────────────────────── -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-num">1</div><div class="sec-title">Sobre o negócio</div></div>
+  <p class="sec-desc">Informações essenciais para entender quem é o cliente.</p>
+
+  <div class="card">
+    <label class="q-label">Nome do negócio / marca <span class="req">*</span></label>
+    <input type="text" id="q1_nome" placeholder="Ex: Studio Bloom">
+  </div>
+
+  <div class="card">
+    <label class="q-label">Segmento de atuação <span class="req">*</span></label>
+    <div class="pills" id="g_seg" data-mode="solo">
+      <button class="pill">Moda &amp; Estilo</button>
+      <button class="pill">Beleza &amp; Bem-estar</button>
+      <button class="pill">Alimentação</button>
+      <button class="pill">Saúde</button>
+      <button class="pill">Educação</button>
+      <button class="pill">Serviços</button>
+      <button class="pill">Tech / Digital</button>
+      <button class="pill">Varejo</button>
+      <button class="pill">Outro</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="q-label">O que a marca vende ou oferece? <span class="req">*</span></label>
+    <span class="q-hint">Descreva em 1–2 frases.</span>
+    <textarea id="q1_oferta" placeholder="Ex: Vendo roupas femininas plus size com foco em alfaiataria e conforto."></textarea>
+  </div>
+
+  <div class="card">
+    <label class="q-label">Há quanto tempo o negócio existe?</label>
+    <div class="pills" id="g_tempo" data-mode="solo">
+      <button class="pill">Ainda não existe (lançamento)</button>
+      <button class="pill">Menos de 1 ano</button>
+      <button class="pill">1–3 anos</button>
+      <button class="pill">Mais de 3 anos</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="q-label">Possui identidade visual atual?</label>
+    <div class="pills" id="g_idatual" data-mode="solo">
+      <button class="pill">Sim, completa (logo, cores, tipografia)</button>
+      <button class="pill">Parcial (só logo ou só cores)</button>
+      <button class="pill">Não possuo nada</button>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ─── SEÇÃO 2 ─────────────────────────────────────────────────────── -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-num">2</div><div class="sec-title">Público e posicionamento</div></div>
+  <p class="sec-desc">Para quem a marca fala e como quer ser percebida.</p>
+
+  <div class="card">
+    <label class="q-label">Sexo predominante do público <span class="req">*</span></label>
+    <div class="pills" id="g_sexo" data-mode="solo">
+      <button class="pill">Feminino</button>
+      <button class="pill">Masculino</button>
+      <button class="pill">Ambos</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="q-label">Faixa etária do público <span class="req">*</span></label>
+    <div class="pills" id="g_idade" data-mode="solo">
+      <button class="pill">18–24</button>
+      <button class="pill">25–34</button>
+      <button class="pill">35–44</button>
+      <button class="pill">45+</button>
+      <button class="pill">Variada</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="q-label">Classe social predominante</label>
+    <div class="pills" id="g_classe" data-mode="solo">
+      <button class="pill">Popular (C/D)</button>
+      <button class="pill">Média (B)</button>
+      <button class="pill">Alta (A)</button>
+      <button class="pill">Mista</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="q-label">Como a marca quer ser percebida? <span class="req">*</span></label>
+    <span class="q-hint">Selecione até 3 adjetivos.</span>
+    <div class="pills" id="g_persona" data-mode="multi" data-max="3">
+      <button class="pill">Sofisticada</button>
+      <button class="pill">Acessível</button>
+      <button class="pill">Jovem</button>
+      <button class="pill">Séria</button>
+      <button class="pill">Divertida</button>
+      <button class="pill">Confiável</button>
+      <button class="pill">Exclusiva</button>
+      <button class="pill">Natural</button>
+      <button class="pill">Moderna</button>
+      <button class="pill">Minimalista</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="q-label">Marcas que admira esteticamente</label>
+    <span class="q-hint">Cite 1 a 3. Não precisa ser do mesmo segmento.</span>
+    <input type="text" id="q2_refs" placeholder="Ex: Granado, Cantu, Lush">
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ─── SEÇÃO 3 ─────────────────────────────────────────────────────── -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-num">3</div><div class="sec-title">Identidade visual</div></div>
+  <p class="sec-desc">Diretrizes estéticas para a construção visual da marca.</p>
+
+  <div class="card">
+    <label class="q-label">Paleta de cores preferida <span class="req">*</span></label>
+    <span class="q-hint">Pode escolher mais de uma.</span>
+    <div class="pills" id="g_cores" data-mode="multi" data-max="4">
+      <button class="pill">Neutros (bege, off-white, cinza)</button>
+      <button class="pill">Terrosos (terra, cobre, mostarda)</button>
+      <button class="pill">Frios (azul, verde, lilás)</button>
+      <button class="pill">Vibrantes (laranja, vermelho, pink)</button>
+      <button class="pill">Escuros (preto, verde escuro, vinho)</button>
+      <button class="pill">Pastéis</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="q-label">Alguma cor que não pode ser usada?</label>
+    <input type="text" id="q3_corpro" placeholder="Ex: Não quero amarelo nem laranja">
+  </div>
+
+  <div class="card">
+    <label class="q-label">Estilo visual desejado <span class="req">*</span></label>
+    <div class="pills" id="g_estilo" data-mode="solo">
+      <button class="pill">Clean / Minimalista</button>
+      <button class="pill">Orgânico / Natural</button>
+      <button class="pill">Editorial / Sofisticado</button>
+      <button class="pill">Colorido / Expressivo</button>
+      <button class="pill">Retrô / Vintage</button>
+      <button class="pill">Tech / Futurista</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="q-label">Tom da comunicação escrita <span class="req">*</span></label>
+    <div class="pills" id="g_tom" data-mode="solo">
+      <button class="pill">Formal e profissional</button>
+      <button class="pill">Descontraído e próximo</button>
+      <button class="pill">Empoderador e motivacional</button>
+      <button class="pill">Informativo e educativo</button>
+      <button class="pill">Divertido e bem-humorado</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="q-label">Link de referência visual</label>
+    <span class="q-hint">Pinterest, Instagram ou outro.</span>
+    <input type="url" id="q3_link" placeholder="https://...">
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ─── SEÇÃO 4 ─────────────────────────────────────────────────────── -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-num">4</div><div class="sec-title">Redes sociais e conteúdo</div></div>
+  <p class="sec-desc">Como a marca vai se comunicar nas plataformas digitais.</p>
+
+  <div class="card">
+    <label class="q-label">Quais redes serão trabalhadas? <span class="req">*</span></label>
+    <div class="pills" id="g_redes" data-mode="multi" data-max="7">
+      <button class="pill">Instagram</button>
+      <button class="pill">TikTok</button>
+      <button class="pill">Facebook</button>
+      <button class="pill">LinkedIn</button>
+      <button class="pill">YouTube</button>
+      <button class="pill">Pinterest</button>
+      <button class="pill">WhatsApp / Status</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="q-label">Tipos de conteúdo prioritários <span class="req">*</span></label>
+    <div class="pills" id="g_cont" data-mode="multi" data-max="6">
+      <button class="pill">Feed estático (posts)</button>
+      <button class="pill">Stories</button>
+      <button class="pill">Reels / Vídeos curtos</button>
+      <button class="pill">Carrossel</button>
+      <button class="pill">Destaques do perfil</button>
+      <button class="pill">Banners / Anúncios</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="q-label">Frequência de postagem desejada</label>
+    <div class="pills" id="g_freq" data-mode="solo">
+      <button class="pill">3x por semana</button>
+      <button class="pill">5x por semana</button>
+      <button class="pill">Diário</button>
+      <button class="pill">Sob demanda</button>
+      <button class="pill">A definir</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="q-label">Objetivo principal nas redes <span class="req">*</span></label>
+    <div class="pills" id="g_obj" data-mode="solo">
+      <button class="pill">Gerar vendas diretas</button>
+      <button class="pill">Atrair novos seguidores</button>
+      <button class="pill">Autoridade e reconhecimento</button>
+      <button class="pill">Engajamento da comunidade</button>
+      <button class="pill">Tráfego para site/loja</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="q-label">Vai fornecer fotos/vídeos próprios?</label>
+    <div class="pills" id="g_midia" data-mode="solo">
+      <button class="pill">Sim, fornecerei material próprio</button>
+      <button class="pill">Parcialmente (tenho algum material)</button>
+      <button class="pill">Não — usaremos banco de imagens</button>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ─── SEÇÃO 5 ─────────────────────────────────────────────────────── -->
+<div class="sec">
+  <div class="sec-head"><div class="sec-num">5</div><div class="sec-title">Projeto e prazo</div></div>
+  <p class="sec-desc">Escopo, entrega e expectativas do cliente.</p>
+
+  <div class="card">
+    <label class="q-label">O que você precisa neste projeto? <span class="req">*</span></label>
+    <div class="pills" id="g_esc" data-mode="multi" data-max="8">
+      <button class="pill">Identidade visual completa</button>
+      <button class="pill">Redesign de logo</button>
+      <button class="pill">Manual de marca (brandbook)</button>
+      <button class="pill">Templates de feed</button>
+      <button class="pill">Templates de stories</button>
+      <button class="pill">Pacote mensal de posts</button>
+      <button class="pill">Banners para anúncios</button>
+      <button class="pill">Peças avulsas</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="q-label">Prazo desejado para entrega</label>
+    <div class="pills" id="g_prazo" data-mode="solo">
+      <button class="pill">Urgente (até 7 dias)</button>
+      <button class="pill">15 dias</button>
+      <button class="pill">30 dias</button>
+      <button class="pill">Flexível</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="q-label">Número de rodadas de revisão</label>
+    <div class="pills" id="g_rev" data-mode="solo">
+      <button class="pill">1 rodada</button>
+      <button class="pill">2 rodadas</button>
+      <button class="pill">A combinar</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label class="q-label">Concorrentes diretos</label>
+    <span class="q-hint">Para evitar semelhança visual.</span>
+    <input type="text" id="q5_conc" placeholder="Ex: Studio X, Ateliê Y">
+  </div>
+
+  <div class="card">
+    <label class="q-label">Informações adicionais</label>
+    <span class="q-hint">Algo que não foi coberto acima e pode ajudar no projeto.</span>
+    <textarea id="q5_obs" placeholder="Ex: A marca passou por um reposicionamento recente..."></textarea>
+  </div>
+</div>
+
+<button class="btn-gerar" id="btn-gerar">Gerar resumo do briefing ✓</button>
+
+</div><!-- /formulario -->
+
+<!-- ─── RESULTADO ─────────────────────────────────────────────────────── -->
+<div id="resultado">
+  <p class="res-titulo">Briefing completo — Auri Studio</p>
+  <div id="res-content"></div>
+  <button class="btn-copiar" id="btn-copiar">Copiar e enviar para a Auri</button>
+  <button class="btn-novo" id="btn-novo">Preencher novamente</button>
+</div>
+
+</div><!-- /wrap -->
+
+<div class="toast" id="toast">Copiado! Cole no WhatsApp da Auri.</div>
+
+<script>
+(function(){
+
+  // Pills
+  document.querySelectorAll('.pills').forEach(function(g){
+    var mode = g.getAttribute('data-mode') || 'solo';
+    var max  = parseInt(g.getAttribute('data-max') || '99', 10);
+    g.querySelectorAll('.pill').forEach(function(pill){
+      pill.addEventListener('click', function(e){
+        e.preventDefault();
+        if(mode === 'solo'){
+          g.querySelectorAll('.pill').forEach(function(p){ p.classList.remove('on'); });
+          pill.classList.add('on');
+        } else {
+          if(pill.classList.contains('on')){
+            pill.classList.remove('on');
+          } else {
+            if(g.querySelectorAll('.pill.on').length < max) pill.classList.add('on');
+          }
+        }
+      });
+    });
+  });
+
+  function val(id){
+    var el = document.getElementById(id);
+    return (el && el.value.trim()) ? el.value.trim() : '—';
+  }
+  function pills(gid){
+    var g = document.getElementById(gid);
+    if(!g) return '—';
+    var s = Array.from(g.querySelectorAll('.pill.on')).map(function(x){ return x.textContent.trim(); });
+    return s.length ? s.join(', ') : '—';
+  }
+
+  function getData(){
+    return [
+      { t:'01 — Sobre o negócio', rows:[
+        {k:'Nome da marca',      v:val('q1_nome')},
+        {k:'Segmento',           v:pills('g_seg')},
+        {k:'O que oferece',      v:val('q1_oferta')},
+        {k:'Tempo de existência',v:pills('g_tempo')},
+        {k:'Identidade atual',   v:pills('g_idatual')},
+      ]},
+      { t:'02 — Público e posicionamento', rows:[
+        {k:'Sexo predominante',  v:pills('g_sexo')},
+        {k:'Faixa etária',       v:pills('g_idade')},
+        {k:'Classe social',      v:pills('g_classe')},
+        {k:'Personalidade',      v:pills('g_persona')},
+        {k:'Referências de marca',v:val('q2_refs')},
+      ]},
+      { t:'03 — Identidade visual', rows:[
+        {k:'Paleta de cores',    v:pills('g_cores')},
+        {k:'Cores proibidas',    v:val('q3_corpro')},
+        {k:'Estilo visual',      v:pills('g_estilo')},
+        {k:'Tom de comunicação', v:pills('g_tom')},
+        {k:'Link de referência', v:val('q3_link')},
+      ]},
+      { t:'04 — Redes e conteúdo', rows:[
+        {k:'Redes sociais',      v:pills('g_redes')},
+        {k:'Tipos de conteúdo',  v:pills('g_cont')},
+        {k:'Frequência',         v:pills('g_freq')},
+        {k:'Objetivo principal', v:pills('g_obj')},
+        {k:'Fornecimento de mídia',v:pills('g_midia')},
+      ]},
+      { t:'05 — Projeto e prazo', rows:[
+        {k:'Escopo do projeto',  v:pills('g_esc')},
+        {k:'Prazo desejado',     v:pills('g_prazo')},
+        {k:'Rodadas de revisão', v:pills('g_rev')},
+        {k:'Concorrentes',       v:val('q5_conc')},
+        {k:'Observações',        v:val('q5_obs')},
+      ]},
+    ];
+  }
+
+  // Gerar resumo
+  document.getElementById('btn-gerar').addEventListener('click', function(){
+    var data = getData();
+    var html = '';
+    data.forEach(function(sec){
+      html += '<div class="res-bloco"><h3>'+sec.t+'</h3>';
+      sec.rows.forEach(function(r){
+        html += '<div class="res-row"><span class="res-k">'+r.k+'</span><span class="res-v">'+r.v+'</span></div>';
+      });
+      html += '</div>';
+    });
+    document.getElementById('res-content').innerHTML = html;
+    document.getElementById('formulario').classList.add('hidden');
+    document.getElementById('resultado').style.display = 'block';
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  // Copiar
+  document.getElementById('btn-copiar').addEventListener('click', function(){
+    var data = getData();
+    var txt = 'BRIEFING — AURI STUDIO\n================================\n\n';
+    data.forEach(function(s){
+      txt += s.t.toUpperCase() + '\n';
+      s.rows.forEach(function(r){ txt += r.k + ': ' + r.v + '\n'; });
+      txt += '\n';
+    });
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(showToast).catch(function(){
+        fallbackCopy(txt);
+      });
+    } else {
+      fallbackCopy(txt);
+    }
+  });
+
+  function fallbackCopy(txt){
+    var ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    try{ document.execCommand('copy'); showToast(); }
+    catch(e){ alert('Copie manualmente:\n\n'+txt); }
+    document.body.removeChild(ta);
+  }
+
+  function showToast(){
+    var t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); }, 2800);
+  }
+
+  // Novo
+  document.getElementById('btn-novo').addEventListener('click', function(){
+    document.getElementById('resultado').style.display = 'none';
+    document.getElementById('formulario').classList.remove('hidden');
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+})();
+</script>
+</body>
+</html>
