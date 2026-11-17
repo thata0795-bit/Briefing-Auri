@@ -1,0 +1,7 @@
+{
+  "name": "social-media-skills-pt",
+  "version": "1.1.0-pt",
+  "description": "17 skills de redes sociais em português: voz, LinkedIn, Reels, YouTube, prompts para o Gemini, analytics e comunidade. Tradução do plugin social-media-skills de Charlie Hills (MIT).",
+  "author": { "name": "Charlie Hills (original), tradução Auri Studio" },
+  "license": "MIT"
+}
