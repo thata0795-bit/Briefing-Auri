@@ -1,0 +1,88 @@
+{
+  "slug": "vovo-formiga",
+  "nome": "Vovó Formiga",
+  "tipo": "cliente",
+  "status": "rascunho",
+  "aliases": [
+    "vovo formiga",
+    "vovó formiga",
+    "vovo",
+    "vovó",
+    "formiga"
+  ],
+  "segmento": "Confeitaria / bolos (pelos vídeos \"Bolos\" e \"Cobertura\" do Drive, a confirmar)",
+  "oferta": "",
+  "publico": "",
+  "objetivo_redes": "",
+  "fontes_da_verdade": [
+    "Drive: pastas \"Vovó formiga\", \"Fotos e Vídeos Vovó Formiga\", \"Vovó Formiga - Dia das Crianças\"; vídeos Bolos e Cobertura",
+    "Planilha Conteúdos Mensais - programação"
+  ],
+  "voz": {
+    "pessoa": "voce",
+    "registro": "proximo",
+    "tom": [],
+    "faz": [],
+    "evita": [],
+    "palavras_da_marca": [],
+    "palavras_proibidas": [],
+    "emoji_max": 2,
+    "hashtags": [
+      3,
+      5
+    ],
+    "cta_preferido": "",
+    "exemplos_aprovados": [],
+    "metricas": {}
+  },
+  "visual": {
+    "paleta": {
+      "bg": "#F2F0EC",
+      "fg": "#1A1A1A",
+      "acc": "#8A8A8A",
+      "dark": "#111111",
+      "claro": "#FFFFFF",
+      "destaque": "#FFFFFF",
+      "luz": "#FF9A4D"
+    },
+    "cores_proibidas": [],
+    "fontes": {
+      "titulo": "Cormorant Garamond",
+      "corpo": "Montserrat",
+      "acento": ""
+    },
+    "estilo": [],
+    "regras": [],
+    "proibido": [],
+    "logo": "logo/",
+    "referencias": "referencias/"
+  },
+  "video": {
+    "estilo": "editorial",
+    "look": "kodak_dourado",
+    "movimento": "push_in",
+    "transicoes": [
+      "luz",
+      "tinta",
+      "zoom",
+      "queima"
+    ],
+    "evitar_transicoes": [],
+    "dur_transicao": 0.6,
+    "textura": {
+      "grao": 0.5,
+      "halation": 0.4,
+      "vinheta": 0.3,
+      "aberracao": 0.15,
+      "barras": false
+    },
+    "sfx": true,
+    "musica": "",
+    "ritmo": "close de cobertura e textura, rampa de velocidade no corte do bolo"
+  },
+  "pendencias": [
+    "Enviar logo, paleta e fontes",
+    "Enviar 6 a 12 referências visuais aprovadas para referencias/",
+    "Enviar 5 a 15 legendas aprovadas para calibrar a voz (voz.py analisar)"
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "slug": "josimar-easycont",
+  "nome": "Josimar Easycont",
+  "tipo": "cliente",
+  "status": "rascunho",
+  "aliases": [
+    "josimar",
+    "easycont",
+    "easy cont",
+    "josimar easycont"
+  ],
+  "segmento": "",
+  "oferta": "Pelo nome, provável contabilidade (a confirmar)",
+  "publico": "",
+  "objetivo_redes": "",
+  "fontes_da_verdade": [
+    "briefing",
+    "manual de marca",
+    "pasta do Drive",
+    "Instagram",
+    "Planilha Conteúdos Mensais - programação"
+  ],
+  "voz": {
+    "pessoa": "voce",
+    "registro": "proximo",
+    "tom": [],
+    "faz": [],
+    "evita": [],
+    "palavras_da_marca": [],
+    "palavras_proibidas": [],
+    "emoji_max": 2,
+    "hashtags": [
+      3,
+      5
+    ],
+    "cta_preferido": "",
+    "exemplos_aprovados": [],
+    "metricas": {}
+  },
+  "visual": {
+    "paleta": {
+      "bg": "#F2F0EC",
+      "fg": "#1A1A1A",
+      "acc": "#8A8A8A",
+      "dark": "#111111",
+      "claro": "#FFFFFF",
+      "destaque": "#FFFFFF",
+      "luz": "#FF9A4D"
+    },
+    "cores_proibidas": [],
+    "fontes": {
+      "titulo": "Cormorant Garamond",
+      "corpo": "Montserrat",
+      "acento": ""
+    },
+    "estilo": [],
+    "regras": [],
+    "proibido": [],
+    "logo": "logo/",
+    "referencias": "referencias/"
+  },
+  "video": {
+    "estilo": "clean",
+    "look": "natural",
+    "movimento": "push_in",
+    "transicoes": [
+      "fade",
+      "tinta",
+      "zoom"
+    ],
+    "evitar_transicoes": [
+      "glitch",
+      "giro"
+    ],
+    "dur_transicao": 0.6,
+    "textura": {
+      "grao": 0.2,
+      "halation": 0.15,
+      "vinheta": 0.15,
+      "aberracao": 0,
+      "barras": false
+    },
+    "sfx": true,
+    "musica": "",
+    "ritmo": ""
+  },
+  "pendencias": [
+    "Confirmar segmento, oferta e público",
+    "Enviar logo, paleta e fontes",
+    "Enviar 6 a 12 referências visuais aprovadas para referencias/",
+    "Enviar 5 a 15 legendas aprovadas para calibrar a voz (voz.py analisar)"
+  ]
+}

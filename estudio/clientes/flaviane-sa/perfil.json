@@ -1,10 +1,13 @@
 {
-  "slug": "pilates-flaviane",
-  "nome": "Pilates (conta da Flaviane)",
+  "slug": "flaviane-sa",
+  "nome": "Flaviane Sá",
   "tipo": "cliente",
   "status": "rascunho",
   "aliases": [
     "flaviane",
+    "flaviane sa",
+    "flaviane sá",
+    "flavianem",
     "pilates",
     "coluna",
     "escoliose",
@@ -12,12 +15,13 @@
     "postura",
     "trabalho sentado"
   ],
-  "segmento": "Saúde e movimento: pilates com foco em coluna e postura",
+  "segmento": "Saúde e movimento: pilates com foco em coluna e postura (pelos temas dos Reels)",
   "oferta": "Aulas de pilates (temas recorrentes: escoliose, osteoporose, trabalho sentado, pilates para homens)",
   "publico": "",
   "objetivo_redes": "",
   "fontes_da_verdade": [
-    "Drive: pasta \"Taynara\" compartilhada pela Flaviane (Reels de outubro e novembro de 2026)"
+    "Drive: pasta \"Taynara\" compartilhada pela Flaviane (Reels de outubro e novembro de 2026)",
+    "Planilha Conteúdos Mensais - programação"
   ],
   "voz": {
     "pessoa": "voce",
@@ -96,7 +100,7 @@
     "ritmo": "calmo, explicativo; texto na tela para o ponto principal de cada bloco"
   },
   "pendencias": [
-    "Confirmar nome do estúdio, @ do Instagram, paleta, fontes e logo",
+    "Confirmar @ do Instagram, paleta, fontes e logo",
     "Confirmar se a fala é da profissional em primeira pessoa",
     "Enviar referências visuais e legendas aprovadas"
   ]

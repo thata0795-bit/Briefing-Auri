@@ -1,0 +1,89 @@
+{
+  "slug": "auto-ja",
+  "nome": "Auto Já",
+  "tipo": "cliente",
+  "status": "rascunho",
+  "aliases": [
+    "auto ja",
+    "auto já",
+    "autoja",
+    "auto ja repasse",
+    "auto já repasse",
+    "repasse"
+  ],
+  "segmento": "Automotivo: repasse de veículos (pela pasta \"Auto Já Repasse\", a confirmar)",
+  "oferta": "",
+  "publico": "",
+  "objetivo_redes": "",
+  "fontes_da_verdade": [
+    "Drive: pasta \"Auto Já Repasse\"",
+    "Planilha Conteúdos Mensais - programação"
+  ],
+  "voz": {
+    "pessoa": "voce",
+    "registro": "proximo",
+    "tom": [],
+    "faz": [],
+    "evita": [],
+    "palavras_da_marca": [],
+    "palavras_proibidas": [],
+    "emoji_max": 2,
+    "hashtags": [
+      3,
+      5
+    ],
+    "cta_preferido": "",
+    "exemplos_aprovados": [],
+    "metricas": {}
+  },
+  "visual": {
+    "paleta": {
+      "bg": "#F2F0EC",
+      "fg": "#1A1A1A",
+      "acc": "#8A8A8A",
+      "dark": "#111111",
+      "claro": "#FFFFFF",
+      "destaque": "#FFFFFF",
+      "luz": "#FF9A4D"
+    },
+    "cores_proibidas": [],
+    "fontes": {
+      "titulo": "Cormorant Garamond",
+      "corpo": "Montserrat",
+      "acento": ""
+    },
+    "estilo": [],
+    "regras": [],
+    "proibido": [],
+    "logo": "logo/",
+    "referencias": "referencias/"
+  },
+  "video": {
+    "estilo": "dinamico",
+    "look": "teal_laranja",
+    "movimento": "pan_d",
+    "transicoes": [
+      "chicote",
+      "zoom",
+      "flash",
+      "luz"
+    ],
+    "evitar_transicoes": [],
+    "dur_transicao": 0.6,
+    "textura": {
+      "grao": 0.5,
+      "halation": 0.4,
+      "vinheta": 0.3,
+      "aberracao": 0.15,
+      "barras": false
+    },
+    "sfx": true,
+    "musica": "",
+    "ritmo": "rápido, cortes na batida, detalhes do carro com movimento lateral"
+  },
+  "pendencias": [
+    "Enviar logo, paleta e fontes",
+    "Enviar 6 a 12 referências visuais aprovadas para referencias/",
+    "Enviar 5 a 15 legendas aprovadas para calibrar a voz (voz.py analisar)"
+  ]
+}

@@ -21,10 +21,15 @@ Perfis atuais:
 |---|---|---|
 | `thauana` | confirmado | hex exato do vinho, legendas antigas para medir a voz |
 | `auri-studio` | confirmado | logo SVG, referências, arquivo da fonte Sloop |
-| `taynara-castro` | rascunho | identidade da agência |
 | `katiusce` | rascunho | público, paleta, logo, referências, legendas aprovadas |
-| `pilates-flaviane` | rascunho | nome do estúdio, @, paleta, logo, referências |
-| `encantarte` | rascunho | oferta, público, paleta, logo, referências |
+| `flaviane-sa` | rascunho | @, paleta, logo, referências, legendas aprovadas |
+| `josimar-easycont` | rascunho | segmento (provável contabilidade), identidade, referências, legendas |
+| `luana-personal-chef` | rascunho | identidade, referências, legendas |
+| `libercar` | rascunho | segmento, identidade, referências, legendas |
+| `lindas` | rascunho | segmento, identidade, referências, legendas |
+| `vovo-formiga` | rascunho | confirmar confeitaria, identidade, referências, legendas |
+| `auto-ja` | rascunho | confirmar repasse de veículos, identidade, referências, legendas |
+| `encantarte` | rascunho | não está na lista de clientes da agência; mantido por constar na skill de edição |
 
 Para completar um perfil, mande ao agente: logo, manual de marca (se houver), 6 a 12 referências visuais e 5 a 15 legendas que o cliente aprovou. Cliente novo com o formulário da Auri: cole o texto do botão "Copiar" e peça para cadastrar.
 

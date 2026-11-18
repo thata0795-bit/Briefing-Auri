@@ -1,21 +1,23 @@
 {
-  "slug": "taynara-castro",
-  "nome": "Agência Taynara Castro",
-  "tipo": "agencia",
+  "slug": "luana-personal-chef",
+  "nome": "Luana Personal Chef",
+  "tipo": "cliente",
   "status": "rascunho",
   "aliases": [
-    "taynara",
-    "taynara castro",
-    "agencia",
-    "agência",
-    "taynnara"
+    "luana",
+    "luana personal chef",
+    "personal chef",
+    "luana apolinario",
+    "luana apolinário",
+    "chef luana"
   ],
-  "segmento": "Agência de marketing e social media",
+  "segmento": "Gastronomia: personal chef",
   "oferta": "",
   "publico": "",
   "objetivo_redes": "",
   "fontes_da_verdade": [
-    "Drive compartilhado pela Taynara"
+    "Drive: pasta \"Vídeos Luana Apolinário\" (nome completo a confirmar)",
+    "Planilha Conteúdos Mensais - programação"
   ],
   "voz": {
     "pessoa": "voce",
@@ -58,12 +60,12 @@
   },
   "video": {
     "estilo": "editorial",
-    "look": "filme_quente",
+    "look": "kodak_dourado",
     "movimento": "push_in",
     "transicoes": [
       "luz",
-      "tinta",
       "zoom",
+      "chicote",
       "fade"
     ],
     "evitar_transicoes": [],
@@ -77,10 +79,11 @@
     },
     "sfx": true,
     "musica": "",
-    "ritmo": ""
+    "ritmo": "detalhe de ingrediente e preparo em close, rampa de velocidade em gesto de cozinha"
   },
   "pendencias": [
-    "Confirmar paleta, fontes, logo e tom da própria agência",
-    "Enviar referências visuais da agência para referencias/"
+    "Enviar logo, paleta e fontes",
+    "Enviar 6 a 12 referências visuais aprovadas para referencias/",
+    "Enviar 5 a 15 legendas aprovadas para calibrar a voz (voz.py analisar)"
   ]
 }
