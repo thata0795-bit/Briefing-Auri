@@ -68,6 +68,20 @@ Motor: `scripts/cinema.py`. Para Reels de fala (talking head com roteiro) a limp
 Campos de cena: `arquivo` (vídeo) ou `imagem` ou `cartela`; `ini`, `fim`, `velocidade`, `rampa`, `movimento` (push_in, push_out, pan_e, pan_d, tilt, parallax, tremor, respira, nenhum), `intensidade` (sutil, normal, forte), `enquadre` (preencher, caber), `look`, `audio` (true mantém a fala/ambiente do clipe), `transicao` (para a próxima cena; `auto` ou ausente escolhe da lista do perfil), `dur_transicao`, `texto` ou `textos` (lista) com `conteudo`, `estilo`, `pos` (topo, centro, terco, baixo), `em`, `dur`, `sub`, `cor`. Cartela: `cartela`, `sub`, `dur`, `fundo`, `cor_texto`, `animacao`.
 Projeto: `cliente`, `formato` (9:16, 4:5, 1:1, 16:9, 2.39:1), `look`, `movimento`, `transicoes` (lista de preferência), `dur_transicao`, `cortes_secos` (true), `musica`, `audio_cenas`, `textura`, `sfx` (true), `sfx_corte`, `paleta`/`fontes` (sobrescrevem o perfil), `manter_tmp`.
 
+## Motion design (chamadas, datas comemorativas, lançamentos)
+Quando o material é foto, logo e texto (sem takes), monte cada cena como HTML/CSS animado e grave com
+`node scripts/anima.mjs cena.html --hash <id> --dur <s> --saida cenas/<id>.mp4 --cliente <slug>` (quadro a quadro, sem perda).
+Depois una as cenas no `cinema.py` (cada cena vira um `arquivo`, `movimento: nenhum`, `look: natural` para preservar a paleta).
+Exemplo completo: `estudio/clientes/luana-personal-chef/projetos/natal-2026/`.
+Ideias que funcionam: foto em arco ou janela com Ken Burns ou panorâmica, moldura dourada que se desenha, texto subindo por máscara,
+rótulo em caixa alta com tracking, brilho percorrendo texto dourado, partículas de luz em canvas (`window.cena(t)`).
+
+## Narração
+Voz neural offline (Kokoro): `pip install kokoro-onnx soundfile` e os arquivos `kokoro-v1.0.onnx` e `voices-v1.0.bin`
+(releases do GitHub thewh1teagle/kokoro-onnx, model-files-v1.0) em /tmp/kokoro. Voz feminina pt-BR: `pf_dora` (masculinas: `pm_alex`, `pm_santa`), speed 0.92.
+Gere uma fala por cena, apare o silêncio das pontas e posicione com adelay. Mix: voz com highpass e presença, trilha com sidechain, -14 LUFS.
+O serviço de voz da Microsoft (edge-tts) é bloqueado pela rede deste ambiente. Revise as falas com `voz.py checar` antes de gerar.
+
 ## Regras de marca no vídeo
 - Paleta, fontes, look e transições vêm sempre do perfil do projeto. A paleta oliva e areia é só da Auri.
 - Texto na tela segue as regras de copy: nada de travessão, segunda pessoa quando é a marca falando com o público dela.

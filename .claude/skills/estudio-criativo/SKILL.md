@@ -54,6 +54,7 @@ Curta: para qual projeto, o que foi feito, escolhas criativas em uma linha, avis
 - `scripts/cinema.py` --setup | projeto.json | --acabamento | --batidas | --quadros | --looks
 - `scripts/referencias.py` analisar | comparar
 - `scripts/render.mjs` HTML → PNG/SVG/PDF com tokens da marca
+- `scripts/anima.mjs` HTML animado → vídeo quadro a quadro (motion design com fotos, logo e texto)
 - `scripts/voz.py` analisar | checar
 - `modelos/peca-base.html` esqueleto técnico de peça
 Requisitos: ffmpeg, python3 com numpy e Pillow, node com Playwright e Chromium (já instalados no ambiente). Fontes: Google Fonts (baixadas sob demanda); fontes próprias do cliente em `estudio/clientes/<slug>/fontes/`.

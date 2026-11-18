@@ -1,0 +1,10 @@
+{"cliente":"luana-personal-chef","saida":"saida/montagem.mp4","formato":"9:16","look":"natural","movimento":"nenhum",
+ "audio_cenas":false,"dur_transicao":0.75,"cortes_secos":false,
+ "textura":{"grao":0.35,"halation":0.3,"vinheta":0.25,"aberracao":0.05,"barras":false},
+ "cenas":[
+  {"arquivo":"cenas/c1.mp4","transicao":"luz"},
+  {"arquivo":"cenas/c3.mp4","transicao":"zoom"},
+  {"arquivo":"cenas/c4.mp4","transicao":"tinta"},
+  {"arquivo":"cenas/c6.mp4","transicao":"cor"},
+  {"arquivo":"cenas/c5.mp4"}
+ ]}

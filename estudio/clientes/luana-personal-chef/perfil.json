@@ -17,15 +17,24 @@
   "objetivo_redes": "",
   "fontes_da_verdade": [
     "Drive: pasta \"Vídeos Luana Apolinário\" (nome completo a confirmar)",
+    "Paleta oficial e logo enviados pela Thauana (nov/2026)",
     "Planilha Conteúdos Mensais - programação"
   ],
   "voz": {
     "pessoa": "voce",
     "registro": "proximo",
-    "tom": [],
+    "tom": [
+      "sofisticado",
+      "acolhedor",
+      "afetivo"
+    ],
     "faz": [],
     "evita": [],
-    "palavras_da_marca": [],
+    "palavras_da_marca": [
+      "afeto em cada detalhe",
+      "exclusividade",
+      "acolhimento"
+    ],
     "palavras_proibidas": [],
     "emoji_max": 2,
     "hashtags": [
@@ -38,43 +47,70 @@
   },
   "visual": {
     "paleta": {
-      "bg": "#F2F0EC",
-      "fg": "#1A1A1A",
-      "acc": "#8A8A8A",
-      "dark": "#111111",
-      "claro": "#FFFFFF",
-      "destaque": "#FFFFFF",
-      "luz": "#FF9A4D"
+      "bg": "#3B2416",
+      "fg": "#F5F1EA",
+      "acc": "#C7A46A",
+      "dark": "#3B2416",
+      "claro": "#F5F1EA",
+      "destaque": "#C7A46A",
+      "luz": "#E9C48A"
     },
     "cores_proibidas": [],
     "fontes": {
       "titulo": "Cormorant Garamond",
       "corpo": "Montserrat",
-      "acento": ""
+      "acento": "Cinzel"
     },
-    "estilo": [],
-    "regras": [],
-    "proibido": [],
+    "estilo": [
+      "sofisticado",
+      "acolhedor",
+      "gastronomia premium",
+      "dourado sobre tons de chocolate e café"
+    ],
+    "regras": [
+      "Logo LA em dourado, sempre sobre fundo escuro (café, chocolate) ou off-white",
+      "Paleta oficial: chocolate, off-white, dourado champagne, terracota, marsala, café; secundárias areia, caramelo, rosa queimado",
+      "Rótulos em serifa caixa alta espaçada (Cinzel), títulos em serifa elegante, detalhes em linha fina dourada",
+      "Valores da marca: sofisticação, acolhimento, gastronomia, exclusividade, afeto em cada detalhe"
+    ],
+    "proibido": [
+      "cores fora da paleta oficial",
+      "visual de fast food ou promoção gritante"
+    ],
     "logo": "logo/",
-    "referencias": "referencias/"
+    "referencias": "referencias/",
+    "paleta_oficial": {
+      "chocolate_gourmet": "#6B3F24",
+      "off_white_elegante": "#F5F1EA",
+      "dourado_champagne": "#C7A46A",
+      "terracota_refinado": "#A66542",
+      "marsala_elegante": "#7A3E48",
+      "cafe_intenso": "#3B2416",
+      "areia_suave": "#DDD0C0",
+      "caramelo_premium": "#B7835A",
+      "rosa_queimado": "#C48A85"
+    }
   },
   "video": {
     "estilo": "editorial",
-    "look": "kodak_dourado",
+    "look": "marca",
     "movimento": "push_in",
     "transicoes": [
       "luz",
-      "zoom",
-      "chicote",
-      "fade"
+      "tinta",
+      "cor",
+      "zoom"
     ],
-    "evitar_transicoes": [],
+    "evitar_transicoes": [
+      "glitch",
+      "prisma"
+    ],
     "dur_transicao": 0.6,
     "textura": {
-      "grao": 0.5,
-      "halation": 0.4,
+      "grao": 0.35,
+      "halation": 0.35,
       "vinheta": 0.3,
-      "aberracao": 0.15,
+      "aberracao": 0.05,
       "barras": false
     },
     "sfx": true,
@@ -82,8 +118,9 @@
     "ritmo": "detalhe de ingrediente e preparo em close, rampa de velocidade em gesto de cozinha"
   },
   "pendencias": [
-    "Enviar logo, paleta e fontes",
-    "Enviar 6 a 12 referências visuais aprovadas para referencias/",
-    "Enviar 5 a 15 legendas aprovadas para calibrar a voz (voz.py analisar)"
+    "Logo em alta resolução ou SVG (o enviado tem 198 px)",
+    "Confirmar as fontes oficiais (usando Cormorant Garamond e Cinzel como aproximação)",
+    "Enviar legendas aprovadas para calibrar a voz",
+    "Confirmar canal de encomendas (direct ou WhatsApp)"
   ]
 }
