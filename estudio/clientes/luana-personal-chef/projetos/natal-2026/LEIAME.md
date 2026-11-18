@@ -14,3 +14,5 @@ Refazer:
 - Mix: narração em 1.0 / 4.8 / 8.85 / 12.7 / 17.4 s, trilha com sidechain, -14 LUFS.
 Trilha: caixinha de música original sintetizada (sem direitos de terceiros).
 Bruschetta removida a pedido da Thauana.
+
+Versão final aprovada para envio: sem narração e sem efeitos sonoros, só a trilha (a pedido da Thauana). Legenda do post em legenda.txt.
