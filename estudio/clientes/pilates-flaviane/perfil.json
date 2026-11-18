@@ -1,0 +1,103 @@
+{
+  "slug": "pilates-flaviane",
+  "nome": "Pilates (conta da Flaviane)",
+  "tipo": "cliente",
+  "status": "rascunho",
+  "aliases": [
+    "flaviane",
+    "pilates",
+    "coluna",
+    "escoliose",
+    "osteoporose",
+    "postura",
+    "trabalho sentado"
+  ],
+  "segmento": "Saúde e movimento: pilates com foco em coluna e postura",
+  "oferta": "Aulas de pilates (temas recorrentes: escoliose, osteoporose, trabalho sentado, pilates para homens)",
+  "publico": "",
+  "objetivo_redes": "",
+  "fontes_da_verdade": [
+    "Drive: pasta \"Taynara\" compartilhada pela Flaviane (Reels de outubro e novembro de 2026)"
+  ],
+  "voz": {
+    "pessoa": "voce",
+    "registro": "didático e acolhedor",
+    "tom": [
+      "claro",
+      "educativo",
+      "seguro"
+    ],
+    "faz": [],
+    "evita": [
+      "promessa de cura ou resultado clínico",
+      "diagnóstico pelo Instagram",
+      "termos de medo ou culpa"
+    ],
+    "palavras_da_marca": [],
+    "palavras_proibidas": [
+      "cura garantida",
+      "milagre"
+    ],
+    "emoji_max": 2,
+    "hashtags": [
+      3,
+      5
+    ],
+    "cta_preferido": "",
+    "exemplos_aprovados": [],
+    "metricas": {}
+  },
+  "visual": {
+    "paleta": {
+      "bg": "#F2F0EC",
+      "fg": "#1A1A1A",
+      "acc": "#8A8A8A",
+      "dark": "#111111",
+      "claro": "#FFFFFF",
+      "destaque": "#FFFFFF",
+      "luz": "#FF9A4D"
+    },
+    "cores_proibidas": [],
+    "fontes": {
+      "titulo": "Cormorant Garamond",
+      "corpo": "Montserrat",
+      "acento": ""
+    },
+    "estilo": [],
+    "regras": [],
+    "proibido": [],
+    "logo": "logo/",
+    "referencias": "referencias/"
+  },
+  "video": {
+    "estilo": "clean",
+    "look": "clinico_limpo",
+    "movimento": "respira",
+    "transicoes": [
+      "fade",
+      "tinta",
+      "zoom",
+      "luz"
+    ],
+    "evitar_transicoes": [
+      "glitch",
+      "prisma"
+    ],
+    "dur_transicao": 0.6,
+    "textura": {
+      "grao": 0.25,
+      "halation": 0.2,
+      "vinheta": 0.15,
+      "aberracao": 0,
+      "barras": false
+    },
+    "sfx": true,
+    "musica": "",
+    "ritmo": "calmo, explicativo; texto na tela para o ponto principal de cada bloco"
+  },
+  "pendencias": [
+    "Confirmar nome do estúdio, @ do Instagram, paleta, fontes e logo",
+    "Confirmar se a fala é da profissional em primeira pessoa",
+    "Enviar referências visuais e legendas aprovadas"
+  ]
+}

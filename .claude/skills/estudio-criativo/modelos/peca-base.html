@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<!--
+  Esqueleto tecnico de peca. NAO e um layout pronto: a composicao vem das referencias do cliente.
+  As variaveis (--bg, --fg, --acc, --dark, --claro, --destaque, --fonte-titulo, --fonte-corpo, --fonte-acento)
+  sao injetadas pelo render.mjs a partir de estudio/clientes/<slug>/perfil.json. Os valores abaixo sao so fallback.
+  Tamanhos: feed 4:5 = 1080x1350 | quadrado = 1080x1080 | story/reels = 1080x1920 | capa de reels = 1080x1920 (area segura central 1080x1350)
+  Logo: .pagina de 2000x2000 e exporte com --escala 1 --transparente; vetor em <svg class="logo-svg" data-nome="logo-positivo">.
+-->
+<style>
+  :root{--bg:#F2F0EC;--fg:#1A1A1A;--acc:#8A8A8A;--dark:#111;--claro:#FFF;--destaque:#FFF;
+        --fonte-titulo:Georgia,serif;--fonte-corpo:Arial,sans-serif;--fonte-acento:Georgia,serif;
+        --margem:88px;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#777}
+  .pagina{width:1080px;height:1350px;position:relative;overflow:hidden;background:var(--bg);color:var(--fg);
+          font-family:var(--fonte-corpo);padding:var(--margem)}
+  .pagina.story{height:1920px}
+  .pagina.quadrado{height:1080px}
+  h1{font-family:var(--fonte-titulo);font-weight:500;font-size:96px;line-height:1.02;letter-spacing:-.01em}
+  h1 em{font-style:italic;color:var(--acc)}
+  p{font-size:34px;line-height:1.45;max-width:30ch}
+  .rodape{position:absolute;left:var(--margem);right:var(--margem);bottom:64px;display:flex;justify-content:space-between;
+          font-size:22px;letter-spacing:.14em;text-transform:uppercase;opacity:.7}
+</style>
+</head>
+<body>
+  <section class="pagina" data-nome="slide-01">
+    <h1>Título com <em>uma palavra</em> em destaque</h1>
+    <div class="rodape"><span>@perfil</span><span>01/06</span></div>
+  </section>
+</body>
+</html>

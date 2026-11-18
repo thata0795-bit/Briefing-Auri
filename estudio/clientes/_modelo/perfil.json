@@ -1,0 +1,61 @@
+{
+  "slug": "nome-do-cliente",
+  "nome": "Nome da marca",
+  "tipo": "cliente",
+  "status": "rascunho",
+  "aliases": ["apelidos, @ do instagram, nome do dono, nomes de pasta no Drive"],
+  "segmento": "",
+  "oferta": "",
+  "publico": "",
+  "objetivo_redes": "",
+  "fontes_da_verdade": ["briefing", "manual de marca", "pasta do Drive", "Instagram"],
+
+  "voz": {
+    "pessoa": "voce",
+    "registro": "proximo",
+    "tom": [],
+    "faz": [],
+    "evita": [],
+    "palavras_da_marca": [],
+    "palavras_proibidas": [],
+    "emoji_max": 2,
+    "hashtags": [3, 5],
+    "cta_preferido": "",
+    "exemplos_aprovados": [],
+    "metricas": {}
+  },
+
+  "visual": {
+    "paleta": {
+      "bg": "#F2F0EC",
+      "fg": "#1A1A1A",
+      "acc": "#8A8A8A",
+      "dark": "#111111",
+      "claro": "#FFFFFF",
+      "destaque": "#FFFFFF",
+      "luz": "#FF9A4D"
+    },
+    "cores_proibidas": [],
+    "fontes": { "titulo": "Cormorant Garamond", "corpo": "Montserrat", "acento": "" },
+    "estilo": [],
+    "regras": [],
+    "proibido": [],
+    "logo": "logo/",
+    "referencias": "referencias/"
+  },
+
+  "video": {
+    "estilo": "editorial",
+    "look": "filme_quente",
+    "movimento": "push_in",
+    "transicoes": ["luz", "tinta", "zoom", "fade"],
+    "evitar_transicoes": [],
+    "dur_transicao": 0.6,
+    "textura": { "grao": 0.5, "halation": 0.4, "vinheta": 0.3, "aberracao": 0.15, "barras": false },
+    "sfx": true,
+    "musica": "",
+    "ritmo": ""
+  },
+
+  "pendencias": []
+}

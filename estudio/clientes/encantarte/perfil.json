@@ -1,0 +1,83 @@
+{
+  "slug": "encantarte",
+  "nome": "Encantarte",
+  "tipo": "cliente",
+  "status": "rascunho",
+  "aliases": [
+    "encantarte",
+    "encant arte"
+  ],
+  "segmento": "Infantil e festas",
+  "oferta": "",
+  "publico": "",
+  "objetivo_redes": "",
+  "fontes_da_verdade": [
+    "skill agente-edicao-video (citação como cliente infantil/festa)"
+  ],
+  "voz": {
+    "pessoa": "voce",
+    "registro": "proximo",
+    "tom": [],
+    "faz": [],
+    "evita": [],
+    "palavras_da_marca": [],
+    "palavras_proibidas": [],
+    "emoji_max": 2,
+    "hashtags": [
+      3,
+      5
+    ],
+    "cta_preferido": "",
+    "exemplos_aprovados": [],
+    "metricas": {}
+  },
+  "visual": {
+    "paleta": {
+      "bg": "#F2F0EC",
+      "fg": "#1A1A1A",
+      "acc": "#8A8A8A",
+      "dark": "#111111",
+      "claro": "#FFFFFF",
+      "destaque": "#FFFFFF",
+      "luz": "#FF9A4D"
+    },
+    "cores_proibidas": [],
+    "fontes": {
+      "titulo": "Cormorant Garamond",
+      "corpo": "Montserrat",
+      "acento": ""
+    },
+    "estilo": [],
+    "regras": [],
+    "proibido": [],
+    "logo": "logo/",
+    "referencias": "referencias/"
+  },
+  "video": {
+    "estilo": "dinamico",
+    "look": "kodak_dourado",
+    "movimento": "push_in",
+    "transicoes": [
+      "luz",
+      "zoom",
+      "chicote",
+      "cor"
+    ],
+    "evitar_transicoes": [],
+    "dur_transicao": 0.6,
+    "textura": {
+      "grao": 0.5,
+      "halation": 0.4,
+      "vinheta": 0.3,
+      "aberracao": 0.15,
+      "barras": false
+    },
+    "sfx": true,
+    "musica": "",
+    "ritmo": "alegre, cortes na batida"
+  },
+  "pendencias": [
+    "Confirmar oferta, público, paleta, fontes e logo",
+    "Enviar referências e legendas aprovadas"
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "slug": "auri-studio",
+  "nome": "Auri Studio",
+  "tipo": "estudio",
+  "status": "confirmado",
+  "aliases": ["auri", "auri studio", "estudio auri", "briefing auri"],
+  "segmento": "Estúdio de social media e identidade visual",
+  "oferta": "Identidade visual, manual de marca, templates e pacotes mensais de conteúdo para redes sociais",
+  "publico": "Pequenas e médias marcas que querem presença profissional nas redes",
+  "objetivo_redes": "Autoridade e captação de clientes",
+  "fontes_da_verdade": ["Briefing Auri .html (formulário do repositório)", "preferências da Thauana"],
+
+  "voz": {
+    "pessoa": "voce",
+    "registro": "proximo e profissional",
+    "tom": ["direto", "elegante", "natural"],
+    "faz": ["frases curtas e claras", "fala de processo e resultado visual concreto", "segunda pessoa com o cliente"],
+    "evita": ["linguagem de IA", "tom poético", "tom institucional", "clichê de marketing"],
+    "palavras_da_marca": ["processo criativo", "identidade", "briefing"],
+    "palavras_proibidas": [],
+    "emoji_max": 2,
+    "hashtags": [3, 5],
+    "cta_preferido": "chamar no WhatsApp ou no direct",
+    "exemplos_aprovados": ["Responda com objetividade. Suas respostas guiam todo o processo criativo."],
+    "metricas": {}
+  },
+
+  "visual": {
+    "paleta": {
+      "bg": "#F5F3EE",
+      "fg": "#2C2C2A",
+      "acc": "#6B7A3E",
+      "dark": "#4A5628",
+      "claro": "#F6F0E2",
+      "destaque": "#EADFC8",
+      "luz": "#F4C27A"
+    },
+    "cores_proibidas": [],
+    "fontes": { "titulo": "Cormorant Garamond", "corpo": "Montserrat", "acento": "Sloop" },
+    "estilo": ["editorial", "orgânico", "oliva e areia"],
+    "regras": [
+      "Fundo creme ou areia, oliva como cor de ação e destaque",
+      "Cormorant Garamond nos títulos, Montserrat no corpo",
+      "Sloop só em uso pontual e emocional (uma palavra, uma assinatura), nunca em parágrafo",
+      "PDFs da agência: fundo creme, acentos pretos, títulos em Cormorant Garamond, corpo em Inter, números de seção grandes e esmaecidos, cards com cabeçalho preto"
+    ],
+    "proibido": ["formas geométricas decorativas sem função", "cara de flyer"],
+    "logo": "logo/",
+    "referencias": "referencias/"
+  },
+
+  "video": {
+    "estilo": "editorial",
+    "look": "marca",
+    "movimento": "push_in",
+    "transicoes": ["tinta", "luz", "fade", "zoom"],
+    "evitar_transicoes": ["glitch"],
+    "dur_transicao": 0.7,
+    "textura": { "grao": 0.55, "halation": 0.35, "vinheta": 0.3, "aberracao": 0.1, "barras": false },
+    "sfx": true,
+    "musica": "acústica ou lo-fi orgânica, sem vocal",
+    "ritmo": "calmo, cortes na batida forte, respiros longos"
+  },
+
+  "pendencias": ["Enviar logo em SVG para estudio/clientes/auri-studio/logo/", "Enviar 6 a 12 referências visuais para referencias/", "Arquivo da fonte Sloop (não está no Google Fonts) em fontes/"]
+}

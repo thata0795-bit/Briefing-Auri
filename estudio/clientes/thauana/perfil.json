@@ -1,0 +1,84 @@
+{
+  "slug": "thauana",
+  "nome": "Thauana Anoara",
+  "tipo": "pessoal",
+  "status": "confirmado",
+  "aliases": ["thauana", "thauana anoara", "@_cthauana", "_cthauana", "meu perfil", "meu instagram", "pessoal", "eu"],
+  "segmento": "Social media, identidade visual e IA aplicada a negócios",
+  "oferta": "Fase de plantio: conteúdo sobre IA na prática e o buraco entre marketing e venda. Nada de venda direta ainda.",
+  "publico": "Donos de empresa, gestores e equipes comerciais que já recebem contatos, mas vendem menos do que deveriam",
+  "objetivo_redes": "Ser vista e lembrada como quem enxerga e resolve com IA e automação o que trava a venda depois do marketing",
+  "fontes_da_verdade": ["skill instagram-thauana (regras completas de conteúdo, pilares e plano semanal)"],
+
+  "voz": {
+    "pessoa": "voce",
+    "registro": "conversa boa com alguém que ela respeita",
+    "tom": ["direto", "elegante", "natural", "descontraído sem forçar gíria", "humor leve de observação"],
+    "faz": [
+      "primeira pessoa quando é experiência dela (eu testei, na minha rotina)",
+      "fala como quem faz, mostra o processo inclusive o que deu errado",
+      "uma ideia e uma opinião clara por post",
+      "números e ferramentas reais, nomeados",
+      "frases curtas misturadas com frases mais longas"
+    ],
+    "evita": [
+      "atacar o marketing ou quem faz marketing",
+      "prometer resultado",
+      "inventar fatos, números ou histórias pessoais",
+      "citar cliente sem autorização",
+      "estrutura 'não é X, é Y'",
+      "revelação dramática (E o resultado?, Aqui está o segredo)",
+      "isca de engajamento",
+      "anúncio de sinceridade"
+    ],
+    "palavras_da_marca": ["processo", "gargalo", "atendimento", "follow-up", "automação"],
+    "palavras_proibidas": ["vou ser sincera", "sem filtro", "comente EU QUERO", "marque 3 amigas", "dê dois toques", "E o resultado?", "Aqui está o segredo"],
+    "emoji_max": 3,
+    "hashtags": [3, 5],
+    "cta_preferido": "pergunta específica, motivo para salvar ou para enviar a alguém",
+    "exemplos_aprovados": [
+      "Seu marketing não está fraco. Seu atendimento está devagar.",
+      "O cliente chegou pelo anúncio, pediu orçamento e ninguém respondeu até o dia seguinte."
+    ],
+    "metricas": {}
+  },
+
+  "visual": {
+    "paleta": {
+      "bg": "#F7F4EE",
+      "fg": "#1E1A1A",
+      "acc": "#6E1E2B",
+      "dark": "#3A0F17",
+      "claro": "#FBF8F3",
+      "destaque": "#C9A5A0",
+      "luz": "#E8A27C"
+    },
+    "cores_proibidas": [],
+    "fontes": { "titulo": "Cormorant Garamond", "corpo": "Montserrat", "acento": "" },
+    "estilo": ["editorial", "sofisticado", "off-white e vinho"],
+    "regras": [
+      "Fundo off-white, vinho como cor de destaque",
+      "Título em serifa elegante com itálico pontual, corpo em sans simples",
+      "Margens e fontes iguais em todos os slides do carrossel",
+      "Carrossel 4:5"
+    ],
+    "proibido": ["formas geométricas decorativas", "cara de flyer"],
+    "logo": "",
+    "referencias": "referencias/"
+  },
+
+  "video": {
+    "estilo": "editorial",
+    "look": "filme_quente",
+    "movimento": "respira",
+    "transicoes": ["luz", "tinta", "fade", "zoom"],
+    "evitar_transicoes": ["glitch"],
+    "dur_transicao": 0.6,
+    "textura": { "grao": 0.45, "halation": 0.35, "vinheta": 0.25, "aberracao": 0.1, "barras": false },
+    "sfx": true,
+    "musica": "",
+    "ritmo": "Reels de 20 a 45 segundos, gancho falado e escrito nos 3 primeiros segundos"
+  },
+
+  "pendencias": ["Confirmar o hex exato do vinho (usado #6E1E2B como aproximação)", "Enviar legendas antigas que ela considera a voz dela para calibrar voz.metricas"]
+}
