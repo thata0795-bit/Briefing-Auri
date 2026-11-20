@@ -85,7 +85,9 @@
       "Sans bold para frases de impacto, serifa para texto clínico, itálico serifado na assinatura Dra. Flaviane Sá",
       "Subtítulo da assinatura: FISIOTERAPIA E PILATES, caixa alta espaçada"
     ],
-    "proibido": [],
+    "proibido": [
+      "figura humana desenhada em 2D ou com roupa pintada no corpo: usar boneco 3D realista com roupa de verdade"
+    ],
     "logo": "logo/",
     "referencias": "referencias/"
   },

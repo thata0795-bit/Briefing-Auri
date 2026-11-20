@@ -36,20 +36,67 @@
     if (opt.frente) { camera.position.set(0, opt.alvoY || 0.6, 60); } else { camera.position.set(-60, opt.alvoY || 0.6, opt.camZ || 0); }
     camera.lookAt(0, opt.alvoY || 0.6, opt.frente ? 0 : (opt.camZ || 0));
 
-    // malha
+    // malha do corpo + bermuda modelada sobre ele
+    var tmp = new T.BufferGeometry();
+    tmp.setAttribute('position', new T.Float32BufferAttribute(H.pos, 3)); tmp.setIndex(H.tri); tmp.computeVertexNormals();
+    var NR = tmp.getAttribute('normal').array;
+    var YT = 3.25, YB = -0.95, XL = 2.75;
+    function dentro(i, m) { var x = H.pos[3 * i], y = H.pos[3 * i + 1]; return y <= YT - m && y >= YB + m && Math.abs(x) < XL; }
+    var triCorpo = [], triRoupa = [];
+    for (var t3 = 0; t3 < H.tri.length; t3 += 3) {
+      var a0 = H.tri[t3], a1 = H.tri[t3 + 1], a2 = H.tri[t3 + 2];
+      if (dentro(a0, 0) && dentro(a1, 0) && dentro(a2, 0)) triRoupa.push(a0, a1, a2);
+      if (!(dentro(a0, 0.18) && dentro(a1, 0.18) && dentro(a2, 0.18))) triCorpo.push(a0, a1, a2);
+    }
     var g = new T.BufferGeometry();
     g.setAttribute('position', new T.Float32BufferAttribute(H.pos, 3));
-    g.setIndex(H.tri);
+    g.setIndex(triCorpo);
     g.setAttribute('skinIndex', new T.Uint16BufferAttribute(H.si, 4));
     g.setAttribute('skinWeight', new T.Float32BufferAttribute(H.sw, 4));
     g.computeVertexNormals();
-    var cores = [], pele = new T.Color(opt.cor || '#C9987C'), roupa = new T.Color(opt.roupa || '#3D2050');
-    for (var vi = 0; vi < H.pos.length; vi += 3) {
-      var x = H.pos[vi], y = H.pos[vi + 1];
-      var c = (y < 3.05 && y > 0.15 && Math.abs(x) < 2.75) ? roupa : pele;
-      cores.push(c.r, c.g, c.b);
+    // bermuda: casca afastada da pele, mais solta nas pernas, cos, faixa lateral, dobras e barra com espessura
+    var mapa = {}, rp = [], rc = [], rsi = [], rsw = [], ri = [];
+    var cTecido = new T.Color(opt.roupa || '#55316E'), cCos = new T.Color('#3D2050'), cFaixa = new T.Color('#C9B3D6');
+    function sm(x) { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); }
+    function vert(i, interno) {
+      var key = i + (interno ? 'i' : 'o'); if (mapa[key] !== undefined) return mapa[key];
+      var x = H.pos[3 * i], y = H.pos[3 * i + 1], z = H.pos[3 * i + 2], nx = NR[3 * i], ny = NR[3 * i + 1], nz = NR[3 * i + 2];
+      if (naBorda[i]) y = y > (YT + YB) / 2 ? YT + 0.02 : YB;
+      var f = (YT - y) / (YT - YB), cos = y > YT - 0.34;
+      var off = interno ? 0.015 : 0.045 + 0.09 * sm(f * 2.2) + 0.26 * Math.pow(Math.max(0, (f - 0.42) / 0.58), 1.3) + (cos ? 0.025 : 0);
+      if (!interno && !cos) off += 0.03 * f * Math.sin(x * 9 + z * 5 + y * 2) * Math.sin(y * 7 - z * 4);
+      var px = x + nx * off, py = y + ny * off - (interno ? 0 : 0.07 * f * f * f), pz = z + nz * off;
+      var c = cos ? cCos : cTecido;
+      rp.push(px, py, pz); rc.push(c.r, c.g, c.b);
+      for (var k4 = 0; k4 < 4; k4++) { rsi.push(H.si[4 * i + k4]); rsw.push(H.sw[4 * i + k4]); }
+      mapa[key] = rp.length / 3 - 1; return mapa[key];
     }
-    g.setAttribute('color', new T.Float32BufferAttribute(cores, 3));
+    var arestas = {}, borda = {};
+    for (var q0 = 0; q0 < triRoupa.length; q0 += 3) for (var e0 = 0; e0 < 3; e0++) {
+      var u0 = triRoupa[q0 + e0], w0 = triRoupa[q0 + (e0 + 1) % 3], k0 = u0 < w0 ? u0 + '_' + w0 : w0 + '_' + u0;
+      borda[k0] = (borda[k0] || 0) + 1;
+    }
+    var naBorda = {};
+    for (var k1 in borda) if (borda[k1] === 1) { var pp = k1.split('_'); naBorda[pp[0]] = 1; naBorda[pp[1]] = 1; }
+    for (var q = 0; q < triRoupa.length; q += 3) {
+      var tv = [triRoupa[q], triRoupa[q + 1], triRoupa[q + 2]];
+      ri.push(vert(tv[0]), vert(tv[1]), vert(tv[2]));
+      for (var e = 0; e < 3; e++) {
+        var u = tv[e], w = tv[(e + 1) % 3], kk = u < w ? u + '_' + w : w + '_' + u;
+        arestas[kk] = arestas[kk] ? null : [u, w];
+      }
+    }
+    for (var kk2 in arestas) {
+      var ed = arestas[kk2]; if (!ed) continue;
+      var A = vert(ed[0]), B = vert(ed[1]), Ai = vert(ed[0], true), Bi = vert(ed[1], true);
+      ri.push(A, B, Bi, A, Bi, Ai);
+    }
+    var gr = new T.BufferGeometry();
+    gr.setAttribute('position', new T.Float32BufferAttribute(rp, 3));
+    gr.setAttribute('color', new T.Float32BufferAttribute(rc, 3));
+    gr.setAttribute('skinIndex', new T.Uint16BufferAttribute(rsi, 4));
+    gr.setAttribute('skinWeight', new T.Float32BufferAttribute(rsw, 4));
+    gr.setIndex(ri); gr.computeVertexNormals();
     var lista = [];
     H.ossos.forEach(function (o, i) {
       var b = new T.Bone(); b.name = o.nome;
@@ -58,13 +105,18 @@
       if (o.pai >= 0) lista[o.pai].add(b);
       lista.push(b); bones[o.nome] = b;
     });
-    var mat = new T.MeshPhysicalMaterial({vertexColors: true, color: '#FFFFFF', roughness: 0.55, metalness: 0,
+    var mat = new T.MeshPhysicalMaterial({color: new T.Color(opt.cor || '#C9987C'), roughness: 0.55, metalness: 0,
       clearcoat: 0.15, clearcoatRoughness: 0.6, sheen: 0.4, sheenColor: new T.Color('#F3D9CC'), sheenRoughness: 0.6});
     mesh = new T.SkinnedMesh(g, mat);
     mesh.add(lista[0]);
     mesh.bind(new T.Skeleton(lista));
     mesh.castShadow = true; mesh.receiveShadow = true;
-    grupo = new T.Group(); grupo.add(mesh);
+    var matRoupa = new T.MeshPhysicalMaterial({vertexColors: true, roughness: 0.9, sheen: 0.3, sheenRoughness: 0.8,
+      sheenColor: new T.Color('#8E6FA6'), side: T.DoubleSide});
+    var roupa = new T.SkinnedMesh(gr, matRoupa);
+    roupa.castShadow = true; roupa.receiveShadow = true;
+    grupo = new T.Group(); grupo.add(mesh); grupo.add(roupa);
+    roupa.bind(mesh.skeleton, mesh.bindMatrix);
     // olhos
     var olhoMat = new T.MeshPhysicalMaterial({color: '#F4F1EE', roughness: 0.15, clearcoat: 1});
     var irisMat = new T.MeshStandardMaterial({color: '#4A3626', roughness: 0.3});

@@ -15,3 +15,4 @@ depois mixar trilha.wav (ambiente original, -18 LUFS) com grão leve (noise c0s=
 Promessa de cura removida ("Tem solução" saiu). Subtítulo da assinatura em #A88BB9 por legibilidade.
 
 Versão 3: boneco 3D masculino com rosto, braços e bermuda na cor da marca; "Hérnia de disco" trocado por "Dor na cervical" a pedido.
+Versão 4: bermuda roxa como peça 3D real (volume, cós, barra, dobras), sem pintura no corpo.
