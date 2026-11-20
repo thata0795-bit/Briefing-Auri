@@ -1,22 +1,27 @@
 {
   "slug": "flaviane-sa",
-  "nome": "Flaviane Sá",
+  "nome": "Dra. Flaviane Sá",
   "tipo": "cliente",
   "status": "rascunho",
   "aliases": [
+    "coluna",
+    "dra flaviane",
+    "dra. flaviane sá",
+    "escoliose",
+    "fisioterapia",
     "flaviane",
     "flaviane sa",
     "flaviane sá",
     "flavianem",
-    "pilates",
-    "coluna",
-    "escoliose",
     "osteoporose",
+    "pilates",
+    "pilates clinico",
+    "pilates clínico",
     "postura",
     "trabalho sentado"
   ],
-  "segmento": "Saúde e movimento: pilates com foco em coluna e postura (pelos temas dos Reels)",
-  "oferta": "Aulas de pilates (temas recorrentes: escoliose, osteoporose, trabalho sentado, pilates para homens)",
+  "segmento": "Fisioterapia e Pilates Clínico",
+  "oferta": "Pilates Clínico como tratamento: avaliação, raciocínio clínico e exercício escolhido para cada paciente",
   "publico": "",
   "objetivo_redes": "",
   "fontes_da_verdade": [
@@ -27,8 +32,8 @@
     "pessoa": "voce",
     "registro": "didático e acolhedor",
     "tom": [
-      "claro",
-      "educativo",
+      "direto",
+      "clínico",
       "seguro"
     ],
     "faz": [],
@@ -47,19 +52,23 @@
       3,
       5
     ],
-    "cta_preferido": "",
-    "exemplos_aprovados": [],
+    "cta_preferido": "Me chama.",
+    "exemplos_aprovados": [
+      "Aqui não é aula. É tratamento.",
+      "Avaliação. Raciocínio clínico. Exercício escolhido pra você.",
+      "É homem. Tem dor. Tem solução."
+    ],
     "metricas": {}
   },
   "visual": {
     "paleta": {
-      "bg": "#F2F0EC",
-      "fg": "#1A1A1A",
-      "acc": "#8A8A8A",
-      "dark": "#111111",
-      "claro": "#FFFFFF",
-      "destaque": "#FFFFFF",
-      "luz": "#FF9A4D"
+      "bg": "#F5F0F8",
+      "fg": "#2A1A35",
+      "acc": "#7B5B8E",
+      "dark": "#3D2050",
+      "claro": "#F5F0F8",
+      "destaque": "#7B5B8E",
+      "luz": "#C9B3D6"
     },
     "cores_proibidas": [],
     "fontes": {
@@ -68,7 +77,11 @@
       "acento": ""
     },
     "estilo": [],
-    "regras": [],
+    "regras": [
+      "Fundo off-white lilás #F5F0F8 ou roxo escuro #3D2050; texto #2A1A35 ou #F5F0F8; destaque #7B5B8E",
+      "Sans bold para frases de impacto, serifa para texto clínico, itálico serifado na assinatura Dra. Flaviane Sá",
+      "Subtítulo da assinatura: FISIOTERAPIA E PILATES, caixa alta espaçada"
+    ],
     "proibido": [],
     "logo": "logo/",
     "referencias": "referencias/"
@@ -100,8 +113,8 @@
     "ritmo": "calmo, explicativo; texto na tela para o ponto principal de cada bloco"
   },
   "pendencias": [
-    "Confirmar @ do Instagram, paleta, fontes e logo",
     "Confirmar se a fala é da profissional em primeira pessoa",
-    "Enviar referências visuais e legendas aprovadas"
+    "Enviar referências visuais e legendas aprovadas",
+    "Confirmar @ do Instagram e logo"
   ]
 }

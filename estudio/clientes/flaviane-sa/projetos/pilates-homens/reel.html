@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Pilates não é coisa de mulher</title>
+<style>
+  :root{--bg:#F5F0F8;--fg:#2A1A35;--acc:#7B5B8E;--dark:#3D2050;--claro:#F5F0F8;--tinta:#A88BB9;
+        --serif:'Cormorant Garamond',Georgia,serif;--sans:'Montserrat',Arial,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1920px;overflow:hidden;background:var(--dark)}
+  .camada{position:absolute;inset:0;overflow:hidden}
+  .ease{animation-timing-function:cubic-bezier(.2,.7,.1,1);animation-fill-mode:both}
+
+  /* CENA 1 */
+  #s1{background:var(--dark);display:flex;align-items:center;justify-content:center}
+  #s1 .frase{font-family:var(--sans);font-weight:800;color:var(--claro);font-size:104px;line-height:1.08;text-align:center;
+             letter-spacing:-.01em;width:900px;min-height:240px}
+  
+
+  /* CENAS 2 e 3 */
+  #s23{background:var(--bg)}
+  #figura{position:absolute;left:60px;top:300px;width:600px;height:1100px;overflow:visible;
+          animation:entra 1.3s cubic-bezier(.2,.7,.1,1) 5.0s both, centraliza 1.2s cubic-bezier(.6,0,.2,1) 12.5s forwards}
+  @keyframes entra{from{transform:translateX(-820px)}to{transform:translateX(0)}}
+  @keyframes centraliza{from{transform:translateX(0)}to{transform:translateX(180px)}}
+  #figura .linha{fill:none;stroke:var(--fg);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+  #figura .contorno{stroke-width:4;opacity:.9}
+  #figura .vert{fill:none;stroke:var(--acc);stroke-width:9;stroke-linecap:round;stroke-dasharray:.1 22}
+  #figura .morph{animation-duration:3s;animation-delay:13s;animation-timing-function:cubic-bezier(.55,0,.25,1);animation-fill-mode:both}
+  #cabeca{animation:cabeca 3s cubic-bezier(.55,0,.25,1) 13s both}
+  @keyframes cabeca{from{transform:translate(110px,95px)}to{transform:translate(0,0)}}
+  #coluna,#vertebras{animation-name:m-coluna}
+  @keyframes m-coluna{from{d:path("M 405 268 C 352 318, 232 392, 282 540")}to{d:path("M 300 182 C 296 280, 312 400, 300 540")}}
+  #costas{animation-name:m-costas}
+  @keyframes m-costas{from{d:path("M 372 285 C 288 300, 206 410, 252 540")}to{d:path("M 272 250 C 260 330, 274 430, 266 540")}}
+  #peito{animation-name:m-peito}
+  @keyframes m-peito{from{d:path("M 432 318 C 420 400, 346 450, 326 540")}to{d:path("M 332 250 C 352 330, 346 420, 334 540")}}
+  #braco{animation-name:m-braco}
+  @keyframes m-braco{from{d:path("M 388 300 C 420 380, 432 440, 430 548")}to{d:path("M 302 252 C 316 330, 322 400, 326 520")}}
+  #perna{animation-name:m-perna}
+  @keyframes m-perna{from{d:path("M 282 540 C 292 650, 352 730, 352 800 C 346 880, 304 960, 300 1040")}to{d:path("M 300 540 C 304 650, 312 740, 312 800 C 312 880, 302 960, 300 1040")}}
+  #pe{animation-name:m-pe}
+  @keyframes m-pe{from{d:path("M 296 1040 L 372 1046")}to{d:path("M 296 1040 L 372 1046")}}
+  #sombra{fill:var(--acc);opacity:.12}
+
+  /* indicadores */
+  .ind{opacity:0}
+  .ind .ponto{fill:var(--acc)}
+  .ind .anel{fill:none;stroke:var(--acc);stroke-width:3;opacity:0;transform-box:fill-box;transform-origin:center}
+  @keyframes aparece{from{opacity:0}to{opacity:1}}
+  @keyframes some{from{opacity:1}to{opacity:0}}
+  @keyframes pulso{0%{transform:scale(.4);opacity:.95}100%{transform:scale(4.2);opacity:0}}
+  @keyframes bate{0%{transform:scale(1)}30%{transform:scale(1.55)}100%{transform:scale(1)}}
+  .ind .ponto{transform-box:fill-box;transform-origin:center}
+
+  /* rotulos */
+  svg#guias{position:absolute;inset:0;width:1080px;height:1920px;overflow:visible}
+  #guias line{stroke:var(--acc);stroke-width:2;stroke-dasharray:400;stroke-dashoffset:400}
+  @keyframes traca{to{stroke-dashoffset:0}}
+  .rot{position:absolute;left:610px;font-family:var(--sans);font-weight:700;color:var(--fg);font-size:56px;line-height:1;
+       white-space:nowrap;transform-origin:left center}
+  .rot small{display:block;font-weight:600;font-size:22px;letter-spacing:.32em;color:var(--acc);margin-bottom:12px;text-transform:uppercase}
+  @keyframes pop{0%{opacity:0;transform:translateX(40px) scale(1.18)}60%{opacity:1;transform:translateX(0) scale(.97)}100%{opacity:1;transform:none}}
+  .sai{animation:some .45s ease 12.3s forwards}
+
+  #prumo{position:absolute;left:539px;top:270px;width:2px;height:0;
+         background:repeating-linear-gradient(to bottom,var(--acc) 0 14px,transparent 14px 26px);
+         animation:prumo 1.2s cubic-bezier(.6,0,.2,1) 13.1s forwards;opacity:.8}
+  @keyframes prumo{to{height:1160px}}
+  #s3txt{position:absolute;left:90px;right:90px;top:1440px;text-align:center;font-family:var(--serif);color:var(--fg)}
+  #s3txt .l1{font-size:84px;font-weight:600;line-height:1.05;animation:fade 1s ease 16.2s both}
+  #s3txt .l2{font-size:52px;font-style:italic;font-weight:500;line-height:1.25;margin-top:30px;animation:fade 1.1s ease 17.7s both}
+  @keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  /* CENA 4 */
+  #s4{background:var(--dark);animation:fadecena .6s ease 22s both}
+  @keyframes fadecena{from{opacity:0}to{opacity:1}}
+  #s4 .bloco{position:absolute;top:420px;left:0;right:0;text-align:center;font-family:var(--sans);font-weight:800;color:var(--claro);
+             font-size:112px;line-height:1.12;animation:respira 1.8s ease-in-out 24s infinite}
+  @keyframes respira{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+  #s4 .bloco span{display:block;animation:pop4 .7s cubic-bezier(.2,.7,.1,1) both}
+  @keyframes pop4{0%{opacity:0;transform:scale(1.25)}60%{opacity:1;transform:scale(.97)}100%{opacity:1;transform:none}}
+  #s4 .assina{position:absolute;top:1060px;left:0;right:0;text-align:center;animation:desliza 1s cubic-bezier(.2,.7,.1,1) 24.6s both}
+  @keyframes desliza{from{opacity:0;transform:translateY(130px)}to{opacity:1;transform:none}}
+  #s4 .nome{font-family:var(--serif);font-style:italic;font-weight:600;font-size:104px;color:var(--claro)}
+  #s4 .linha-a{width:0;height:1.6px;background:var(--tinta);margin:26px auto;animation:abre .9s ease 25.2s forwards}
+  @keyframes abre{to{width:220px}}
+  #s4 .sub{font-family:var(--sans);font-weight:600;font-size:30px;letter-spacing:.42em;color:var(--tinta);text-transform:uppercase;
+           margin-left:.42em;animation:fade .9s ease 25.4s both}
+  #s4 .cta{position:absolute;top:1500px;left:50%;transform:translateX(-50%);animation:popc .8s cubic-bezier(.2,.7,.1,1) 27.2s both}
+  @keyframes popc{0%{opacity:0;transform:translateX(-50%) scale(.7)}60%{opacity:1;transform:translateX(-50%) scale(1.06)}100%{opacity:1;transform:translateX(-50%) scale(1)}}
+  #s4 .cta b{display:block;background:var(--acc);color:var(--claro);font-family:var(--sans);font-weight:700;font-size:64px;
+             padding:30px 74px;border-radius:999px;animation:respira 1.6s ease-in-out 28.2s infinite;box-shadow:0 18px 50px rgba(0,0,0,.25)}
+</style>
+</head>
+<body>
+
+<section class="camada" id="s23">
+  <div id="prumo"></div>
+  <svg id="figura" viewBox="0 0 600 1100">
+    <ellipse id="sombra" cx="320" cy="1050" rx="120" ry="12"/>
+    <g id="cabeca"><circle class="linha" cx="300" cy="120" r="58"/></g>
+    <path id="costas" class="linha contorno morph" d="M 272 250 C 260 330, 274 430, 266 540"/>
+    <path id="peito" class="linha contorno morph" d="M 332 250 C 352 330, 346 420, 334 540"/>
+    <path id="coluna" class="linha morph" d="M 300 182 C 296 280, 312 400, 300 540"/>
+    <path id="vertebras" class="vert morph" d="M 300 182 C 296 280, 312 400, 300 540"/>
+    <path id="braco" class="linha morph" d="M 302 252 C 316 330, 322 400, 326 520"/>
+    <path id="perna" class="linha morph" d="M 300 540 C 304 650, 312 740, 312 800 C 312 880, 302 960, 300 1040"/>
+    <path id="pe" class="linha morph" d="M 296 1040 L 372 1046"/>
+    <!-- indicadores (posicoes da postura curvada) -->
+    <g class="ind" id="i-cerv" style="animation:aparece .3s ease 6.4s both, some .45s ease 12.3s forwards">
+      <circle class="anel" cx="385" cy="282" r="14" style="animation:pulso 1.3s ease-out 6.4s infinite"/>
+      <circle class="ponto" cx="385" cy="282" r="13" style="animation:bate .5s ease 11.2s both"/></g>
+    <g class="ind" id="i-joelho" style="animation:aparece .3s ease 8s both, some .45s ease 12.3s forwards">
+      <circle class="anel" cx="352" cy="800" r="14" style="animation:pulso 1.3s ease-out 8s infinite"/>
+      <circle class="ponto" cx="352" cy="800" r="13" style="animation:bate .5s ease 11.25s both"/></g>
+    <g class="ind" id="i-lombar" style="animation:aparece .3s ease 9.6s both, some .45s ease 12.3s forwards">
+      <circle class="anel" cx="272" cy="442" r="14" style="animation:pulso 1.3s ease-out 9.6s infinite"/>
+      <circle class="ponto" cx="272" cy="442" r="13" style="animation:bate .5s ease 11.3s both"/></g>
+  </svg>
+
+  <svg id="guias" viewBox="0 0 1080 1920">
+    <line x1="462" y1="582" x2="590" y2="582" class="sai-l" style="animation:traca .5s ease 6.4s forwards, some .45s ease 12.3s forwards"/>
+    <line x1="429" y1="1100" x2="590" y2="1100" style="animation:traca .5s ease 8s forwards, some .45s ease 12.3s forwards"/>
+    <line x1="349" y1="742" x2="590" y2="742" style="animation:traca .5s ease 9.6s forwards, some .45s ease 12.3s forwards"/>
+  </svg>
+  <div class="rot" style="top:522px;animation:pop .6s cubic-bezier(.2,.7,.1,1) 6.5s both, some .45s ease 12.3s forwards"><small>cervical</small>Hérnia de disco.</div>
+  <div class="rot" style="top:1040px;animation:pop .6s cubic-bezier(.2,.7,.1,1) 8.1s both, some .45s ease 12.3s forwards"><small>joelho</small>Artrose.</div>
+  <div class="rot" style="top:682px;animation:pop .6s cubic-bezier(.2,.7,.1,1) 9.7s both, some .45s ease 12.3s forwards"><small>lombar</small>Dor na lombar.</div>
+  <div class="rot" style="top:1290px;animation:pop .6s cubic-bezier(.2,.7,.1,1) 11.2s both, some .45s ease 12.3s forwards"><small>o corpo todo</small>Perda de força.</div>
+
+  <div id="s3txt">
+    <div class="l1">Aqui não é aula.<br>É tratamento.</div>
+    <div class="l2">Avaliação. Raciocínio clínico.<br>Exercício escolhido pra você.</div>
+  </div>
+</section>
+
+<section class="camada" id="s4">
+  <div class="bloco">
+    <span style="animation-delay:22.7s">É homem.</span>
+    <span style="animation-delay:23.1s">Tem dor.</span>
+    <span style="animation-delay:23.5s">Tem solução.</span>
+  </div>
+  <div class="assina">
+    <div class="nome">Dra. Flaviane Sá</div>
+    <div class="linha-a"></div>
+    <div class="sub">Fisioterapia e Pilates</div>
+  </div>
+  <div class="cta"><b>Me chama.</b></div>
+</section>
+
+<section class="camada" id="s1"><div class="frase" id="frase"></div></section>
+
+<script>
+(function () {
+  var frase = 'Pilates não é coisa de mulher.';
+  var s1 = document.getElementById('s1');
+  var box = document.getElementById('frase');
+  var letras = frase.split('').map(function (c) {
+    var sp = document.createElement('span'); sp.textContent = c; sp.style.visibility = 'hidden'; box.appendChild(sp); return sp;
+  });
+  var s4 = document.getElementById('s4');
+  window.cena = function (t) {
+    s1.style.display = t < 5 ? 'flex' : 'none';
+    s4.style.visibility = t >= 22 ? 'visible' : 'hidden';
+    var n = Math.max(0, Math.min(frase.length, Math.floor((t - 0.4) / 0.108) + 1));
+    if (t < 0.4) n = 0;
+    var piscando = n >= frase.length && Math.floor(t / 0.5) % 2;
+    letras.forEach(function (sp, i) {
+      sp.style.visibility = i < n ? 'visible' : 'hidden';
+      sp.style.boxShadow = (i === n - 1 && !piscando) ? '7px 0 0 -0px #F5F0F8' : 'none';
+    });
+  };
+  window.cena(0);
+})();
+</script>
+</body>
+</html>
