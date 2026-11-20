@@ -38,8 +38,9 @@
     ],
     "faz": [],
     "evita": [
-      "promessa de cura ou resultado clínico",
       "diagnóstico pelo Instagram",
+      "promessa de cura ou resultado clínico",
+      "promessa de cura ou solução garantida (ex.: \"tem solução\")",
       "termos de medo ou culpa"
     ],
     "palavras_da_marca": [],
@@ -52,11 +53,12 @@
       3,
       5
     ],
-    "cta_preferido": "Me chama.",
+    "cta_preferido": "Agende sua avaliação",
     "exemplos_aprovados": [
+      "Se você é homem, precisa saber disso.",
       "Aqui não é aula. É tratamento.",
       "Avaliação. Raciocínio clínico. Exercício escolhido pra você.",
-      "É homem. Tem dor. Tem solução."
+      "Se você é homem, saiba que pilates também é pra você."
     ],
     "metricas": {}
   },
@@ -79,6 +81,7 @@
     "estilo": [],
     "regras": [
       "Fundo off-white lilás #F5F0F8 ou roxo escuro #3D2050; texto #2A1A35 ou #F5F0F8; destaque #7B5B8E",
+      "Palavras principais de cada frase em itálico serifado (Cormorant Garamond), em lilás",
       "Sans bold para frases de impacto, serifa para texto clínico, itálico serifado na assinatura Dra. Flaviane Sá",
       "Subtítulo da assinatura: FISIOTERAPIA E PILATES, caixa alta espaçada"
     ],

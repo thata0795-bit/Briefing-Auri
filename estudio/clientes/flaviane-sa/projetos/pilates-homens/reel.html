@@ -2,174 +2,297 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<title>Pilates não é coisa de mulher</title>
+<title>Pilates também é pra você</title>
 <style>
-  :root{--bg:#F5F0F8;--fg:#2A1A35;--acc:#7B5B8E;--dark:#3D2050;--claro:#F5F0F8;--tinta:#A88BB9;
+  :root{--bg:#F5F0F8;--fg:#2A1A35;--acc:#7B5B8E;--dark:#3D2050;--claro:#F5F0F8;--lilas:#C9B3D6;--tinta:#A88BB9;
         --serif:'Cormorant Garamond',Georgia,serif;--sans:'Montserrat',Arial,sans-serif}
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{width:1080px;height:1920px;overflow:hidden;background:var(--dark)}
+  html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg)}
   .camada{position:absolute;inset:0;overflow:hidden}
-  .ease{animation-timing-function:cubic-bezier(.2,.7,.1,1);animation-fill-mode:both}
+  em.k{font-family:var(--serif);font-style:italic;font-weight:600;letter-spacing:0}
 
   /* CENA 1 */
   #s1{background:var(--dark);display:flex;align-items:center;justify-content:center}
-  #s1 .frase{font-family:var(--sans);font-weight:800;color:var(--claro);font-size:104px;line-height:1.08;text-align:center;
-             letter-spacing:-.01em;width:900px;min-height:240px}
-  
+  #frase{font-family:var(--sans);font-weight:800;color:var(--claro);font-size:100px;line-height:1.1;text-align:center;width:940px;
+         text-transform:uppercase;letter-spacing:.01em}
+  #frase em.k{color:var(--lilas);font-size:1.22em;text-transform:none}
 
   /* CENAS 2 e 3 */
   #s23{background:var(--bg)}
-  #figura{position:absolute;left:60px;top:300px;width:600px;height:1100px;overflow:visible;
-          animation:entra 1.3s cubic-bezier(.2,.7,.1,1) 5.0s both, centraliza 1.2s cubic-bezier(.6,0,.2,1) 12.5s forwards}
-  @keyframes entra{from{transform:translateX(-820px)}to{transform:translateX(0)}}
-  @keyframes centraliza{from{transform:translateX(0)}to{transform:translateX(180px)}}
-  #figura .linha{fill:none;stroke:var(--fg);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
-  #figura .contorno{stroke-width:4;opacity:.9}
-  #figura .vert{fill:none;stroke:var(--acc);stroke-width:9;stroke-linecap:round;stroke-dasharray:.1 22}
-  #figura .morph{animation-duration:3s;animation-delay:13s;animation-timing-function:cubic-bezier(.55,0,.25,1);animation-fill-mode:both}
-  #cabeca{animation:cabeca 3s cubic-bezier(.55,0,.25,1) 13s both}
-  @keyframes cabeca{from{transform:translate(110px,95px)}to{transform:translate(0,0)}}
-  #coluna,#vertebras{animation-name:m-coluna}
-  @keyframes m-coluna{from{d:path("M 405 268 C 352 318, 232 392, 282 540")}to{d:path("M 300 182 C 296 280, 312 400, 300 540")}}
-  #costas{animation-name:m-costas}
-  @keyframes m-costas{from{d:path("M 372 285 C 288 300, 206 410, 252 540")}to{d:path("M 272 250 C 260 330, 274 430, 266 540")}}
-  #peito{animation-name:m-peito}
-  @keyframes m-peito{from{d:path("M 432 318 C 420 400, 346 450, 326 540")}to{d:path("M 332 250 C 352 330, 346 420, 334 540")}}
-  #braco{animation-name:m-braco}
-  @keyframes m-braco{from{d:path("M 388 300 C 420 380, 432 440, 430 548")}to{d:path("M 302 252 C 316 330, 322 400, 326 520")}}
-  #perna{animation-name:m-perna}
-  @keyframes m-perna{from{d:path("M 282 540 C 292 650, 352 730, 352 800 C 346 880, 304 960, 300 1040")}to{d:path("M 300 540 C 304 650, 312 740, 312 800 C 312 880, 302 960, 300 1040")}}
-  #pe{animation-name:m-pe}
-  @keyframes m-pe{from{d:path("M 296 1040 L 372 1046")}to{d:path("M 296 1040 L 372 1046")}}
-  #sombra{fill:var(--acc);opacity:.12}
-
-  /* indicadores */
-  .ind{opacity:0}
-  .ind .ponto{fill:var(--acc)}
-  .ind .anel{fill:none;stroke:var(--acc);stroke-width:3;opacity:0;transform-box:fill-box;transform-origin:center}
-  @keyframes aparece{from{opacity:0}to{opacity:1}}
-  @keyframes some{from{opacity:1}to{opacity:0}}
-  @keyframes pulso{0%{transform:scale(.4);opacity:.95}100%{transform:scale(4.2);opacity:0}}
-  @keyframes bate{0%{transform:scale(1)}30%{transform:scale(1.55)}100%{transform:scale(1)}}
-  .ind .ponto{transform-box:fill-box;transform-origin:center}
-
-  /* rotulos */
-  svg#guias{position:absolute;inset:0;width:1080px;height:1920px;overflow:visible}
-  #guias line{stroke:var(--acc);stroke-width:2;stroke-dasharray:400;stroke-dashoffset:400}
-  @keyframes traca{to{stroke-dashoffset:0}}
-  .rot{position:absolute;left:610px;font-family:var(--sans);font-weight:700;color:var(--fg);font-size:56px;line-height:1;
-       white-space:nowrap;transform-origin:left center}
-  .rot small{display:block;font-weight:600;font-size:22px;letter-spacing:.32em;color:var(--acc);margin-bottom:12px;text-transform:uppercase}
-  @keyframes pop{0%{opacity:0;transform:translateX(40px) scale(1.18)}60%{opacity:1;transform:translateX(0) scale(.97)}100%{opacity:1;transform:none}}
-  .sai{animation:some .45s ease 12.3s forwards}
-
-  #prumo{position:absolute;left:539px;top:270px;width:2px;height:0;
-         background:repeating-linear-gradient(to bottom,var(--acc) 0 14px,transparent 14px 26px);
-         animation:prumo 1.2s cubic-bezier(.6,0,.2,1) 13.1s forwards;opacity:.8}
-  @keyframes prumo{to{height:1160px}}
-  #s3txt{position:absolute;left:90px;right:90px;top:1440px;text-align:center;font-family:var(--serif);color:var(--fg)}
+  canvas#corpo{position:absolute;inset:0;width:1080px;height:1920px}
+  .rot{position:absolute;left:620px;font-family:var(--sans);font-weight:700;color:var(--fg);font-size:54px;line-height:1.05;white-space:nowrap}
+  .rot em.k{font-size:1.22em;color:var(--acc)}
+  .rot small{display:block;font-weight:600;font-size:21px;letter-spacing:.32em;color:var(--acc);margin-bottom:10px;text-transform:uppercase}
+  @keyframes pop{0%{opacity:0;transform:translateX(40px) scale(1.15)}60%{opacity:1;transform:translateX(0) scale(.97)}100%{opacity:1;transform:none}}
+  @keyframes some{to{opacity:0;filter:blur(8px)}}
+  #s3txt{position:absolute;left:70px;right:70px;top:1470px;text-align:center;font-family:var(--serif);color:var(--fg)}
   #s3txt .l1{font-size:84px;font-weight:600;line-height:1.05;animation:fade 1s ease 16.2s both}
-  #s3txt .l2{font-size:52px;font-style:italic;font-weight:500;line-height:1.25;margin-top:30px;animation:fade 1.1s ease 17.7s both}
-  @keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  #s3txt .l1 em.k{color:var(--acc);font-size:1.08em}
+  #s3txt .l2{font-family:var(--sans);font-size:36px;font-weight:500;line-height:1.5;margin-top:28px;animation:fade 1.1s ease 17.7s both}
+  #s3txt .l2 em.k{font-size:1.3em;color:var(--acc)}
+  @keyframes fade{from{opacity:0;transform:translateY(16px);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
 
   /* CENA 4 */
-  #s4{background:var(--dark);animation:fadecena .6s ease 22s both}
-  @keyframes fadecena{from{opacity:0}to{opacity:1}}
-  #s4 .bloco{position:absolute;top:420px;left:0;right:0;text-align:center;font-family:var(--sans);font-weight:800;color:var(--claro);
-             font-size:112px;line-height:1.12;animation:respira 1.8s ease-in-out 24s infinite}
-  @keyframes respira{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+  #s4{background:var(--dark);clip-path:circle(0% at 50% 30%);animation:iris 1s cubic-bezier(.7,0,.2,1) 21.6s both}
+  @keyframes iris{from{clip-path:circle(0% at 50% 30%)}to{clip-path:circle(150% at 50% 30%)}}
+  #anel{position:absolute;left:540px;top:576px;width:0;height:0;border:3px solid var(--acc);border-radius:50%;opacity:0;
+        animation:anel 1.1s cubic-bezier(.7,0,.2,1) 21.5s both}
+  @keyframes anel{0%{width:0;height:0;margin:0;opacity:0}6%{opacity:1}100%{width:3200px;height:3200px;margin:-1600px 0 0 -1600px;opacity:0}}
+  #s4 .bloco{position:absolute;top:360px;left:60px;right:60px;text-align:center;font-family:var(--sans);font-weight:800;color:var(--claro);
+             font-size:92px;line-height:1.14;animation:respira 2s ease-in-out 24s infinite}
+  #s4 .bloco em.k{color:var(--lilas);font-size:1.25em}
+  @keyframes respira{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
   #s4 .bloco span{display:block;animation:pop4 .7s cubic-bezier(.2,.7,.1,1) both}
-  @keyframes pop4{0%{opacity:0;transform:scale(1.25)}60%{opacity:1;transform:scale(.97)}100%{opacity:1;transform:none}}
+  @keyframes pop4{0%{opacity:0;transform:translateY(40px) scale(1.08);filter:blur(10px)}60%{opacity:1;filter:blur(0)}100%{opacity:1;transform:none}}
   #s4 .assina{position:absolute;top:1060px;left:0;right:0;text-align:center;animation:desliza 1s cubic-bezier(.2,.7,.1,1) 24.6s both}
   @keyframes desliza{from{opacity:0;transform:translateY(130px)}to{opacity:1;transform:none}}
-  #s4 .nome{font-family:var(--serif);font-style:italic;font-weight:600;font-size:104px;color:var(--claro)}
-  #s4 .linha-a{width:0;height:1.6px;background:var(--tinta);margin:26px auto;animation:abre .9s ease 25.2s forwards}
+  #s4 .nome{font-family:var(--serif);font-style:italic;font-weight:600;font-size:100px;color:var(--claro)}
+  #s4 .linha-a{width:0;height:1.6px;background:var(--tinta);margin:24px auto;animation:abre .9s ease 25.2s forwards}
   @keyframes abre{to{width:220px}}
   #s4 .sub{font-family:var(--sans);font-weight:600;font-size:30px;letter-spacing:.42em;color:var(--tinta);text-transform:uppercase;
            margin-left:.42em;animation:fade .9s ease 25.4s both}
-  #s4 .cta{position:absolute;top:1500px;left:50%;transform:translateX(-50%);animation:popc .8s cubic-bezier(.2,.7,.1,1) 27.2s both}
-  @keyframes popc{0%{opacity:0;transform:translateX(-50%) scale(.7)}60%{opacity:1;transform:translateX(-50%) scale(1.06)}100%{opacity:1;transform:translateX(-50%) scale(1)}}
-  #s4 .cta b{display:block;background:var(--acc);color:var(--claro);font-family:var(--sans);font-weight:700;font-size:64px;
-             padding:30px 74px;border-radius:999px;animation:respira 1.6s ease-in-out 28.2s infinite;box-shadow:0 18px 50px rgba(0,0,0,.25)}
+  #s4 .cta{position:absolute;top:1470px;left:0;right:0;text-align:center;animation:popc .8s cubic-bezier(.2,.7,.1,1) 26.4s both}
+  @keyframes popc{0%{opacity:0;transform:scale(.7)}60%{opacity:1;transform:scale(1.06)}100%{opacity:1;transform:scale(1)}}
+  #s4 .cta b{display:inline-block;background:var(--acc);color:var(--claro);font-family:var(--sans);font-weight:700;font-size:52px;
+             padding:30px 66px;border-radius:999px;animation:respira 1.6s ease-in-out 27.4s infinite;box-shadow:0 18px 50px rgba(0,0,0,.28)}
+  #s4 .cta b em.k{font-size:1.28em;color:#fff}
+  #s4 .brilho{position:absolute;top:1470px;left:-400px;width:260px;height:150px;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);
+              animation:varre 1.4s ease-in-out 27.6s both;mix-blend-mode:screen}
+  @keyframes varre{from{left:-400px}to{left:1300px}}
+
+  /* TRANSICAO 1: paineis na cor da marca */
+  .painel{position:absolute;inset:0;transform:translateY(100%);animation:painel .9s cubic-bezier(.7,0,.2,1) both}
+  @keyframes painel{0%{transform:translateY(100%)}45%{transform:translateY(0)}55%{transform:translateY(0)}100%{transform:translateY(-100%)}}
 </style>
 </head>
 <body>
 
 <section class="camada" id="s23">
-  <div id="prumo"></div>
-  <svg id="figura" viewBox="0 0 600 1100">
-    <ellipse id="sombra" cx="320" cy="1050" rx="120" ry="12"/>
-    <g id="cabeca"><circle class="linha" cx="300" cy="120" r="58"/></g>
-    <path id="costas" class="linha contorno morph" d="M 272 250 C 260 330, 274 430, 266 540"/>
-    <path id="peito" class="linha contorno morph" d="M 332 250 C 352 330, 346 420, 334 540"/>
-    <path id="coluna" class="linha morph" d="M 300 182 C 296 280, 312 400, 300 540"/>
-    <path id="vertebras" class="vert morph" d="M 300 182 C 296 280, 312 400, 300 540"/>
-    <path id="braco" class="linha morph" d="M 302 252 C 316 330, 322 400, 326 520"/>
-    <path id="perna" class="linha morph" d="M 300 540 C 304 650, 312 740, 312 800 C 312 880, 302 960, 300 1040"/>
-    <path id="pe" class="linha morph" d="M 296 1040 L 372 1046"/>
-    <!-- indicadores (posicoes da postura curvada) -->
-    <g class="ind" id="i-cerv" style="animation:aparece .3s ease 6.4s both, some .45s ease 12.3s forwards">
-      <circle class="anel" cx="385" cy="282" r="14" style="animation:pulso 1.3s ease-out 6.4s infinite"/>
-      <circle class="ponto" cx="385" cy="282" r="13" style="animation:bate .5s ease 11.2s both"/></g>
-    <g class="ind" id="i-joelho" style="animation:aparece .3s ease 8s both, some .45s ease 12.3s forwards">
-      <circle class="anel" cx="352" cy="800" r="14" style="animation:pulso 1.3s ease-out 8s infinite"/>
-      <circle class="ponto" cx="352" cy="800" r="13" style="animation:bate .5s ease 11.25s both"/></g>
-    <g class="ind" id="i-lombar" style="animation:aparece .3s ease 9.6s both, some .45s ease 12.3s forwards">
-      <circle class="anel" cx="272" cy="442" r="14" style="animation:pulso 1.3s ease-out 9.6s infinite"/>
-      <circle class="ponto" cx="272" cy="442" r="13" style="animation:bate .5s ease 11.3s both"/></g>
-  </svg>
-
-  <svg id="guias" viewBox="0 0 1080 1920">
-    <line x1="462" y1="582" x2="590" y2="582" class="sai-l" style="animation:traca .5s ease 6.4s forwards, some .45s ease 12.3s forwards"/>
-    <line x1="429" y1="1100" x2="590" y2="1100" style="animation:traca .5s ease 8s forwards, some .45s ease 12.3s forwards"/>
-    <line x1="349" y1="742" x2="590" y2="742" style="animation:traca .5s ease 9.6s forwards, some .45s ease 12.3s forwards"/>
-  </svg>
-  <div class="rot" style="top:522px;animation:pop .6s cubic-bezier(.2,.7,.1,1) 6.5s both, some .45s ease 12.3s forwards"><small>cervical</small>Hérnia de disco.</div>
-  <div class="rot" style="top:1040px;animation:pop .6s cubic-bezier(.2,.7,.1,1) 8.1s both, some .45s ease 12.3s forwards"><small>joelho</small>Artrose.</div>
-  <div class="rot" style="top:682px;animation:pop .6s cubic-bezier(.2,.7,.1,1) 9.7s both, some .45s ease 12.3s forwards"><small>lombar</small>Dor na lombar.</div>
-  <div class="rot" style="top:1290px;animation:pop .6s cubic-bezier(.2,.7,.1,1) 11.2s both, some .45s ease 12.3s forwards"><small>o corpo todo</small>Perda de força.</div>
-
+  <canvas id="corpo" width="1080" height="1920"></canvas>
+  <div class="rot" id="r-cerv" style="animation:pop .6s cubic-bezier(.2,.7,.1,1) 6.5s both, some .45s ease 12.3s forwards"><small>cervical</small><em class="k">Hérnia</em> de disco.</div>
+  <div class="rot" id="r-joelho" style="animation:pop .6s cubic-bezier(.2,.7,.1,1) 8.1s both, some .45s ease 12.3s forwards"><small>joelho</small><em class="k">Artrose.</em></div>
+  <div class="rot" id="r-lombar" style="animation:pop .6s cubic-bezier(.2,.7,.1,1) 9.7s both, some .45s ease 12.3s forwards"><small>lombar</small><em class="k">Dor</em> na lombar.</div>
+  <div class="rot" id="r-forca" style="animation:pop .6s cubic-bezier(.2,.7,.1,1) 11.2s both, some .45s ease 12.3s forwards"><small>o corpo todo</small>Perda de <em class="k">força.</em></div>
   <div id="s3txt">
-    <div class="l1">Aqui não é aula.<br>É tratamento.</div>
-    <div class="l2">Avaliação. Raciocínio clínico.<br>Exercício escolhido pra você.</div>
+    <div class="l1">Aqui não é aula.<br>É <em class="k">tratamento.</em></div>
+    <div class="l2"><em class="k">Avaliação.</em> Raciocínio <em class="k">clínico.</em><br>Exercício escolhido <em class="k">pra você.</em></div>
   </div>
 </section>
 
+<section class="camada" id="s1"><div id="frase"></div></section>
+
+<div class="painel" style="background:#7B5B8E;animation-delay:4.7s"></div>
+<div class="painel" style="background:#C9B3D6;animation-delay:4.76s"></div>
+<div class="painel" style="background:#F5F0F8;animation-delay:4.82s"></div>
+
+<div id="anel"></div>
 <section class="camada" id="s4">
   <div class="bloco">
-    <span style="animation-delay:22.7s">É homem.</span>
-    <span style="animation-delay:23.1s">Tem dor.</span>
-    <span style="animation-delay:23.5s">Tem solução.</span>
+    <span style="animation-delay:22.5s">Se você é <em class="k">homem,</em></span>
+    <span style="animation-delay:22.9s">saiba que <em class="k">pilates</em></span>
+    <span style="animation-delay:23.3s"><em class="k">também é pra você.</em></span>
   </div>
   <div class="assina">
     <div class="nome">Dra. Flaviane Sá</div>
     <div class="linha-a"></div>
     <div class="sub">Fisioterapia e Pilates</div>
   </div>
-  <div class="cta"><b>Me chama.</b></div>
+  <div class="cta"><b>Agende sua <em class="k">avaliação</em></b></div>
+  <div class="brilho"></div>
 </section>
-
-<section class="camada" id="s1"><div class="frase" id="frase"></div></section>
 
 <script>
 (function () {
-  var frase = 'Pilates não é coisa de mulher.';
-  var s1 = document.getElementById('s1');
+  // ---------- cena 1: digitacao com palavras-chave em italico ----------
+  var partes = [['Se você é ', 0], ['homem', 1], [', precisa ', 0], ['saber\u00a0disso.', 1]];
   var box = document.getElementById('frase');
-  var letras = frase.split('').map(function (c) {
-    var sp = document.createElement('span'); sp.textContent = c; sp.style.visibility = 'hidden'; box.appendChild(sp); return sp;
+  var letras = [];
+  partes.forEach(function (p) {
+    var alvo = box;
+    if (p[1]) { alvo = document.createElement('em'); alvo.className = 'k'; box.appendChild(alvo); }
+    p[0].split('').forEach(function (c) {
+      var sp = document.createElement('span'); sp.textContent = c; sp.style.visibility = 'hidden'; alvo.appendChild(sp); letras.push(sp);
+    });
   });
-  var s4 = document.getElementById('s4');
+
+  // ---------- boneco articulado ----------
+  var cv = document.getElementById('corpo'), g = cv.getContext('2d');
+  var rad = Math.PI / 180;
+  var CURVADO = {shin: 11, thigh: -13, lum: 6, tor: 32, neck: 42, head: 22, ua: 20, fa: 26};
+  var ERETO   = {shin: 1,  thigh: -1,  lum: -7, tor: 7, neck: 4,  head: -2, ua: 4,  fa: 12};
+  var L = {shin: 262, thigh: 282, lum: 140, tor: 205, neck: 66};
+  function ease(x) { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); }
+  function easeOut(x) { x = Math.max(0, Math.min(1, x)); return 1 - Math.pow(1 - x, 3); }
+  function add(p, len, ang) { return [p[0] + len * Math.sin(ang * rad), p[1] - len * Math.cos(ang * rad)]; }
+  function down(p, len, ang) { return [p[0] + len * Math.sin(ang * rad), p[1] + len * Math.cos(ang * rad)]; }
+  function pose(k, resp) {
+    var o = {}; for (var j in ERETO) o[j] = CURVADO[j] + (ERETO[j] - CURVADO[j]) * k;
+    o.tor += resp; return o;
+  }
+  function rig(ax, P) {
+    var A = [ax, 1395];
+    var K = add(A, L.shin, P.shin), H = add(K, L.thigh, P.thigh);
+    var L1 = add(H, L.lum, P.lum), T = add(L1, L.tor, P.tor), C = add(T, L.neck, P.neck);
+    return {A: A, K: K, H: H, L1: L1, T: T, C: C, P: P};
+  }
+  function cr(p0, p1, p2, p3, t) {
+    var t2 = t * t, t3 = t2 * t;
+    return [0, 1].map(function (i) {
+      return 0.5 * ((2 * p1[i]) + (-p0[i] + p2[i]) * t + (2 * p0[i] - 5 * p1[i] + 4 * p2[i] - p3[i]) * t2 + (-p0[i] + 3 * p1[i] - 3 * p2[i] + p3[i]) * t3);
+    });
+  }
+  function coluna(R, n) {
+    var pts = [R.H, R.L1, R.T, R.C], out = [];
+    var ext0 = [2 * pts[0][0] - pts[1][0], 2 * pts[0][1] - pts[1][1]], ext1 = [2 * pts[3][0] - pts[2][0], 2 * pts[3][1] - pts[2][1]];
+    var all = [ext0].concat(pts, [ext1]);
+    for (var i = 0; i <= n; i++) {
+      var s = i / n * 3, seg = Math.min(2, Math.floor(s)), u = s - seg;
+      out.push(cr(all[seg], all[seg + 1], all[seg + 2], all[seg + 3], u));
+    }
+    return out;
+  }
+  function perfil(tab, s) {
+    for (var i = 1; i < tab.length; i++) if (s <= tab[i][0]) {
+      var a = tab[i - 1], b = tab[i], u = (s - a[0]) / (b[0] - a[0]); u = u * u * (3 - 2 * u); return a[1] + (b[1] - a[1]) * u;
+    }
+    return tab[tab.length - 1][1];
+  }
+  var COSTAS = [[0, 74], [0.18, 50], [0.42, 56], [0.68, 66], [0.88, 52], [1, 34]];
+  var FRENTE = [[0, 86], [0.16, 98], [0.36, 92], [0.58, 108], [0.8, 92], [0.93, 60], [1, 34]];
+  function membro(p, q, r0, r1, rm) {
+    var dx = q[0] - p[0], dy = q[1] - p[1], len = Math.hypot(dx, dy), nx = -dy / len, ny = dx / len, n = 14, e = [], d = [];
+    for (var i = 0; i <= n; i++) {
+      var u = i / n, r = r0 + (r1 - r0) * u + (rm || 0) * Math.sin(Math.PI * Math.min(1, u * 1.6));
+      var x = p[0] + dx * u, y = p[1] + dy * u; e.push([x + nx * r, y + ny * r]); d.push([x - nx * r, y - ny * r]);
+    }
+    g.beginPath(); g.moveTo(e[0][0], e[0][1]); e.forEach(function (pt) { g.lineTo(pt[0], pt[1]); });
+    for (var j = d.length - 1; j >= 0; j--) g.lineTo(d[j][0], d[j][1]);
+    g.closePath(); g.fill();
+    g.beginPath(); g.arc(p[0], p[1], r0, 0, 7); g.fill();
+    g.beginPath(); g.arc(q[0], q[1], r1, 0, 7); g.fill();
+  }
+  function desenha(R, alpha) {
+    var P = R.P, sp = coluna(R, 48);
+    var grad = g.createLinearGradient(0, 260, 0, 1420);
+    grad.addColorStop(0, '#4A2A5E'); grad.addColorStop(0.55, '#33203F'); grad.addColorStop(1, '#2A1A35');
+    g.save(); g.globalAlpha = alpha; g.fillStyle = grad;
+    // sombra no chao
+    g.save(); g.fillStyle = 'rgba(123,91,142,.18)'; g.beginPath(); g.ellipse(R.A[0] + 40, 1418, 150, 16, 0, 0, 7); g.fill(); g.restore();
+    // tronco a partir da coluna
+    var fr = [], cs = [];
+    for (var i = 0; i < sp.length; i++) {
+      var a = sp[Math.max(0, i - 1)], b = sp[Math.min(sp.length - 1, i + 1)];
+      var tx = b[0] - a[0], ty = b[1] - a[1], l = Math.hypot(tx, ty); tx /= l; ty /= l;
+      var nx = -ty, ny = tx, s = i / (sp.length - 1);
+      var f = perfil(FRENTE, s), c = perfil(COSTAS, s);
+      fr.push([sp[i][0] + nx * f, sp[i][1] + ny * f]); cs.push([sp[i][0] - nx * c, sp[i][1] - ny * c]);
+    }
+    g.beginPath(); g.moveTo(cs[0][0], cs[0][1]);
+    cs.forEach(function (p) { g.lineTo(p[0], p[1]); });
+    for (var j = fr.length - 1; j >= 0; j--) g.lineTo(fr[j][0], fr[j][1]);
+    g.closePath(); g.fill();
+    // gluteo e quadril
+    var dirc = [sp[3][0] - sp[0][0], sp[3][1] - sp[0][1]], lc = Math.hypot(dirc[0], dirc[1]);
+    var bx = dirc[1] / lc, by = -dirc[0] / lc; // vetor para as costas
+    g.beginPath(); g.arc(R.H[0] + bx * 20, R.H[1] + by * 20 + 22, 60, 0, 7); g.fill();
+    // pernas (perna de tras um pouco recuada para dar volume)
+    membro(R.H, R.K, 72, 44, 6); membro(R.K, R.A, 44, 24, 14);
+    membro([R.H[0] - 14, R.H[1]], [R.K[0] - 16, R.K[1]], 64, 40, 4); membro([R.K[0] - 16, R.K[1]], [R.A[0] - 14, R.A[1]], 40, 22, 12);
+    // pe
+    var A = R.A; g.beginPath();
+    [[-36, -14], [-40, 22], [112, 26], [122, 12], [64, -6], [14, -26]].forEach(function (d, k) { k ? g.lineTo(A[0] + d[0], A[1] + d[1]) : g.moveTo(A[0] + d[0], A[1] + d[1]); });
+    g.closePath(); g.fill();
+    // braco
+    var S = [sp[42][0] + 8, sp[42][1] + 8];
+    var E = down(S, 176, P.ua), W = down(E, 160, P.fa);
+    membro(S, E, 38, 28, 6); membro(E, W, 28, 19, 5);
+    g.beginPath(); g.ellipse(W[0] + 8 * Math.sin(P.fa * rad), W[1] + 30, 20, 36, -P.fa * rad, 0, 7); g.fill();
+    // pescoco e cabeca
+    var Hb = add(R.C, 30, P.neck);
+    membro(sp[44], Hb, 34, 30, 0);
+    var Hc = add(Hb, 58, P.neck * 0.6 + P.head);
+    g.save(); g.translate(Hc[0], Hc[1]); g.rotate((P.head + P.neck * 0.35) * rad);
+    g.beginPath(); g.ellipse(-6, -8, 66, 76, 0, 0, 7); g.fill();               // cranio
+    g.beginPath(); g.moveTo(-30, 30); g.quadraticCurveTo(10, 86, 52, 66); g.lineTo(60, 44); g.lineTo(58, 18); g.lineTo(76, 0); g.lineTo(60, -14);
+    g.quadraticCurveTo(58, -40, 40, -56); g.lineTo(-10, -20); g.closePath(); g.fill();   // rosto, nariz e queixo
+    g.restore();
+    g.restore();
+    return {sp: sp, Hc: Hc};
+  }
+  function vertebras(sp, alpha) {
+    g.save(); g.globalAlpha = alpha; g.fillStyle = '#C9B3D6';
+    for (var i = 3; i < sp.length - 1; i += 3) { g.beginPath(); g.ellipse(sp[i][0], sp[i][1], 9, 6, 0, 0, 7); g.fill(); }
+    g.restore();
+  }
+  function indicador(p, t0, t, alpha, extra) {
+    if (t < t0 || alpha <= 0) return;
+    g.save(); g.globalAlpha = alpha;
+    var ph = ((t - t0) % 1.3) / 1.3;
+    g.strokeStyle = '#7B5B8E'; g.lineWidth = 4; g.globalAlpha = alpha * (1 - ph);
+    g.beginPath(); g.arc(p[0], p[1], 14 + ph * 60, 0, 7); g.stroke();
+    g.globalAlpha = alpha;
+    var bump = extra ? 1 + 0.6 * Math.max(0, 1 - Math.abs(t - extra - 0.15) / 0.25) : 1;
+    g.fillStyle = '#7B5B8E'; g.strokeStyle = '#F5F0F8'; g.lineWidth = 4;
+    g.beginPath(); g.arc(p[0], p[1], 14 * bump, 0, 7); g.fill(); g.stroke();
+    g.restore();
+  }
+  function guia(p, y, t0, t, alpha) {
+    if (t < t0 || alpha <= 0) return;
+    var k = easeOut((t - t0) / 0.5), x1 = 600;
+    g.save(); g.globalAlpha = alpha; g.strokeStyle = '#7B5B8E'; g.lineWidth = 2;
+    g.beginPath(); g.moveTo(p[0] + 18, p[1]); g.lineTo(p[0] + 18 + (x1 - p[0] - 18) * k, p[1] + (y - p[1]) * k); g.stroke();
+    g.restore();
+  }
+  // posicoes dos rotulos a partir da postura curvada
+  var R0 = rig(300, pose(0, 0)), sp0 = coluna(R0, 48);
+  var pCerv = sp0[44], pLomb = sp0[9], pJoel = R0.K;
+  document.getElementById('r-cerv').style.top = (pCerv[1] - 64) + 'px';
+  document.getElementById('r-lombar').style.top = (pLomb[1] - 64) + 'px';
+  document.getElementById('r-joelho').style.top = (pJoel[1] - 64) + 'px';
+  document.getElementById('r-forca').style.top = '1250px';
+
+  var s1 = document.getElementById('s1'), s4 = document.getElementById('s4');
   window.cena = function (t) {
-    s1.style.display = t < 5 ? 'flex' : 'none';
-    s4.style.visibility = t >= 22 ? 'visible' : 'hidden';
-    var n = Math.max(0, Math.min(frase.length, Math.floor((t - 0.4) / 0.108) + 1));
-    if (t < 0.4) n = 0;
-    var piscando = n >= frase.length && Math.floor(t / 0.5) % 2;
+    // cena 1
+    s1.style.display = t < 5.15 ? 'flex' : 'none';
+    var n = t < 0.4 ? 0 : Math.min(letras.length, Math.floor((t - 0.4) / 0.088) + 1);
+    var pisca = n >= letras.length && Math.floor(t / 0.5) % 2;
     letras.forEach(function (sp, i) {
       sp.style.visibility = i < n ? 'visible' : 'hidden';
-      sp.style.boxShadow = (i === n - 1 && !piscando) ? '7px 0 0 -0px #F5F0F8' : 'none';
+      sp.style.boxShadow = (i === n - 1 && !pisca) ? '8px 0 0 0 #F5F0F8' : 'none';
     });
+    s4.style.visibility = t >= 21.5 ? 'visible' : 'hidden';
+    document.getElementById('anel').style.visibility = t >= 21.4 ? 'visible' : 'hidden';
+    // corpo
+    g.clearRect(0, 0, 1080, 1920);
+    if (t < 5.1 || t > 22.8) return;
+    var x = 300 - 900 * (1 - easeOut((t - 5.25) / 1.3)) + 180 * ease((t - 12.5) / 1.2);
+    var k = ease((t - 13) / 3);
+    var resp = 0.9 * Math.sin(t * 2.2);
+    var R = rig(x, pose(k, resp));
+    // linha de prumo
+    var ap = Math.min(ease((t - 13.1) / 1.2), 1 - ease((t - 20.6) / 0.8));
+    if (ap > 0) {
+      g.save(); g.strokeStyle = '#7B5B8E'; g.globalAlpha = 0.75 * (t > 13.1 ? 1 : 0); g.lineWidth = 2.5; g.setLineDash([16, 12]);
+      var px = R.A[0] + 30; g.beginPath(); g.moveTo(px, 230); g.lineTo(px, 230 + 1200 * ap); g.stroke(); g.restore();
+    }
+    var out = desenha(R, 1);
+    vertebras(out.sp, 0.55 + 0.45 * ease((t - 14) / 2));
+    // indicadores e guias (somem antes da virada)
+    var fade = 1 - ease((t - 12.3) / 0.45);
+    var sp = out.sp;
+    indicador(sp[44], 6.4, t, fade, 11.2); guia(sp[44], parseFloat(document.getElementById('r-cerv').style.top) + 64, 6.4, t, fade);
+    indicador(R.K, 8.0, t, fade, 11.25); guia(R.K, parseFloat(document.getElementById('r-joelho').style.top) + 64, 8.0, t, fade);
+    indicador(sp[9], 9.6, t, fade, 11.3); guia(sp[9], parseFloat(document.getElementById('r-lombar').style.top) + 64, 9.6, t, fade);
+    // varredura clinica (transicao 2)
+    var v = (t - 12.2) / 0.9;
+    if (v > 0 && v < 1) {
+      var y = 200 + 1300 * ease(v);
+      var gr = g.createLinearGradient(0, y - 120, 0, y + 6);
+      gr.addColorStop(0, 'rgba(201,179,214,0)'); gr.addColorStop(1, 'rgba(123,91,142,.45)');
+      g.fillStyle = gr; g.fillRect(0, y - 120, 1080, 126);
+      g.fillStyle = '#7B5B8E'; g.fillRect(0, y, 1080, 3);
+    }
   };
   window.cena(0);
 })();

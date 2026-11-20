@@ -1,12 +1,15 @@
-# Reel 30 s: Pilates não é coisa de mulher (100% animado, sem takes)
+# Reel 30 s: Pilates para homens (100% animado, sem takes), versão 2
 
 Cenas (linha do tempo única em reel.html):
-1. 0 a 5 s: fundo #3D2050, frase digitada letra a letra, pausa, corte seco.
-2. 5 a 13 s: silhueta masculina em postura curvada entra pela esquerda; indicadores pulsam com os rótulos
-   Hérnia de disco (cervical), Artrose (joelho), Dor na lombar (lombar), Perda de força (os três pontos juntos).
-3. 13 a 22 s: a silhueta se alinha na linha de prumo em 3 s (morph de postura); texto clínico em fade.
-4. 22 a 30 s: fade para #3D2050, "É homem. Tem dor. Tem solução." com pulso, assinatura desliza, "Me chama." no fim.
+1. 0 a 5 s: fundo #3D2050, "SE VOCÊ É homem, PRECISA saber disso." digitado letra a letra (palavras-chave em itálico serifado lilás).
+   Transição: três painéis nas cores da marca sobem e revelam a cena 2.
+2. 5 a 13 s: boneco articulado realista (canvas) em postura curvada; indicadores pulsam com os rótulos
+   Hérnia de disco (cervical), Artrose (joelho), Dor na lombar (lombar), Perda de força (os três juntos).
+   Transição: varredura clínica de cima a baixo.
+3. 13 a 22 s: linha de prumo e alinhamento postural em 3 s (rotação das articulações); vértebras visíveis; texto clínico.
+   Transição: íris circular em #3D2050 com anel lilás.
+4. 22 a 30 s: "Se você é homem, saiba que pilates também é pra você.", assinatura, CTA "Agende sua avaliação" com brilho.
 
 Refazer: `node .claude/skills/estudio-criativo/scripts/anima.mjs reel.html --dur 30 --saida animacao.mp4 --cliente flaviane-sa`,
-depois mixar trilha.wav (ambiente original sintetizada, baixa) com grão leve.
-Subtítulo da assinatura em lilás claro #A88BB9 porque #7B5B8E sobre #3D2050 fica ilegível; "Me chama." usa #7B5B8E como fundo do botão.
+depois mixar trilha.wav (ambiente original, -18 LUFS) com grão leve (noise c0s=5).
+Promessa de cura removida ("Tem solução" saiu). Subtítulo da assinatura em #A88BB9 por legibilidade.
