@@ -25,7 +25,7 @@
   .rot small{display:block;font-weight:600;font-size:21px;letter-spacing:.32em;color:var(--acc);margin-bottom:10px;text-transform:uppercase}
   @keyframes pop{0%{opacity:0;transform:translateX(40px) scale(1.15)}60%{opacity:1;transform:translateX(0) scale(.97)}100%{opacity:1;transform:none}}
   @keyframes some{to{opacity:0;filter:blur(8px)}}
-  #s3txt{position:absolute;left:70px;right:70px;top:1470px;text-align:center;font-family:var(--serif);color:var(--fg)}
+  #s3txt{animation:some .45s ease 21.3s forwards;position:absolute;left:70px;right:70px;top:1470px;text-align:center;font-family:var(--serif);color:var(--fg)}
   #s3txt .l1{font-size:84px;font-weight:600;line-height:1.05;animation:fade 1s ease 16.2s both}
   #s3txt .l1 em.k{color:var(--acc);font-size:1.08em}
   #s3txt .l2{font-family:var(--sans);font-size:36px;font-weight:500;line-height:1.5;margin-top:28px;animation:fade 1.1s ease 17.7s both}
@@ -33,7 +33,7 @@
   @keyframes fade{from{opacity:0;transform:translateY(16px);filter:blur(6px)}to{opacity:1;transform:none;filter:blur(0)}}
 
   /* CENA 4 */
-  #s4{background:var(--dark);clip-path:circle(0% at 50% 30%);animation:iris 1s cubic-bezier(.7,0,.2,1) 21.6s both}
+  #s4{background:var(--dark)}
   @keyframes iris{from{clip-path:circle(0% at 50% 30%)}to{clip-path:circle(150% at 50% 30%)}}
   #anel{position:absolute;left:540px;top:576px;width:0;height:0;border:3px solid var(--acc);border-radius:50%;opacity:0;
         animation:anel 1.1s cubic-bezier(.7,0,.2,1) 21.5s both}
@@ -68,8 +68,9 @@
 <body>
 
 <section class="camada" id="s23">
+  <canvas id="c3d" width="1080" height="1920" style="position:absolute;inset:0;width:1080px;height:1920px"></canvas>
   <canvas id="corpo" width="1080" height="1920"></canvas>
-  <div class="rot" id="r-cerv" style="animation:pop .6s cubic-bezier(.2,.7,.1,1) 6.5s both, some .45s ease 12.3s forwards"><small>cervical</small><em class="k">Hérnia</em> de disco.</div>
+  <div class="rot" id="r-cerv" style="animation:pop .6s cubic-bezier(.2,.7,.1,1) 6.5s both, some .45s ease 12.3s forwards"><small>cervical</small><em class="k">Dor</em> na cervical.</div>
   <div class="rot" id="r-joelho" style="animation:pop .6s cubic-bezier(.2,.7,.1,1) 8.1s both, some .45s ease 12.3s forwards"><small>joelho</small><em class="k">Artrose.</em></div>
   <div class="rot" id="r-lombar" style="animation:pop .6s cubic-bezier(.2,.7,.1,1) 9.7s both, some .45s ease 12.3s forwards"><small>lombar</small><em class="k">Dor</em> na lombar.</div>
   <div class="rot" id="r-forca" style="animation:pop .6s cubic-bezier(.2,.7,.1,1) 11.2s both, some .45s ease 12.3s forwards"><small>o corpo todo</small>Perda de <em class="k">força.</em></div>
@@ -101,6 +102,9 @@
   <div class="brilho"></div>
 </section>
 
+<script src="node_modules/three/build/three.min.js"></script><!-- npm i three@0.149.0 nesta pasta; copie humano.js e boneco3d.js de .claude/skills/estudio-criativo/modelos/humano3d -->
+<script src="humano.js"></script>
+<script src="boneco3d.js"></script>
 <script>
 (function () {
   // ---------- cena 1: digitacao com palavras-chave em italico ----------
@@ -115,121 +119,26 @@
     });
   });
 
-  // ---------- boneco articulado ----------
+  // ---------- boneco 3D ----------
+  var c3d = document.getElementById('c3d');
+  Boneco.init(c3d, {alvoY: -1.9, alturaVisivel: 33.7});
   var cv = document.getElementById('corpo'), g = cv.getContext('2d');
-  var rad = Math.PI / 180;
-  var CURVADO = {shin: 11, thigh: -13, lum: 6, tor: 32, neck: 42, head: 22, ua: 20, fa: 26};
-  var ERETO   = {shin: 1,  thigh: -1,  lum: -7, tor: 7, neck: 4,  head: -2, ua: 4,  fa: 12};
-  var L = {shin: 262, thigh: 282, lum: 140, tor: 205, neck: 66};
   function ease(x) { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); }
   function easeOut(x) { x = Math.max(0, Math.min(1, x)); return 1 - Math.pow(1 - x, 3); }
-  function add(p, len, ang) { return [p[0] + len * Math.sin(ang * rad), p[1] - len * Math.cos(ang * rad)]; }
-  function down(p, len, ang) { return [p[0] + len * Math.sin(ang * rad), p[1] + len * Math.cos(ang * rad)]; }
-  function pose(k, resp) {
-    var o = {}; for (var j in ERETO) o[j] = CURVADO[j] + (ERETO[j] - CURVADO[j]) * k;
-    o.tor += resp; return o;
-  }
-  function rig(ax, P) {
-    var A = [ax, 1395];
-    var K = add(A, L.shin, P.shin), H = add(K, L.thigh, P.thigh);
-    var L1 = add(H, L.lum, P.lum), T = add(L1, L.tor, P.tor), C = add(T, L.neck, P.neck);
-    return {A: A, K: K, H: H, L1: L1, T: T, C: C, P: P};
-  }
-  function cr(p0, p1, p2, p3, t) {
-    var t2 = t * t, t3 = t2 * t;
-    return [0, 1].map(function (i) {
-      return 0.5 * ((2 * p1[i]) + (-p0[i] + p2[i]) * t + (2 * p0[i] - 5 * p1[i] + 4 * p2[i] - p3[i]) * t2 + (-p0[i] + 3 * p1[i] - 3 * p2[i] + p3[i]) * t3);
-    });
-  }
-  function coluna(R, n) {
-    var pts = [R.H, R.L1, R.T, R.C], out = [];
-    var ext0 = [2 * pts[0][0] - pts[1][0], 2 * pts[0][1] - pts[1][1]], ext1 = [2 * pts[3][0] - pts[2][0], 2 * pts[3][1] - pts[2][1]];
-    var all = [ext0].concat(pts, [ext1]);
-    for (var i = 0; i <= n; i++) {
-      var s = i / n * 3, seg = Math.min(2, Math.floor(s)), u = s - seg;
-      out.push(cr(all[seg], all[seg + 1], all[seg + 2], all[seg + 3], u));
-    }
-    return out;
-  }
-  function perfil(tab, s) {
-    for (var i = 1; i < tab.length; i++) if (s <= tab[i][0]) {
-      var a = tab[i - 1], b = tab[i], u = (s - a[0]) / (b[0] - a[0]); u = u * u * (3 - 2 * u); return a[1] + (b[1] - a[1]) * u;
-    }
-    return tab[tab.length - 1][1];
-  }
-  var COSTAS = [[0, 74], [0.18, 50], [0.42, 56], [0.68, 66], [0.88, 52], [1, 34]];
-  var FRENTE = [[0, 86], [0.16, 98], [0.36, 92], [0.58, 108], [0.8, 92], [0.93, 60], [1, 34]];
-  function membro(p, q, r0, r1, rm) {
-    var dx = q[0] - p[0], dy = q[1] - p[1], len = Math.hypot(dx, dy), nx = -dy / len, ny = dx / len, n = 14, e = [], d = [];
-    for (var i = 0; i <= n; i++) {
-      var u = i / n, r = r0 + (r1 - r0) * u + (rm || 0) * Math.sin(Math.PI * Math.min(1, u * 1.6));
-      var x = p[0] + dx * u, y = p[1] + dy * u; e.push([x + nx * r, y + ny * r]); d.push([x - nx * r, y - ny * r]);
-    }
-    g.beginPath(); g.moveTo(e[0][0], e[0][1]); e.forEach(function (pt) { g.lineTo(pt[0], pt[1]); });
-    for (var j = d.length - 1; j >= 0; j--) g.lineTo(d[j][0], d[j][1]);
-    g.closePath(); g.fill();
-    g.beginPath(); g.arc(p[0], p[1], r0, 0, 7); g.fill();
-    g.beginPath(); g.arc(q[0], q[1], r1, 0, 7); g.fill();
-  }
-  function desenha(R, alpha) {
-    var P = R.P, sp = coluna(R, 48);
-    var grad = g.createLinearGradient(0, 260, 0, 1420);
-    grad.addColorStop(0, '#4A2A5E'); grad.addColorStop(0.55, '#33203F'); grad.addColorStop(1, '#2A1A35');
-    g.save(); g.globalAlpha = alpha; g.fillStyle = grad;
-    // sombra no chao
-    g.save(); g.fillStyle = 'rgba(123,91,142,.18)'; g.beginPath(); g.ellipse(R.A[0] + 40, 1418, 150, 16, 0, 0, 7); g.fill(); g.restore();
-    // tronco a partir da coluna
-    var fr = [], cs = [];
-    for (var i = 0; i < sp.length; i++) {
-      var a = sp[Math.max(0, i - 1)], b = sp[Math.min(sp.length - 1, i + 1)];
-      var tx = b[0] - a[0], ty = b[1] - a[1], l = Math.hypot(tx, ty); tx /= l; ty /= l;
-      var nx = -ty, ny = tx, s = i / (sp.length - 1);
-      var f = perfil(FRENTE, s), c = perfil(COSTAS, s);
-      fr.push([sp[i][0] + nx * f, sp[i][1] + ny * f]); cs.push([sp[i][0] - nx * c, sp[i][1] - ny * c]);
-    }
-    g.beginPath(); g.moveTo(cs[0][0], cs[0][1]);
-    cs.forEach(function (p) { g.lineTo(p[0], p[1]); });
-    for (var j = fr.length - 1; j >= 0; j--) g.lineTo(fr[j][0], fr[j][1]);
-    g.closePath(); g.fill();
-    // gluteo e quadril
-    var dirc = [sp[3][0] - sp[0][0], sp[3][1] - sp[0][1]], lc = Math.hypot(dirc[0], dirc[1]);
-    var bx = dirc[1] / lc, by = -dirc[0] / lc; // vetor para as costas
-    g.beginPath(); g.arc(R.H[0] + bx * 20, R.H[1] + by * 20 + 22, 60, 0, 7); g.fill();
-    // pernas (perna de tras um pouco recuada para dar volume)
-    membro(R.H, R.K, 72, 44, 6); membro(R.K, R.A, 44, 24, 14);
-    membro([R.H[0] - 14, R.H[1]], [R.K[0] - 16, R.K[1]], 64, 40, 4); membro([R.K[0] - 16, R.K[1]], [R.A[0] - 14, R.A[1]], 40, 22, 12);
-    // pe
-    var A = R.A; g.beginPath();
-    [[-36, -14], [-40, 22], [112, 26], [122, 12], [64, -6], [14, -26]].forEach(function (d, k) { k ? g.lineTo(A[0] + d[0], A[1] + d[1]) : g.moveTo(A[0] + d[0], A[1] + d[1]); });
-    g.closePath(); g.fill();
-    // braco
-    var S = [sp[42][0] + 8, sp[42][1] + 8];
-    var E = down(S, 176, P.ua), W = down(E, 160, P.fa);
-    membro(S, E, 38, 28, 6); membro(E, W, 28, 19, 5);
-    g.beginPath(); g.ellipse(W[0] + 8 * Math.sin(P.fa * rad), W[1] + 30, 20, 36, -P.fa * rad, 0, 7); g.fill();
-    // pescoco e cabeca
-    var Hb = add(R.C, 30, P.neck);
-    membro(sp[44], Hb, 34, 30, 0);
-    var Hc = add(Hb, 58, P.neck * 0.6 + P.head);
-    g.save(); g.translate(Hc[0], Hc[1]); g.rotate((P.head + P.neck * 0.35) * rad);
-    g.beginPath(); g.ellipse(-6, -8, 66, 76, 0, 0, 7); g.fill();               // cranio
-    g.beginPath(); g.moveTo(-30, 30); g.quadraticCurveTo(10, 86, 52, 66); g.lineTo(60, 44); g.lineTo(58, 18); g.lineTo(76, 0); g.lineTo(60, -14);
-    g.quadraticCurveTo(58, -40, 40, -56); g.lineTo(-10, -20); g.closePath(); g.fill();   // rosto, nariz e queixo
-    g.restore();
-    g.restore();
-    return {sp: sp, Hc: Hc};
-  }
-  function vertebras(sp, alpha) {
-    g.save(); g.globalAlpha = alpha; g.fillStyle = '#C9B3D6';
-    for (var i = 3; i < sp.length - 1; i += 3) { g.beginPath(); g.ellipse(sp[i][0], sp[i][1], 9, 6, 0, 0, 7); g.fill(); }
-    g.restore();
-  }
+  var X2 = -3.9;
+  Boneco.desenha({k: 0, x: X2, giro: -8});
+  var p0 = {c: Boneco.projeta('neck02'), l: Boneco.projeta('spine04'), j: Boneco.projeta('lowerleg01.R')};
+  document.getElementById('r-cerv').style.top = (p0.c[1] - 64) + 'px';
+  document.getElementById('r-lombar').style.top = (p0.l[1] - 64) + 'px';
+  document.getElementById('r-joelho').style.top = (p0.j[1] - 64) + 'px';
+  document.getElementById('r-forca').style.top = Math.max(p0.j[1] + 110, 1230) + 'px';
   function indicador(p, t0, t, alpha, extra) {
     if (t < t0 || alpha <= 0) return;
-    g.save(); g.globalAlpha = alpha;
+    g.save();
     var ph = ((t - t0) % 1.3) / 1.3;
     g.strokeStyle = '#7B5B8E'; g.lineWidth = 4; g.globalAlpha = alpha * (1 - ph);
     g.beginPath(); g.arc(p[0], p[1], 14 + ph * 60, 0, 7); g.stroke();
+    g.globalAlpha = alpha * 0.35; g.fillStyle = '#7B5B8E'; g.beginPath(); g.arc(p[0], p[1], 34, 0, 7); g.fill();
     g.globalAlpha = alpha;
     var bump = extra ? 1 + 0.6 * Math.max(0, 1 - Math.abs(t - extra - 0.15) / 0.25) : 1;
     g.fillStyle = '#7B5B8E'; g.strokeStyle = '#F5F0F8'; g.lineWidth = 4;
@@ -243,13 +152,7 @@
     g.beginPath(); g.moveTo(p[0] + 18, p[1]); g.lineTo(p[0] + 18 + (x1 - p[0] - 18) * k, p[1] + (y - p[1]) * k); g.stroke();
     g.restore();
   }
-  // posicoes dos rotulos a partir da postura curvada
-  var R0 = rig(300, pose(0, 0)), sp0 = coluna(R0, 48);
-  var pCerv = sp0[44], pLomb = sp0[9], pJoel = R0.K;
-  document.getElementById('r-cerv').style.top = (pCerv[1] - 64) + 'px';
-  document.getElementById('r-lombar').style.top = (pLomb[1] - 64) + 'px';
-  document.getElementById('r-joelho').style.top = (pJoel[1] - 64) + 'px';
-  document.getElementById('r-forca').style.top = '1250px';
+  function topo(id) { return parseFloat(document.getElementById(id).style.top) + 64; }
 
   var s1 = document.getElementById('s1'), s4 = document.getElementById('s4');
   window.cena = function (t) {
@@ -261,30 +164,38 @@
       sp.style.visibility = i < n ? 'visible' : 'hidden';
       sp.style.boxShadow = (i === n - 1 && !pisca) ? '8px 0 0 0 #F5F0F8' : 'none';
     });
-    s4.style.visibility = t >= 21.5 ? 'visible' : 'hidden';
-    document.getElementById('anel').style.visibility = t >= 21.4 ? 'visible' : 'hidden';
-    // corpo
+    s4.style.visibility = t >= 22.55 ? 'visible' : 'hidden';
+    document.getElementById('anel').style.display = 'none';
+    // corpo 3D
     g.clearRect(0, 0, 1080, 1920);
-    if (t < 5.1 || t > 22.8) return;
-    var x = 300 - 900 * (1 - easeOut((t - 5.25) / 1.3)) + 180 * ease((t - 12.5) / 1.2);
+    var vis = t >= 5.1 && t <= 22.7;
+    c3d.style.display = vis ? 'block' : 'none';
+    if (!vis) return;
+    var x = X2 - 17 * (1 - easeOut((t - 5.25) / 1.3)) + (-X2) * ease((t - 12.5) / 1.2);
     var k = ease((t - 13) / 3);
-    var resp = 0.9 * Math.sin(t * 2.2);
-    var R = rig(x, pose(k, resp));
+    Boneco.desenha({k: k, x: x, respira: 0.8 * Math.sin(t * 2.2), giro: -8 - 30 * ease((t - 17.2) / 5)});
     // linha de prumo
-    var ap = Math.min(ease((t - 13.1) / 1.2), 1 - ease((t - 20.6) / 0.8));
+    var ap = Math.min(ease((t - 13.1) / 1.2), 1 - ease((t - 16.6) / 0.8));
     if (ap > 0) {
-      g.save(); g.strokeStyle = '#7B5B8E'; g.globalAlpha = 0.75 * (t > 13.1 ? 1 : 0); g.lineWidth = 2.5; g.setLineDash([16, 12]);
-      var px = R.A[0] + 30; g.beginPath(); g.moveTo(px, 230); g.lineTo(px, 230 + 1200 * ap); g.stroke(); g.restore();
+      var pe = Boneco.projeta('foot.R');
+      g.save(); g.strokeStyle = '#7B5B8E'; g.globalAlpha = 0.8 * Math.min(1, (t - 13.1) * 4) * (1 - ease((t - 16.6) / 0.8)); g.lineWidth = 2.5; g.setLineDash([16, 12]);
+      g.beginPath(); g.moveTo(pe[0] + 4, 200); g.lineTo(pe[0] + 4, 200 + 1250 * ease((t - 13.1) / 1.2)); g.stroke(); g.restore();
     }
-    var out = desenha(R, 1);
-    vertebras(out.sp, 0.55 + 0.45 * ease((t - 14) / 2));
-    // indicadores e guias (somem antes da virada)
     var fade = 1 - ease((t - 12.3) / 0.45);
-    var sp = out.sp;
-    indicador(sp[44], 6.4, t, fade, 11.2); guia(sp[44], parseFloat(document.getElementById('r-cerv').style.top) + 64, 6.4, t, fade);
-    indicador(R.K, 8.0, t, fade, 11.25); guia(R.K, parseFloat(document.getElementById('r-joelho').style.top) + 64, 8.0, t, fade);
-    indicador(sp[9], 9.6, t, fade, 11.3); guia(sp[9], parseFloat(document.getElementById('r-lombar').style.top) + 64, 9.6, t, fade);
-    // varredura clinica (transicao 2)
+    var pc = Boneco.projeta('neck02'), pl = Boneco.projeta('spine04'), pj = Boneco.projeta('lowerleg01.R');
+    indicador(pc, 6.4, t, fade, 11.2); guia(pc, topo('r-cerv'), 6.4, t, fade);
+    indicador(pj, 8.0, t, fade, 11.25); guia(pj, topo('r-joelho'), 8.0, t, fade);
+    indicador(pl, 9.6, t, fade, 11.3); guia(pl, topo('r-lombar'), 9.6, t, fade);
+    // iris para a cena final (desenhada por cima do boneco)
+    var ir = (t - 21.6) / 0.95;
+    if (ir > 0) {
+      var e = ir < 1 ? (ir < .5 ? 4 * ir * ir * ir : 1 - Math.pow(-2 * ir + 2, 3) / 2) : 1;
+      var raio = 2300 * e;
+      g.save(); g.fillStyle = '#3D2050'; g.beginPath(); g.arc(540, 576, raio, 0, 7); g.fill();
+      g.strokeStyle = '#A88BB9'; g.lineWidth = 3; g.globalAlpha = Math.max(0, 1 - ir);
+      g.beginPath(); g.arc(540, 576, raio * 1.08 + 20, 0, 7); g.stroke(); g.restore();
+    }
+    // varredura clinica
     var v = (t - 12.2) / 0.9;
     if (v > 0 && v < 1) {
       var y = 200 + 1300 * ease(v);

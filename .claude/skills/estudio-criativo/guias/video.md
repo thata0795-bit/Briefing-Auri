@@ -76,6 +76,10 @@ Exemplo completo: `estudio/clientes/luana-personal-chef/projetos/natal-2026/`.
 Ideias que funcionam: foto em arco ou janela com Ken Burns ou panorâmica, moldura dourada que se desenha, texto subindo por máscara,
 rótulo em caixa alta com tracking, brilho percorrendo texto dourado, partículas de luz em canvas (`window.cena(t)`).
 
+## Figura humana realista
+Para corpo humano (postura, saúde, fitness, anatomia) use o boneco 3D de `modelos/humano3d/` (homem realista com rosto, articulado,
+licença CC0). Nunca desenhe humano com formas 2D: fica caricato. Postura, giro e marcações por articulação estão no LEIAME de lá.
+
 ## Narração
 Voz neural offline (Kokoro): `pip install kokoro-onnx soundfile` e os arquivos `kokoro-v1.0.onnx` e `voices-v1.0.bin`
 (releases do GitHub thewh1teagle/kokoro-onnx, model-files-v1.0) em /tmp/kokoro. Voz feminina pt-BR: `pf_dora` (masculinas: `pm_alex`, `pm_santa`), speed 0.92.

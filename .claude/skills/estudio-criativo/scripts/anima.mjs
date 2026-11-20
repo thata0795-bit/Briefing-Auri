@@ -48,7 +48,7 @@ if (slug) {
 let chromium;
 try { ({ chromium } = createRequire(import.meta.url)('playwright')); }
 catch { ({ chromium } = createRequire(path.join(execFileSync('npm', ['root', '-g']).toString().trim(), 'x'))('playwright')); }
-const browser = await chromium.launch();
+const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: 1 });
 await page.goto('file://' + html + (hash ? '#' + hash : ''), { waitUntil: 'networkidle' });
 if (css) await page.addStyleTag({ content: css });
