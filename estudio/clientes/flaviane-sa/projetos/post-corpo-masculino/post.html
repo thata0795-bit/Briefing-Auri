@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,600,50;1,9..144,600,50&family=Montserrat:wght@500;600;700&display=block" rel="stylesheet">
+<style>
+  :root{--fundo:#EDECEA;--dark:#3D2050;--acc:#7B5B8E;--suave:#9E82AE;--medio:#5A3E70;
+        --serif:'Fraunces',Georgia,serif;--sans:'Montserrat',Arial,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1350px;background:var(--fundo)}
+  body::after{content:"";position:fixed;inset:0;pointer-events:none;opacity:.6;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='540' height='540'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/></svg>");
+    background-size:540px 540px}
+  .pagina{position:relative;width:1080px;height:1350px;overflow:hidden;background:var(--fundo);color:var(--dark)}
+
+  .canto{position:absolute;font-family:var(--sans);font-size:19px;letter-spacing:.03em;color:var(--dark);text-transform:uppercase}
+  .canto b{font-weight:700}
+  .canto span{font-weight:500}
+  .canto.rotulo{font-weight:700}
+
+  .tag{position:absolute;left:100px;top:330px;display:flex;flex-direction:column;align-items:flex-start;gap:7px}
+  .tag span{display:inline-block;background:var(--dark);color:var(--fundo);font-family:var(--sans);font-weight:500;
+            font-size:29px;font-weight:600;line-height:1;padding:9px 12px 10px}
+
+  .titulo{position:absolute;font-family:var(--serif);font-weight:600;color:var(--dark);line-height:1;letter-spacing:-.015em;
+          font-variation-settings:'opsz' 28,'SOFT' 50}
+  .titulo em{font-style:italic;font-weight:600;color:var(--dark)}
+  .t1{right:76px;top:300px;font-size:142px}
+  .t2{left:100px;top:440px;font-size:160px;word-spacing:.1em}
+
+  svg.curva{position:absolute;left:0;top:0;width:1080px;height:1350px;overflow:visible}
+  svg.curva path{fill:none;stroke:var(--dark);stroke-width:2.2;stroke-linecap:round}
+
+  .corpo{position:absolute;left:446px;top:756px;width:516px;font-family:var(--sans);font-weight:500;font-size:37px;line-height:1.3;color:var(--dark)}
+  .corpo span{display:block;text-align:justify;text-align-last:justify;white-space:nowrap}
+  .corpo span.ult{text-align-last:left}
+  .corpo b{font-weight:700}
+
+  .seta{position:absolute;left:446px;top:1050px;width:104px;height:52px;border:2.2px solid var(--dark);border-radius:50%;
+        display:flex;align-items:center;justify-content:center}
+  .halteres{position:absolute;left:62px;top:880px;width:318px;height:228px;overflow:visible}
+</style>
+</head>
+<body>
+<section class="pagina" data-nome="post-flaviane-feed">
+  <div class="canto" style="left:76px;top:94px"><b>Dra.</b><span> Flaviane Sá</span></div>
+  <div class="canto rotulo" style="right:76px;top:94px">Fisioterapeuta</div>
+  <div class="canto rotulo" style="left:76px;bottom:92px">Fisioterapeuta</div>
+  <div class="canto" style="right:76px;bottom:92px"><b>Dra.</b><span> Flaviane Sá</span></div>
+
+  <div class="tag"><span>O corpo masculino</span><span>tem demandas específicas.</span></div>
+  <div class="titulo t1">dá pra</div>
+  <div class="titulo t2"><em>mudar</em> isso!</div>
+
+  <svg class="curva" viewBox="0 0 1080 1350"><path d="M 276 596 C 270 700, 330 772, 430 782"/></svg>
+
+  <div class="corpo">
+    <span>Com a fisioterapia certa</span>
+    <span>e <b>Pilates Clínico</b> no</span>
+    <span>tratamento, seu corpo</span>
+    <span>pode <b>voltar a funcionar</b></span>
+    <span class="ult">do jeito que deveria.</span>
+  </div>
+
+
+
+  <svg class="halteres" viewBox="0 0 320 230">
+    <!-- reformer de Pilates em perspectiva obliqua: comprimento no eixo x, profundidade (dx 46, dy -26) -->
+    <!-- pes -->
+    <rect x="22" y="176" width="12" height="16" rx="2" fill="#3D2050"/>
+    <rect x="262" y="176" width="12" height="16" rx="2" fill="#3D2050"/>
+    <rect x="68" y="150" width="10" height="14" rx="2" fill="#2E1640"/>
+    <rect x="308" y="150" width="10" height="14" rx="2" fill="#2E1640"/>
+    <!-- cordas e polias (fundo, lado da cabeceira) -->
+    <rect x="16" y="78" width="9" height="86" rx="3" fill="#5A3E70"/>
+    <rect x="62" y="52" width="9" height="86" rx="3" fill="#3D2050"/>
+    <circle cx="20.5" cy="80" r="7" fill="#7B5B8E"/><circle cx="66.5" cy="54" r="7" fill="#5A3E70"/>
+    <path d="M 24 84 C 70 110, 110 120, 150 128" fill="none" stroke="#9E82AE" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M 70 58 C 116 84, 156 96, 196 102" fill="none" stroke="#7B5B8E" stroke-width="2.4" stroke-linecap="round"/>
+    <!-- trilho do fundo -->
+    <polygon points="46,138 306,138 316,132 56,132" fill="#5A3E70"/>
+    <rect x="46" y="138" width="260" height="14" fill="#3D2050"/>
+    <!-- molas -->
+    <g fill="none" stroke="#5A3E70" stroke-width="2.2" stroke-linecap="round">
+      <path d="M 214 150 l5 -6 l5 6 l5 -6 l5 6 l5 -6 l5 6 l5 -6 l5 6 l5 -6 l5 6"/>
+      <path d="M 222 142 l5 -6 l5 6 l5 -6 l5 6 l5 -6 l5 6 l5 -6 l5 6 l5 -6 l5 6"/>
+    </g>
+    <!-- carrinho estofado -->
+    <polygon points="92,150 196,150 238,126 134,126" fill="#9E82AE"/>
+    <polygon points="92,150 196,150 196,166 92,166" fill="#7B5B8E"/>
+    <polygon points="196,150 238,126 238,142 196,166" fill="#5A3E70"/>
+    <!-- apoio de cabeca -->
+    <polygon points="92,150 112,150 152,127 132,127" fill="#B79DC6"/>
+    <polygon points="86,146 112,146 112,154 86,154" fill="#7B5B8E" transform="translate(0 -4) skewX(0)"/>
+    <!-- apoios de ombro -->
+    <rect x="126" y="128" width="11" height="20" rx="4" fill="#5A3E70"/>
+    <rect x="152" y="114" width="11" height="20" rx="4" fill="#3D2050"/>
+    <!-- trilho da frente (estrutura) -->
+    <polygon points="20,164 280,164 306,150 46,150" fill="#5A3E70" opacity=".0"/>
+    <rect x="20" y="166" width="260" height="14" rx="2" fill="#3D2050"/>
+    <rect x="20" y="166" width="260" height="4" rx="2" fill="#5A3E70"/>
+    <!-- barra de pes -->
+    <g stroke-linecap="round" fill="none">
+      <path d="M 262 166 L 286 104" stroke="#3D2050" stroke-width="7"/>
+      <path d="M 306 140 L 328 80" stroke="#2E1640" stroke-width="7"/>
+      <path d="M 286 104 L 328 80" stroke="#7B5B8E" stroke-width="11"/>
+      <path d="M 286 101 L 328 77" stroke="#9E82AE" stroke-width="4"/>
+    </g>
+  </svg>
+</section>
+<script>
+(function () {
+  var svg = document.getElementById('halteres'), NS = 'http://www.w3.org/2000/svg';
+  function poly(pts, cor) { var p = document.createElementNS(NS, 'polygon'); p.setAttribute('points', pts.map(function (q) { return q[0].toFixed(1) + ',' + q[1].toFixed(1); }).join(' ')); p.setAttribute('fill', cor); p.setAttribute('stroke', cor); p.setAttribute('stroke-width', '.6'); p.setAttribute('stroke-linejoin', 'round'); svg.appendChild(p); }
+  function add(a, b, k) { return [a[0] + b[0] * k, a[1] + b[1] * k]; }
+  // halter: eixo na direcao ang (graus, tela); profundidade simulada por encurtamento
+  function halter(cx, cy, ang, L, R, esp, cores) {
+    var t = ang * Math.PI / 180, ax = [Math.cos(t), Math.sin(t)], up = [-Math.sin(t), Math.cos(t)], dep = [ax[0] * 0.42, ax[1] * 0.42];
+    function hexa(c) { var v = []; for (var k = 0; k < 6; k++) { var f = Math.PI / 6 + k * Math.PI / 3; v.push(add(add(c, up, R * Math.cos(f)), dep, R * Math.sin(f))); } return v; }
+    function placa(c) {
+      var tras = hexa(add(c, ax, -esp / 2)), frente = hexa(add(c, ax, esp / 2));
+      poly(tras, cores.lado);
+      for (var k = 0; k < 6; k++) { var j = (k + 1) % 6; poly([tras[k], tras[j], frente[j], frente[k]], k % 2 ? cores.lado : cores.escuro); }
+      poly(frente, cores.face);
+      var brilho = frente.slice(0, 3).concat([add(frente[2], ax, 0)]);
+      poly([frente[0], frente[1], add(add(frente[1], frente[0], 0), [0, 0], 0), add(c, ax, esp / 2)], cores.claro);
+    }
+    var p1 = add([cx, cy], ax, -L / 2), p2 = add([cx, cy], ax, L / 2), r = R * 0.26;
+    placa(p1);
+    poly([add(p1, up, r), add(p2, up, r), add(p2, up, -r), add(p1, up, -r)], cores.pega);
+    poly([add(p1, up, -r * 0.1), add(p2, up, -r * 0.1), add(p2, up, -r), add(p1, up, -r)], cores.pegaSombra);
+    placa(p2);
+  }
+  var c1 = {face: '#7B5B8E', lado: '#5A3E70', escuro: '#3D2050', claro: '#9E82AE', pega: '#9E82AE', pegaSombra: '#7B5B8E'};
+  var c2 = {face: '#5A3E70', lado: '#3D2050', escuro: '#2E1640', claro: '#7B5B8E', pega: '#7B5B8E', pegaSombra: '#5A3E70'};
+  var cp = document.querySelector('.corpo'), mx = 0;
+  cp.querySelectorAll('span').forEach(function (sp) { sp.style.display = 'inline-block'; mx = Math.max(mx, sp.getBoundingClientRect().width); });
+  cp.querySelectorAll('span').forEach(function (sp) { sp.style.display = 'block'; });
+  cp.style.width = Math.ceil(mx) + 'px';
+})();
+</script>
+</body>
+</html>
