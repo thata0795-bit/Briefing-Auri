@@ -5,3 +5,4 @@ alinhada à esquerda, entrelinha 0,9, cinco linhas. Nesta versão o texto vai em
 radial só atrás do bloco (foto clara com folhagem).
 Refazer: `node .claude/skills/estudio-criativo/scripts/render.mjs post.html --saida export --escala 2`
 Topo: "KATIUSCE SOUZA" à esquerda e "VERÃO 26/27" à direita, Montserrat 600 20px, espaçamento 0,18em, branco 78% de opacidade com sombra leve.
+Ajuste: foto com zoom 1,36 e modelo deslocada para a direita; frase menor (62px, 6 linhas) sobre a folhagem à esquerda, sem cobrir as peças.
