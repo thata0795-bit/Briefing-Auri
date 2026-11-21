@@ -1,16 +1,17 @@
 {
   "slug": "katiusce",
-  "nome": "Katiusce",
+  "nome": "Katiusce Souza",
   "tipo": "cliente",
   "status": "rascunho",
   "aliases": [
-    "katiusce",
-    "katiuce",
-    "loja katiusce",
-    "provadores",
     "condicional",
     "crediario",
-    "crediário"
+    "crediário",
+    "katiuce",
+    "katiusce",
+    "katiusce souza",
+    "loja katiusce",
+    "provadores"
   ],
   "segmento": "Moda (loja com atendimento presencial e online)",
   "oferta": "Loja de roupas com crediário, condicional e atendimento online (pelos vídeos e pastas do Drive)",
@@ -23,7 +24,11 @@
   "voz": {
     "pessoa": "voce",
     "registro": "proximo",
-    "tom": [],
+    "tom": [
+      "fala com a cliente como amiga",
+      "leve",
+      "próximo"
+    ],
     "faz": [],
     "evita": [],
     "palavras_da_marca": [],
@@ -34,7 +39,10 @@
       5
     ],
     "cta_preferido": "",
-    "exemplos_aprovados": [],
+    "exemplos_aprovados": [
+      "pode dormir tranquila, já lançamos o chinelo perfeito para o verão.",
+      "pode dormir tranquila, nós temos o look perfeito pro seu verão."
+    ],
     "metricas": {}
   },
   "visual": {
@@ -49,12 +57,18 @@
     },
     "cores_proibidas": [],
     "fontes": {
-      "titulo": "Cormorant Garamond",
+      "titulo": "Montserrat",
       "corpo": "Montserrat",
       "acento": ""
     },
-    "estilo": [],
-    "regras": [],
+    "estilo": [
+      "foto de look em tela cheia",
+      "frase curta sobre a foto"
+    ],
+    "regras": [
+      "Post de frase sobre foto: Montserrat 800, minúsculas, alinhada à esquerda, entrelinha apertada (0,9), 5 linhas curtas",
+      "Texto sobre foto clara em branco, com sombra suave e escurecimento só atrás do bloco; nunca cobrir o rosto"
+    ],
     "proibido": [],
     "logo": "logo/",
     "referencias": "referencias/"
@@ -84,7 +98,7 @@
   },
   "pendencias": [
     "Confirmar público, paleta, fontes e logo",
-    "Enviar 6 a 12 referências visuais aprovadas pela cliente para referencias/",
-    "Enviar legendas já aprovadas para calibrar a voz (voz.py analisar)"
+    "Enviar legendas já aprovadas para calibrar a voz (voz.py analisar)",
+    "Enviar mais posts aprovados para completar as referências visuais"
   ]
 }

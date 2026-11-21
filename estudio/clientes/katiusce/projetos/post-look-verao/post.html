@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=block" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1350px;background:#000}
+  .pagina{position:relative;width:1080px;height:1350px;overflow:hidden}
+  .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+  /* escurecimento suave so atras do texto, para leitura */
+  .sombra{position:absolute;inset:0;background:
+     radial-gradient(ellipse 60% 30% at 40% 66%, rgba(20,16,10,.42) 0%, rgba(20,16,10,.22) 50%, rgba(20,16,10,0) 100%)}
+  .frase{position:absolute;left:148px;top:724px;font-family:'Montserrat',Arial,sans-serif;font-weight:800;font-size:80px;
+         line-height:.9;letter-spacing:-.01em;color:#FFFFFF;
+         text-shadow:0 2px 4px rgba(0,0,0,.35),0 6px 26px rgba(0,0,0,.38)}
+</style>
+</head>
+<body>
+<section class="pagina" data-nome="post-look-verao">
+  <img class="foto" src="foto.jpg" alt="">
+  <div class="sombra"></div>
+  <div class="frase">pode dormir<br>tranquila, nós<br>temos o look<br>perfeito pro<br>seu verão.</div>
+</section>
+</body>
+</html>
