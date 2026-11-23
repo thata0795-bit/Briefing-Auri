@@ -59,10 +59,11 @@
     ],
     "regras": [
       "Frase em serifa elegante (The Seasons) com palavras-chave em The Seasons Itálico, nunca fonte manuscrita",
-      "Identificação centralizada no topo e rodapé \"NOME | ÁREA\" centralizado embaixo, em sans pequena"
+      "Identificação pequena centralizada no topo e logo centralizado no rodapé (versão branca sobre foto)",
+      "Sem frase de apoio pequena: a frase principal fala sozinha"
     ],
     "proibido": [],
-    "logo": "logo/",
+    "logo": "logo/ (logo-linda-original.png cinza #333 sobre branco; logo-linda-branco.png para fotos escuras)",
     "referencias": "referencias/"
   },
   "video": {
@@ -89,7 +90,7 @@
     "ritmo": ""
   },
   "pendencias": [
-    "@ do Instagram e descrição do rodapé",
+    "@ do Instagram para o topo dos posts",
     "Arquivo da fonte The Seasons (regular e itálico) em fontes/",
     "Enviar 5 a 15 legendas aprovadas para calibrar a voz (voz.py analisar)",
     "Enviar 6 a 12 referências visuais aprovadas para referencias/",
