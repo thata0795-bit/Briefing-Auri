@@ -1,13 +1,13 @@
 {
   "slug": "lindas",
-  "nome": "Lindas",
+  "nome": "Linda",
   "tipo": "cliente",
   "status": "rascunho",
   "aliases": [
-    "lindas",
-    "linda"
+    "linda",
+    "lindas"
   ],
-  "segmento": "",
+  "segmento": "Beleza: cabelo (tratamentos capilares), a confirmar",
   "oferta": "",
   "publico": "",
   "objetivo_redes": "",
@@ -47,12 +47,20 @@
     },
     "cores_proibidas": [],
     "fontes": {
-      "titulo": "Cormorant Garamond",
+      "titulo": "The Seasons",
       "corpo": "Montserrat",
-      "acento": ""
+      "acento": "The Seasons Italic"
     },
-    "estilo": [],
-    "regras": [],
+    "estilo": [
+      "editorial de beleza",
+      "foto em tela cheia",
+      "serifa elegante com palavra-chave em itálico",
+      "texto branco sobre foto"
+    ],
+    "regras": [
+      "Frase em serifa elegante (The Seasons) com palavras-chave em The Seasons Itálico, nunca fonte manuscrita",
+      "Identificação centralizada no topo e rodapé \"NOME | ÁREA\" centralizado embaixo, em sans pequena"
+    ],
     "proibido": [],
     "logo": "logo/",
     "referencias": "referencias/"
@@ -81,9 +89,10 @@
     "ritmo": ""
   },
   "pendencias": [
-    "Confirmar segmento, oferta e público",
-    "Enviar logo, paleta e fontes",
+    "@ do Instagram e descrição do rodapé",
+    "Arquivo da fonte The Seasons (regular e itálico) em fontes/",
+    "Enviar 5 a 15 legendas aprovadas para calibrar a voz (voz.py analisar)",
     "Enviar 6 a 12 referências visuais aprovadas para referencias/",
-    "Enviar 5 a 15 legendas aprovadas para calibrar a voz (voz.py analisar)"
+    "Enviar logo, paleta e fontes"
   ]
 }

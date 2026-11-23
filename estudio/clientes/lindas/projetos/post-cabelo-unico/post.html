@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400;1,500&family=Montserrat:wght@400;500;700;800&display=block" rel="stylesheet">
+<style>
+  /* Troca de fonte: quando houver o arquivo da The Seasons, defina --script e --serif para 'The Seasons' */
+  :root{--serif:'Playfair Display',Georgia,serif;--script:'Playfair Display',Georgia,serif;--sans:'Montserrat',Arial,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1350px;background:#111}
+  .pagina{position:relative;width:1080px;height:1350px;overflow:hidden;color:#fff}
+  .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 28%}
+  .luz{position:absolute;inset:0;background:
+      radial-gradient(ellipse 46% 22% at 26% 31%, rgba(20,14,10,.38), rgba(20,14,10,0) 100%),
+      radial-gradient(ellipse 60% 26% at 66% 55%, rgba(10,8,6,.30), rgba(10,8,6,0) 100%),
+      linear-gradient(180deg, rgba(0,0,0,.18) 0%, rgba(0,0,0,0) 14%, rgba(0,0,0,0) 82%, rgba(0,0,0,.35) 100%)}
+  .sombra{text-shadow:0 1px 3px rgba(0,0,0,.28),0 4px 22px rgba(0,0,0,.32)}
+  .handle{position:absolute;top:88px;left:0;right:0;text-align:center;font-family:var(--sans);font-size:19px;font-weight:500;letter-spacing:.06em;color:rgba(255,255,255,.88)}
+  .handle b{font-weight:800}
+  .serif{position:absolute;font-family:var(--serif);font-weight:400;line-height:1;letter-spacing:-.01em}
+  .script{position:absolute;font-family:var(--script);font-style:italic;font-weight:400;line-height:1;letter-spacing:-.01em}
+  .sub{position:absolute;font-family:var(--sans);font-size:23px;font-weight:500;letter-spacing:-.01em}
+  .sub b{font-weight:800}
+  .rodape{position:absolute;bottom:72px;left:0;right:0;text-align:center;font-family:var(--sans);font-size:19px;letter-spacing:.06em;color:#fff}
+  .rodape b{font-weight:700}
+  .rodape span{font-weight:400}
+</style>
+</head>
+<body>
+<section class="pagina" data-nome="post-linda-cabelo-unico">
+  <img class="foto" src="foto.jpg" alt="">
+  <div class="luz"></div>
+  <div class="handle sombra"><b>LINDA</b></div>
+
+  <div class="serif sombra" style="left:114px;top:330px;font-size:70px">Seu cabelo</div>
+  <div class="serif sombra" style="left:118px;top:430px;font-size:60px">é</div>
+  <div class="script sombra" style="left:168px;top:400px;font-size:104px">único</div>
+
+  <div class="serif sombra" style="left:446px;top:808px;font-size:72px">E o tratamento</div>
+  <div class="serif sombra" style="right:162px;top:888px;font-size:72px">também</div>
+  <div class="script sombra" style="left:436px;top:956px;font-size:128px">deve ser</div>
+  <div class="sub sombra" style="left:498px;top:1110px">Aqui eu valorizo sua <b>beleza natural</b></div>
+
+  <div class="rodape sombra"><b>LINDA</b> <span>| TRATAMENTO CAPILAR</span></div>
+</section>
+</body>
+</html>
