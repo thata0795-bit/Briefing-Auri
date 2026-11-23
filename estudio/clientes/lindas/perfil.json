@@ -59,7 +59,7 @@
     ],
     "regras": [
       "Frase em serifa elegante (The Seasons) com palavras-chave em The Seasons Itálico, nunca fonte manuscrita",
-      "Identificação pequena centralizada no topo e logo centralizado no rodapé (versão branca sobre foto)",
+      "Logo branco pequeno centralizado no topo do post (sem @ nem texto de identificação); nada no rodapé",
       "Sem frase de apoio pequena: a frase principal fala sozinha"
     ],
     "proibido": [],
@@ -90,7 +90,6 @@
     "ritmo": ""
   },
   "pendencias": [
-    "@ do Instagram para o topo dos posts",
     "Arquivo da fonte The Seasons (regular e itálico) em fontes/",
     "Enviar 5 a 15 legendas aprovadas para calibrar a voz (voz.py analisar)",
     "Enviar 6 a 12 referências visuais aprovadas para referencias/",
