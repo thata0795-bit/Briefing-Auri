@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Libercar fim de ano</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,500;0,600;0,700;0,800;0,900;1,700;1,800;1,900&display=block" rel="stylesheet">
+<style>
+  :root{--verde:#51B84A;--verde-esc:#3E9A38;--cinza:#494949;--claro:#F2F2F2;--branco:#FFFFFF;--sans:'Poppins',Arial,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+  #fundo{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;transform-origin:50% 55%}
+  .vinheta{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,.32) 18%,rgba(0,0,0,0) 34%,rgba(0,0,0,0) 62%,rgba(0,0,0,.35) 100%)}
+
+  .txt{position:absolute;left:70px;right:70px;top:230px;color:#fff;font-family:var(--sans);
+        text-shadow:0 2px 6px rgba(0,0,0,.45),0 6px 30px rgba(0,0,0,.45)}
+  .txt .l{display:block;overflow:hidden;line-height:1.04;padding:0 0 4px}
+  .txt .l>span{display:block}
+  .txt em{color:#6FD466;font-style:italic}
+  .p1{animation:sai .45s cubic-bezier(.7,0,.8,.4) 2.85s forwards}
+  .p2{animation:sai .45s cubic-bezier(.7,0,.8,.4) 5.95s forwards}
+  .p3{animation:sai .4s cubic-bezier(.7,0,.8,.4) 9.5s forwards}
+  @keyframes sai{to{transform:translateX(-115%);opacity:0}}
+  .f-big2{font-size:96px;font-weight:900;font-style:italic;letter-spacing:-.01em}
+  .sobe{animation:sobe .55s cubic-bezier(.2,.8,.1,1) both}
+  @keyframes sobe{from{transform:translateY(105%)}to{transform:translateY(0)}}
+  .f-peq{font-size:54px;font-weight:800;letter-spacing:.01em}
+  .f-big{font-size:124px;font-weight:900;font-style:italic;letter-spacing:-.01em}
+  .f-med{font-size:74px;font-weight:900;letter-spacing:-.005em}
+  .f-med i{font-weight:900}
+
+  /* transicao: onda verde da marca */
+  #onda{position:absolute;inset:0;pointer-events:none}
+
+  /* fechamento */
+  #fim{position:absolute;inset:0;background:var(--claro);visibility:hidden;overflow:hidden;font-family:var(--sans);color:var(--cinza)}
+  #fim .curva{position:absolute;left:-560px;bottom:-760px;width:1300px;height:1300px;border-radius:50%;background:var(--verde);
+              animation:curva 1s cubic-bezier(.2,.8,.1,1) 10.3s both}
+  @keyframes curva{from{transform:scale(.4) translate(-30%,30%)}to{transform:none}}
+  #fim .t1{position:absolute;left:0;right:0;text-align:center;top:250px;font-size:64px;font-weight:600;line-height:1.1;animation:fadeUp .6s ease 10.5s both}
+  #fim .t1 b{font-weight:800}
+  #fim .marca{position:absolute;left:78px;top:410px;font-size:182px;font-weight:900;font-style:italic;letter-spacing:-.02em;line-height:1;
+              color:var(--cinza);animation:fadeUp .7s cubic-bezier(.2,.8,.1,1) 10.7s both}
+  #fim .t2{position:absolute;left:0;right:0;top:680px;font-size:64px;font-weight:600;text-align:center;line-height:1.1;animation:fadeUp .6s ease 11.0s both}
+  #fim .t2 b{font-weight:800}
+  #fim .cta{position:absolute;left:84px;right:84px;top:850px;background:var(--verde);color:#fff;border-radius:999px;text-align:center;
+            font-size:52px;font-weight:900;font-style:italic;line-height:1.12;padding:34px 20px;box-shadow:0 16px 40px rgba(81,184,74,.35);
+            animation:pop .6s cubic-bezier(.2,.8,.1,1) 11.5s both, pulsa 1.4s ease-in-out 12.3s infinite}
+  @keyframes pop{0%{opacity:0;transform:scale(.7)}65%{opacity:1;transform:scale(1.05)}100%{transform:scale(1)}}
+  @keyframes pulsa{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+  #fim .contato{position:absolute;left:0;right:0;top:1090px;text-align:center;font-size:48px;font-weight:600;line-height:1.2;color:var(--cinza);animation:fadeUp .6s ease 12.0s both}
+  #fim .site{position:absolute;left:0;right:0;top:1235px;text-align:center;font-size:40px;font-weight:600;color:var(--cinza);letter-spacing:.02em;animation:fadeUp .6s ease 12.2s both}
+  #fim .lojas{position:absolute;left:50%;top:1335px;transform:translateX(-50%);white-space:nowrap;text-align:center;font-size:32px;font-weight:700;color:#fff;letter-spacing:.06em;background:var(--cinza);padding:18px 34px;border-radius:999px;animation:fadeUpC .6s ease 12.5s both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:none}}
+  #fim .logo{position:absolute;left:50%;top:345px;width:600px;transform:translateX(-50%);animation:logoIn .8s cubic-bezier(.2,.8,.1,1) 10.65s both}
+  @keyframes logoIn{from{opacity:0;transform:translate(-50%,40px) scale(.9)}to{opacity:1;transform:translate(-50%,0) scale(1)}}
+  @keyframes fadeUpC{from{opacity:0;transform:translate(-50%,36px)}to{opacity:1;transform:translate(-50%,0)}}
+</style>
+</head>
+<body>
+<img id="fundo" src="quadros/f_0001.jpg" alt="">
+<div class="vinheta"></div>
+
+<div class="txt p1">
+  <span class="l"><span class="sobe f-peq" style="animation-delay:.45s">A VIAGEM DE</span></span>
+  <span class="l"><span class="sobe f-big" style="animation-delay:.6s"><em>FIM DE ANO</em></span></span>
+  <span class="l"><span class="sobe f-peq" style="animation-delay:.78s">ESTÁ CHEGANDO</span></span>
+</div>
+<div class="txt p2">
+  <span class="l"><span class="sobe f-med" style="animation-delay:3.4s">ESTRADA CHEIA</span></span>
+  <span class="l"><span class="sobe f-med" style="animation-delay:3.55s">PEDE <em>PNEU NOVO</em></span></span>
+</div>
+<div class="txt p3">
+  <span class="l"><span class="sobe f-med" style="animation-delay:6.45s">TROQUE SEUS PNEUS</span></span>
+  <span class="l"><span class="sobe f-big2" style="animation-delay:6.6s"><em>ANTES</em> DE PEGAR</span></span>
+  <span class="l"><span class="sobe f-med" style="animation-delay:6.78s">A ESTRADA</span></span>
+</div>
+
+<div id="fim">
+  <div class="curva"></div>
+  <div class="t1">Sempre tem uma</div>
+  <img class="logo" src="logo_hd.png" alt="Libercar">
+  <div class="t2"><b>perto</b> de você.</div>
+  <div class="cta">TROQUE SEUS PNEUS<br>ANTES DA VIAGEM!</div>
+  <div class="contato">Compre <b>online</b> e instale<br>na loja mais próxima.</div>
+  <div class="site">www.libercar.com.br</div>
+  <div class="lojas">BETHÂNIA · CENTRO · TIMÓTEO</div>
+</div>
+
+<canvas id="onda" width="1080" height="1920"></canvas>
+
+<script>
+(function () {
+  var fundo = document.getElementById('fundo'), fim = document.getElementById('fim');
+  var cv = document.getElementById('onda'), g = cv.getContext('2d');
+  var TOTAL = 300, cache = {};
+  function ease(x) { x = Math.max(0, Math.min(1, x)); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
+  function carrega(n) {
+    var src = 'quadros/f_' + String(n).padStart(4, '0') + '.jpg';
+    if (fundo.getAttribute('src') === src && fundo.complete) return Promise.resolve();
+    return new Promise(function (ok) { fundo.onload = ok; fundo.onerror = ok; fundo.src = src; });
+  }
+  window.cena = function (t) {
+    // fundo: o take real, com leve aproximacao continua e "punch" nos cortes de texto
+    var n = Math.min(TOTAL, Math.max(1, Math.floor(t * 30) + 1));
+    var z = 1.0 + 0.04 * Math.min(1, t / 10);
+    var p = 0;
+    [3.15, 6.2].forEach(function (c) { var d = t - c; if (d > 0 && d < .35) p = Math.max(p, .025 * Math.sin(Math.PI * d / .35)); });
+    fundo.style.transform = 'scale(' + (z + p) + ')';
+    fim.style.visibility = t >= 10.25 ? 'visible' : 'hidden';
+    // onda verde: varre de baixo-esquerda para cima-direita, cobre e revela o fechamento
+    g.clearRect(0, 0, 1080, 1920);
+    var w = (t - 9.55) / 0.9;
+    if (w > 0 && w < 1.0) {
+      var e = ease(w);
+      var cobre = e < .5 ? e * 2 : 1, sai = e < .5 ? 0 : (e - .5) * 2;
+      [['#3E9A38', 0], ['#51B84A', .08], ['#F2F2F2', .16]].forEach(function (c, i) {
+        var a = Math.max(0, Math.min(1, cobre * 1.25 - c[1])), b = Math.max(0, Math.min(1, sai * 1.25 - (.16 - c[1])));
+        if (i === 2) b = 0;
+        g.save(); g.fillStyle = c[0]; g.beginPath();
+        var R = 2600 * a;
+        g.arc(-200, 2120, R, 0, 7);
+        if (b > 0) { g.arc(-200, 2120, 2600 * b, 0, 7, true); }
+        g.fill('evenodd'); g.restore();
+      });
+    }
+    return carrega(n);
+  };
+})();
+</script>
+</body>
+</html>

@@ -69,9 +69,9 @@ const ff = spawn('ffmpeg', ['-y', '-hide_banner', '-loglevel', 'error', '-f', 'i
 const n = Math.round(dur * fps);
 for (let i = 0; i < n; i++) {
   const t = i / fps;
-  await page.evaluate((t) => {
+  await page.evaluate(async (t) => {
     document.getAnimations().forEach((a) => { a.pause(); a.currentTime = t * 1000; });
-    if (window.cena) window.cena(t);
+    if (window.cena) await window.cena(t);
   }, t);
   const buf = await page.screenshot({ type: 'jpeg', quality: 94 });
   if (!ff.stdin.write(buf)) await new Promise((r) => ff.stdin.once('drain', r));

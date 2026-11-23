@@ -24,7 +24,10 @@
       "prático",
       "próximo"
     ],
-    "faz": [],
+    "faz": [
+      "compra online com instalação na loja",
+      "foco em venda de pneus (troca de pneus antes da viagem), não em serviços gerais"
+    ],
     "evita": [],
     "palavras_da_marca": [],
     "palavras_proibidas": [],
@@ -33,7 +36,7 @@
       3,
       5
     ],
-    "cta_preferido": "Agende sua revisão hoje!",
+    "cta_preferido": "Troque seus pneus antes da viagem!",
     "exemplos_aprovados": [
       "Sempre tem uma Libercar perto de você.",
       "Férias começam na estrada. A segurança começa nos pneus.",
@@ -67,12 +70,14 @@
     ],
     "regras": [
       "Cinza-chumbo #3C3C3C e branco completam a paleta",
+      "Em vídeo: texto solto sobre a imagem, sem cards; cards e botões só na cena final sem vídeo",
       "Em vídeo: usar somente o logo Libercar; nunca a faixa de rodapé nem o logo Goodyear",
+      "Não colocar telefone nos vídeos",
       "Títulos em sans pesada (Poppins Bold/ExtraBold), destaques em itálico e caixa alta",
       "Verde da marca é o escuro #51B94B (não usar o verde-limão #7ED218)"
     ],
     "proibido": [],
-    "logo": "logo/",
+    "logo": "logo/ (logo-libercar-original.png 167 px; logo-libercar-hd.png reconstruído em alta, fundo transparente)",
     "referencias": "referencias/"
   },
   "video": {
@@ -99,7 +104,7 @@
     "ritmo": ""
   },
   "pendencias": [
-    "Logo Libercar em alta resolução (PNG transparente ou SVG) para uso fora do Canva"
+    "Logo em vetor (SVG) ou PNG grande para substituir a versão reconstruída"
   ],
   "contato": {
     "telefone": "(31) 3823-3688",
