@@ -19,6 +19,9 @@ const csp = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // Demonstração: o segredo de assinatura do acesso vem da construção. Só o código
+  // de servidor usa process.env.DEMO_SEGREDO, então ele não vai para o navegador.
+  ...(process.env.NEXT_PUBLIC_DEMO === "1" && process.env.DEMO_SEGREDO ? { env: { DEMO_SEGREDO: process.env.DEMO_SEGREDO } } : {}),
   async headers() {
     return [
       {

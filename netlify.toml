@@ -1,7 +1,9 @@
 # Publicação da DEMONSTRAÇÃO do portal na Netlify: dados fictícios, sem Supabase.
 # Para a versão real, troque NEXT_PUBLIC_DEMO para "0" e configure as variáveis do Supabase no painel da Netlify.
 [build]
-  command = "npm run build"
+  # O segredo que assina o acesso da demonstração é sorteado a cada construção
+  # e entra só no código do servidor (ver next.config.ts).
+  command = "DEMO_SEGREDO=$(node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\") npm run build"
   publish = ".next"
 
 [build.environment]

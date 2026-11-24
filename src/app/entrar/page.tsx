@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { FormularioEntrada } from "@/components/auth/formulario-entrada";
-import { EscolhaPerfil } from "@/components/demo/escolha-perfil";
-import { DEMO } from "@/lib/demo/config";
+import { EntradaDemo } from "@/components/demo/escolha-perfil";
+import { DEMO, COOKIE_USUARIO } from "@/lib/demo/config";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { lerUsuarioAssinado } from "@/lib/demo/assinatura-cookie";
 
 export const metadata: Metadata = { title: "Entrar" };
 
@@ -17,6 +20,7 @@ export default async function Entrar({
   searchParams: Promise<{ erro?: string; voltar?: string }>;
 }) {
   const { erro, voltar } = await searchParams;
+  if (DEMO && (await lerUsuarioAssinado((await cookies()).get(COOKIE_USUARIO)?.value))) redirect("/inicio");
   const mensagemErro = erro ? ERROS[erro] : undefined;
 
   return (
@@ -45,7 +49,7 @@ export default async function Entrar({
             </p>
           )}
 
-          {DEMO ? <EscolhaPerfil /> : <FormularioEntrada voltar={voltar} />}
+          {DEMO ? <EntradaDemo erro={erro} /> : <FormularioEntrada voltar={voltar} />}
         </div>
       </section>
     </main>

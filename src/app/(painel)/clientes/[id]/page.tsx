@@ -79,7 +79,12 @@ export default async function FichaCliente({
   // Demonstração: sem e-mail, o convite pendente aparece como link na ficha.
   const convitesDemo = new Map<string, string>();
   if (DEMO && admin) {
-    const { data } = await supabase.from("convites").select("user_id, token_demo, usado_em").eq("cliente_id", id).is("usado_em", null);
+    const { data } = await supabase
+      .from("convites")
+      .select("user_id, token_demo, usado_em")
+      .eq("cliente_id", id)
+      .is("usado_em", null)
+      .gt("expira_em", new Date().toISOString());
     for (const c of (data ?? []) as { user_id: string; token_demo?: string }[]) if (c.token_demo) convitesDemo.set(c.user_id, c.token_demo);
   }
 
@@ -101,7 +106,7 @@ export default async function FichaCliente({
       {convidado && (
         <p role="status" className="mb-6 rounded-md border border-st-done/50 bg-st-done/10 px-4 py-3 text-sm text-text">
           Cliente cadastrado e convite enviado. Você acompanha cada etapa aqui.
-          {DEMO && " Na demonstração o e-mail não sai: use o link \"Abrir convite\" em Pessoas com acesso para ver o que o cliente vê."}
+          {DEMO && " Na demonstração o e-mail não sai: copie o \"Link de acesso\" em Pessoas com acesso e envie para a pessoa. Ele funciona uma vez e vale 7 dias."}
         </p>
       )}
 
@@ -199,13 +204,15 @@ export default async function FichaCliente({
                     <SeloStatus status={p.termos_aceitos_em ? "concluido" : "a_fazer"} rotulo={p.termos_aceitos_em ? "Já entrou" : "Convite pendente"} />
                     {convitesDemo.has(p.id) && (
                       <Link href={`/convite/${convitesDemo.get(p.id)}`} className="inline-flex min-h-11 items-center text-sm font-medium text-brown underline underline-offset-4">
-                        Abrir convite
+                        Link de acesso
                       </Link>
                     )}
-                    {admin && !p.termos_aceitos_em && !DEMO && (
+                    {admin && (DEMO ? !convitesDemo.has(p.id) : !p.termos_aceitos_em) && (
                       <form action={reenviarConvite}>
                         <input type="hidden" name="user_id" value={p.id} />
-                        <BotaoEnviar variante="texto" className="px-0" textoEnviando="Enviando...">Reenviar</BotaoEnviar>
+                        <BotaoEnviar variante="texto" className="px-0" textoEnviando="Gerando...">
+                          {DEMO ? "Gerar link de acesso" : "Reenviar"}
+                        </BotaoEnviar>
                       </form>
                     )}
                   </div>

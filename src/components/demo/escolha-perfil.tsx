@@ -1,43 +1,42 @@
-import Link from "next/link";
-import { ArrowRight, MailOpen } from "lucide-react";
-import { PERFIS_DEMO, TOKEN_CONVITE_DEMO } from "@/lib/demo/dados";
-
-/** Na demonstração, a entrada é escolher com quem entrar. */
-export function EscolhaPerfil() {
+/** Entrada da demonstração: e-mail e senha de cada pessoa. Funciona sem JavaScript. */
+export function EntradaDemo({ erro }: { erro?: string }) {
   return (
-    <div className="mt-8 flex flex-col gap-3">
-      <p className="text-sm font-medium text-text">Entrar como:</p>
-      <ul className="flex flex-col gap-2">
-        {PERFIS_DEMO.map((p) => (
-          <li key={p.id}>
-            <form action="/demo/entrar" method="post">
-              <input type="hidden" name="usuario" value={p.id} />
-              <button
-                type="submit"
-                className="flex min-h-14 w-full items-center justify-between gap-3 rounded-md border border-line bg-card px-4 py-3 text-left transition-colors duration-200 hover:border-brown"
-              >
-                <span className="min-w-0">
-                  <span className="block font-medium text-text">
-                    {p.nome} <span className="font-normal text-muted">· {p.papel}</span>
-                  </span>
-                  <span className="block text-xs text-muted">{p.detalhe}</span>
-                </span>
-                <ArrowRight aria-hidden className="size-4 shrink-0 text-brown" />
-              </button>
-            </form>
-          </li>
-        ))}
-      </ul>
-      <Link
-        href={`/convite/${TOKEN_CONVITE_DEMO}`}
-        className="mt-2 flex min-h-14 items-center gap-3 rounded-md border border-dashed border-brown/60 bg-bg px-4 py-3 text-sm text-brown hover:bg-soft"
+    <form action="/demo/entrar" method="post" className="mt-8 flex flex-col gap-5">
+      {erro === "senha" && (
+        <p role="alert" className="rounded-md border border-st-fix/40 bg-st-fix/10 px-4 py-3 text-sm text-text">
+          E-mail ou senha incorretos. Confira e tente de novo.
+        </p>
+      )}
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="email" className="text-sm font-medium text-text">E-mail</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autoComplete="username"
+          inputMode="email"
+          required
+          className="min-h-11 w-full rounded-md border border-line bg-bg px-3 text-base text-text outline-none focus:border-brown"
+        />
+      </div>
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="senha" className="text-sm font-medium text-text">Senha</label>
+        <input
+          id="senha"
+          name="senha"
+          type="password"
+          autoComplete="current-password"
+          required
+          className="min-h-11 w-full rounded-md border border-line bg-bg px-3 text-base text-text outline-none focus:border-brown"
+        />
+      </div>
+      <button
+        type="submit"
+        className="inline-flex min-h-11 items-center justify-center rounded-md border border-brown bg-brown px-5 text-sm font-medium text-bg hover:bg-brown-dark"
       >
-        <MailOpen aria-hidden className="size-5 shrink-0" />
-        <span>
-          <span className="block font-medium">Começar como cliente novo</span>
-          <span className="block text-xs text-muted">Abre o convite da Clínica Serena e faz a entrada do começo, como o cliente faria.</span>
-        </span>
-      </Link>
-    </div>
+        Entrar
+      </button>
+      <p className="text-xs text-muted">Cada pessoa recebe o próprio acesso da agência. Quem entra vê só o que é seu.</p>
+    </form>
   );
 }

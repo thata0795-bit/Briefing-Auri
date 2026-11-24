@@ -2,7 +2,8 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
 import { cookies } from "next/headers";
-import { COOKIE_SESSAO, COOKIE_USUARIO } from "./config";
+import { COOKIE_USUARIO } from "./config";
+import { assinarUsuario, lerUsuarioAssinado } from "./assinatura-cookie";
 import { carregarBanco, salvarBanco } from "./armazenamento";
 import { Consulta, executarRpc, inserirCru, type Contexto } from "./motor";
 
@@ -11,12 +12,11 @@ async function jarro() {
 }
 
 function contexto(servico: boolean): Contexto {
-  const sessao = async () => (await jarro()).get(COOKIE_SESSAO)?.value ?? "sem-sessao";
   return {
     servico,
-    carregar: async () => carregarBanco(await sessao()),
-    salvar: async (db) => salvarBanco(await sessao(), db),
-    uid: async () => (await jarro()).get(COOKIE_USUARIO)?.value ?? null,
+    carregar: () => carregarBanco(),
+    salvar: (db) => salvarBanco(db),
+    uid: async () => lerUsuarioAssinado((await jarro()).get(COOKIE_USUARIO)?.value),
   };
 }
 
@@ -24,7 +24,7 @@ function definirCookie(nome: string, valor: string | null) {
   return jarro().then((j) => {
     try {
       if (valor === null) j.delete(nome);
-      else j.set(nome, valor, { httpOnly: true, sameSite: "lax", path: "/", secure: process.env.NODE_ENV === "production" });
+      else j.set(nome, valor, { httpOnly: true, sameSite: "lax", path: "/", maxAge: 60 * 60 * 24 * 30, secure: process.env.NODE_ENV === "production" });
     } catch {
       // Em componentes de servidor não dá para gravar cookie; só em ações e rotas.
     }
@@ -67,7 +67,7 @@ export function criarClienteDemo(servico = false): any {
       verifyOtp: async ({ token_hash }: { token_hash: string }) => {
         const uid = token_hash.startsWith("demo:") ? token_hash.slice(5) : null;
         if (!uid) return { data: null, error: { message: "Link inválido." } };
-        await definirCookie(COOKIE_USUARIO, uid);
+        await definirCookie(COOKIE_USUARIO, await assinarUsuario(uid));
         return { data: {}, error: null };
       },
       mfa: { getAuthenticatorAssuranceLevel: async () => ({ data: { currentLevel: "aal1", nextLevel: "aal1" }, error: null }) },

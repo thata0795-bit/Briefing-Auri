@@ -24,7 +24,20 @@ const C = {
 /** Token fixo do convite da Clínica Serena, para a demonstração começar do convite. */
 export const TOKEN_CONVITE_DEMO = "demonstracao-convite-clinica-serena-0000000000000";
 
-/** Quem aparece na tela de entrada da demonstração. */
+/**
+ * Senhas de acesso da demonstração, guardadas como sha256("email:senha").
+ * As senhas em si não ficam no código: são entregues a cada pessoa.
+ */
+export const SENHAS_DEMO: Record<string, string> = {
+  "taynara@agencia-exemplo.com.br": "c90b131a0d0bbadca7d611440b1801b4033325b62ffc2b3d5dd407d7ddd10a53",
+  "julia@agencia-exemplo.com.br": "394f5852a6b93893194a2b3a09b58b629cd458d6509c9c86d7a42008227886b9",
+  "rafael@agencia-exemplo.com.br": "a131f96ce49d0dfbe6a12210b5e54c00068dfe3ff244a1f2edcddd8ae96149d8",
+  "marina@padaria-exemplo.com.br": "a1da133bfcb0e2868c5003791560bd77317d9707350099bf8423af943fa41dce",
+  "carla@estudio-exemplo.com.br": "157f7a89acbc006335e69f41816e7fe09fdbe7d5d1564cea1e59b57b8d522f0a",
+  "helena@clinica-exemplo.com.br": "378053e18d14f962d64e222258ae281af15ab8929d249ce3f4473cedc5b8bc65",
+};
+
+/** Pessoas da demonstração (usado nos testes e na documentação). */
 export const PERFIS_DEMO = [
   { id: U.taynara, nome: "Taynara Castro", papel: "Dona da agência", detalhe: "Vê tudo: clientes, equipe, contratos e modelos." },
   { id: U.julia, nome: "Júlia Martins", papel: "Equipe · Social media", detalhe: "Atende a Padaria Aurora e o Estúdio Bravo. Não vê valores." },

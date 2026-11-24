@@ -14,10 +14,25 @@ export default async function Seguranca() {
     <>
       <CabecalhoPagina numero="04" titulo="Segurança" texto="Senha e verificação em duas etapas do seu acesso." />
       {DEMO ? (
-        <Vazio
-          titulo="Desligado na demonstração"
-          texto="Na versão real, aqui a pessoa troca a senha e liga a verificação em duas etapas, que pede um código do celular a cada entrada."
-        />
+        <div className="flex flex-col gap-6">
+          <Vazio
+            titulo="Desligado na demonstração"
+            texto="Na versão real, aqui a pessoa troca a senha e liga a verificação em duas etapas, que pede um código do celular a cada entrada."
+          />
+          {sessao.perfil.papel === "admin" && (
+            <Cartao titulo="Zerar a demonstração">
+              <p className="text-sm text-muted">
+                Volta todos os clientes, respostas e agenda aos dados fictícios do início. Vale para todas as pessoas que estão usando a
+                demonstração.
+              </p>
+              <form action="/demo/recomecar" method="post" className="mt-4">
+                <button type="submit" className="inline-flex min-h-11 items-center rounded-md border border-line px-4 text-sm font-medium text-brown hover:border-brown">
+                  Zerar e começar de novo
+                </button>
+              </form>
+            </Cartao>
+          )}
+        </div>
       ) : (
       <div className="grid gap-6 lg:grid-cols-2">
         <Cartao titulo="Verificação em duas etapas">
