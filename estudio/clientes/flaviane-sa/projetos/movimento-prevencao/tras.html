@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Movimento também é prevenção (camada de texto)</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,600,50;1,9..144,600,50&family=Montserrat:wght@500;600;700&display=block" rel="stylesheet">
+<style>
+  :root{--dark:#3D2050;--acc:#7B5B8E;--suave:#9E82AE;--lilas:#C9B3D6;--claro:#F5F0F8;
+        --serif:'Fraunces',Georgia,serif;--sans:'Montserrat',Arial,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1920px;overflow:hidden;background:transparent}
+  .veu{position:absolute;inset:0;background:linear-gradient(180deg,rgba(245,240,248,.80) 0%,rgba(245,240,248,.55) 20%,rgba(245,240,248,0) 40%);
+       animation:veuSai .8s ease 9.75s forwards}
+  @keyframes veuSai{to{opacity:.55}}
+  .base{position:absolute;inset:0;background:linear-gradient(0deg,rgba(43,20,58,.92) 0%,rgba(61,32,80,.78) 20%,rgba(61,32,80,.35) 36%,rgba(61,32,80,0) 50%);
+        opacity:0;animation:fade .9s ease 9.7s forwards}
+  .assina{position:absolute;top:92px;left:72px;right:0;text-align:left;font-family:var(--sans);font-size:22px;letter-spacing:.2em;color:var(--dark);
+          font-weight:600;animation:fade .8s ease .2s both}
+  .assina b{font-weight:700}
+  .assina span{color:var(--acc)}
+  .frase{position:absolute;left:72px;right:72px;top:168px;text-align:left;font-family:var(--serif);font-weight:600;color:var(--dark);
+         font-size:88px;line-height:1.02;letter-spacing:-.015em;font-variation-settings:'opsz' 28,'SOFT' 50}
+  .frase em{font-style:italic;color:var(--acc)}
+  .frase .l{display:block;overflow:hidden;padding-bottom:10px}
+  .frase .l>span{display:block;animation:sobe .75s cubic-bezier(.2,.8,.1,1) both}
+  @keyframes sobe{from{transform:translateY(108%)}to{transform:translateY(0)}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .f1{animation:sai .5s cubic-bezier(.6,0,.8,.3) 4.6s forwards}
+  .f2{animation:sai .5s cubic-bezier(.6,0,.8,.3) 9.6s forwards}
+  @keyframes sai{to{opacity:0;filter:blur(14px);transform:translateY(-30px)}}
+  .f3{top:auto;bottom:330px;left:80px;right:80px;text-align:center;color:var(--claro);font-size:112px}
+  .f3 em{color:var(--lilas)}
+  .cta{position:absolute;left:50%;bottom:180px;transform:translateX(-50%);display:flex;align-items:center;gap:16px;
+       background:var(--claro);color:var(--dark);border-radius:999px;font-family:var(--sans);font-weight:700;font-size:32px;
+       letter-spacing:.18em;padding:22px 42px 22px 46px;white-space:nowrap;box-shadow:0 12px 34px rgba(0,0,0,.25);
+       animation:pop .7s cubic-bezier(.2,.8,.1,1) 10.9s both}
+  .cta svg{width:30px;height:30px}
+  @keyframes pop{0%{opacity:0;transform:translateX(-50%) translateY(30px) scale(.85)}65%{opacity:1;transform:translateX(-50%) scale(1.04)}100%{transform:translateX(-50%) scale(1)}}
+  .frase.big{left:40px;right:40px;top:150px;text-align:center;font-size:156px;line-height:.98;letter-spacing:-.02em}
+  .frase.big2{top:92px;font-size:112px;text-align:center;left:30px;right:30px;line-height:.96}
+</style>
+</head>
+<body>
+<div class="veu"></div>
+<div class="frase big f1">
+  <span class="l"><span style="animation-delay:.4s"><em>Movimento</em></span></span>
+  <span class="l"><span style="animation-delay:.6s">também é</span></span>
+  <span class="l"><span style="animation-delay:.8s">prevenção!</span></span>
+</div>
+<div class="frase big big2 f2">
+  <span class="l"><span style="animation-delay:5.2s">Pilates e</span></span>
+  <span class="l"><span style="animation-delay:5.4s"><em>autocuidado</em></span></span>
+  <span class="l"><span style="animation-delay:5.6s">caminham juntos.</span></span>
+</div>
+</body></html>

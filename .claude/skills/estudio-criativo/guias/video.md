@@ -81,6 +81,11 @@ Nunca passe o vídeo pelo navegador (JPEG duas vezes perde qualidade). Trate o t
 cas 0.5 a 0.7) e grave só os textos com `anima.mjs --alfa` (camada transparente .mov), depois una com `overlay` e x264 crf 14 a 16.
 Marca d'água do gerador (ex.: "CapCut AI"): recorte mínimo e reenquadre; avise para marcar "Informações de IA" ao publicar.
 
+## Texto atrás da pessoa (efeito em camadas)
+Recorte a pessoa quadro a quadro com rembg (`u2net_human_seg`, limpando para a maior silhueta; modelos BiRefNet estouram a memória),
+grave o texto de trás e o da frente em duas camadas `--alfa` e monte com `scripts/compor_camadas.py` (fundo, texto de trás, pessoa, texto da frente).
+Deixe a palavra-chave fora da área do corpo: a pessoa pode cobrir só a borda de uma linha, nunca a frase inteira.
+
 ## Figura humana realista
 Para corpo humano (postura, saúde, fitness, anatomia) use o boneco 3D de `modelos/humano3d/` (homem realista com rosto, articulado,
 licença CC0). Nunca desenhe humano com formas 2D: fica caricato. Postura, giro e marcações por articulação estão no LEIAME de lá.

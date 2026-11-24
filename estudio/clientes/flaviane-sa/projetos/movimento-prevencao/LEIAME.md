@@ -16,3 +16,10 @@ Entrada por máscara subindo, saída com desfoque. Trilha ambiente original (../
 Vídeo real enviado pela Thauana (senhor na chair, 23 s, 1080×1920): usados os primeiros 15 s, tratados com
 `fps=30,nlmeans=s=1.4:p=5:r=9,cas=0.5,eq=contrast=1.04:saturation=1.03`. Camada de texto overlay15.html (tempos de 15 s):
 frases do topo alinhadas à esquerda (88 px) para não cobrir a cabeça do aluno; "caminham / juntos." em duas linhas.
+
+## Versão 4 (texto em camadas, atrás do aluno)
+- Frases 1 e 2 grandes na camada de trás (tras.html); frase 3, botão e assinatura na frente (frente.html).
+- Assinatura "DRA. FLAVIANE SÁ · FISIOTERAPIA E PILATES" centralizada embaixo, branca a 50%.
+- Recorte do aluno: rembg u2net_human_seg (0,4 s/quadro) mantendo só a maior silhueta; BiRefNet estoura a memória do ambiente.
+- Montagem: `python3 .claude/skills/estudio-criativo/scripts/compor_camadas.py <pasta>` (máscaras suavizadas no tempo, borda macia).
+- A segunda frase fica acima das costas do aluno (ele se inclina); só "caminham juntos." passa atrás da cabeça.
