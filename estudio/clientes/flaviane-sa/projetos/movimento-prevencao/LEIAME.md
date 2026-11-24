@@ -11,3 +11,8 @@ Entrada por máscara subindo, saída com desfoque. Trilha ambiente original (../
 - Textos em camada transparente: `node .claude/skills/estudio-criativo/scripts/anima.mjs overlay.html --dur 10 --saida overlay.mov --alfa`
 - Composição: overlay sobre o vídeo tratado (zoom lento 3%), x264 crf 15, trilha -16 LUFS.
 - Última frase embaixo, em #F5F0F8 com itálico #C9B3D6 sobre degradê roxo da marca, e botão "LINK NA BIO".
+
+## Versão 3 (vídeo real do estúdio, aprovada para envio)
+Vídeo real enviado pela Thauana (senhor na chair, 23 s, 1080×1920): usados os primeiros 15 s, tratados com
+`fps=30,nlmeans=s=1.4:p=5:r=9,cas=0.5,eq=contrast=1.04:saturation=1.03`. Camada de texto overlay15.html (tempos de 15 s):
+frases do topo alinhadas à esquerda (88 px) para não cobrir a cabeça do aluno; "caminham / juntos." em duas linhas.

@@ -53,7 +53,7 @@
       3,
       5
     ],
-    "cta_preferido": "Agende sua avaliação",
+    "cta_preferido": "Agende sua avaliação. Link na bio.",
     "exemplos_aprovados": [
       "Se você é homem, precisa saber disso.",
       "Aqui não é aula. É tratamento.",
@@ -116,7 +116,8 @@
     },
     "sfx": true,
     "musica": "",
-    "ritmo": "calmo, explicativo; texto na tela para o ponto principal de cada bloco"
+    "ritmo": "calmo, explicativo; texto na tela para o ponto principal de cada bloco",
+    "regras_de_material": "Preferir vídeo real do estúdio a vídeo gerado por IA (mais realista); texto nunca sobre o rosto ou a cabeça do aluno"
   },
   "pendencias": [
     "Confirmar se a fala é da profissional em primeira pessoa",
