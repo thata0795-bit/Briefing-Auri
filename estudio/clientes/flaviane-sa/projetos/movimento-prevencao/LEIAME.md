@@ -23,3 +23,7 @@ frases do topo alinhadas à esquerda (88 px) para não cobrir a cabeça do aluno
 - Recorte do aluno: rembg u2net_human_seg (0,4 s/quadro) mantendo só a maior silhueta; BiRefNet estoura a memória do ambiente.
 - Montagem: `python3 .claude/skills/estudio-criativo/scripts/compor_camadas.py <pasta>` (máscaras suavizadas no tempo, borda macia).
 - A segunda frase fica acima das costas do aluno (ele se inclina); só "caminham juntos." passa atrás da cabeça.
+
+## Versão 5 (final): sem camadas
+Recorte do aluno removido (piscava e distorcia). Frases 1 e 2 maiores (174 px e 120 px), brancas, destaques em lilás claro #C9B3D6,
+sobre degradê roxo no topo. Montagem: vídeo tratado + tras.mov + frente.mov com overlay simples.

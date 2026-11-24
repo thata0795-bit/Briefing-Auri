@@ -85,6 +85,7 @@ Marca d'água do gerador (ex.: "CapCut AI"): recorte mínimo e reenquadre; avise
 Recorte a pessoa quadro a quadro com rembg (`u2net_human_seg`, limpando para a maior silhueta; modelos BiRefNet estouram a memória),
 grave o texto de trás e o da frente em duas camadas `--alfa` e monte com `scripts/compor_camadas.py` (fundo, texto de trás, pessoa, texto da frente).
 Deixe a palavra-chave fora da área do corpo: a pessoa pode cobrir só a borda de uma linha, nunca a frase inteira.
+Limite: em vídeo de celular com movimento, o recorte pisca e distorce bordas e aparelhos (reprovado pela Flaviane). Use só com fundo simples e pessoa bem destacada; na dúvida, texto por cima sem camadas.
 
 ## Figura humana realista
 Para corpo humano (postura, saúde, fitness, anatomia) use o boneco 3D de `modelos/humano3d/` (homem realista com rosto, articulado,

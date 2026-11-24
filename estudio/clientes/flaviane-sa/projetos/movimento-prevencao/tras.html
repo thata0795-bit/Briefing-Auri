@@ -9,9 +9,9 @@
         --serif:'Fraunces',Georgia,serif;--sans:'Montserrat',Arial,sans-serif}
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{width:1080px;height:1920px;overflow:hidden;background:transparent}
-  .veu{position:absolute;inset:0;background:linear-gradient(180deg,rgba(245,240,248,.80) 0%,rgba(245,240,248,.55) 20%,rgba(245,240,248,0) 40%);
+  .veu{position:absolute;inset:0;background:linear-gradient(180deg,rgba(43,20,58,.88) 0%,rgba(61,32,80,.68) 20%,rgba(61,32,80,.30) 34%,rgba(61,32,80,0) 46%);
        animation:veuSai .8s ease 9.75s forwards}
-  @keyframes veuSai{to{opacity:.55}}
+  @keyframes veuSai{to{opacity:0}}
   .base{position:absolute;inset:0;background:linear-gradient(0deg,rgba(43,20,58,.92) 0%,rgba(61,32,80,.78) 20%,rgba(61,32,80,.35) 36%,rgba(61,32,80,0) 50%);
         opacity:0;animation:fade .9s ease 9.7s forwards}
   .assina{position:absolute;top:92px;left:72px;right:0;text-align:left;font-family:var(--sans);font-size:22px;letter-spacing:.2em;color:var(--dark);
@@ -36,8 +36,9 @@
        animation:pop .7s cubic-bezier(.2,.8,.1,1) 10.9s both}
   .cta svg{width:30px;height:30px}
   @keyframes pop{0%{opacity:0;transform:translateX(-50%) translateY(30px) scale(.85)}65%{opacity:1;transform:translateX(-50%) scale(1.04)}100%{transform:translateX(-50%) scale(1)}}
-  .frase.big{left:40px;right:40px;top:150px;text-align:center;font-size:156px;line-height:.98;letter-spacing:-.02em}
-  .frase.big2{top:92px;font-size:112px;text-align:center;left:30px;right:30px;line-height:.96}
+  .frase.big{left:24px;right:24px;top:120px;text-align:center;font-size:174px;line-height:.96;letter-spacing:-.02em;color:#FFFFFF;text-shadow:0 4px 24px rgba(30,10,40,.35)}
+  .frase.big em{color:#C9B3D6}
+  .frase.big2{top:96px;font-size:120px;text-align:center;left:16px;right:16px;line-height:.96;letter-spacing:-.025em}
 </style>
 </head>
 <body>
