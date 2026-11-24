@@ -32,7 +32,7 @@ export const obterSessao = cache(async (): Promise<Sessao> => {
 
   const { data: agencia } = await supabase
     .from("agencias")
-    .select("id, nome, slug, marca, email_contato, telefone")
+    .select("id, nome, slug, marca, email_contato, telefone, manual_parceria")
     .eq("id", perfil.agencia_id)
     .single();
   if (!agencia) redirect("/entrar?erro=sem-acesso");

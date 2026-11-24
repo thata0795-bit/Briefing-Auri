@@ -15,7 +15,7 @@ export default async function Briefing() {
 
   return (
     <div>
-      <span aria-hidden className="num-secao text-7xl">03</span>
+      <span aria-hidden className="num-secao text-7xl">04</span>
       <h1 className="mt-2 text-4xl">Briefing</h1>
       <p className="mt-3 max-w-2xl text-base text-text">
         São 10 partes curtas. Cada resposta salva sozinha: pode fechar e voltar quando quiser. Se não souber algo agora, toque em

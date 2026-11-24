@@ -25,6 +25,7 @@ export type Agencia = {
   marca: MarcaAgencia;
   email_contato: string | null;
   telefone: string | null;
+  manual_parceria?: string | null;
 };
 
 export const ROTULO_PAPEL: Record<Papel, string> = {

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Building2, CalendarClock, CalendarDays, CheckCheck, FileText, Grid3x3, House, LogOut, Menu, ShieldCheck, Users, UsersRound, X } from "lucide-react";
+import { BookOpen, Building2, CalendarClock, CalendarDays, CheckCheck, Compass, FileText, FolderOpen, Grid3x3, House, LogOut, Menu, MessageCircle, ShieldCheck, Users, UsersRound, Wallet, X } from "lucide-react";
 import type { ItemMenu, NomeIcone } from "@/lib/menu";
 
 const ICONES: Record<NomeIcone, typeof House> = {
@@ -13,6 +13,11 @@ const ICONES: Record<NomeIcone, typeof House> = {
   calendario: CalendarDays,
   aprovacoes: CheckCheck,
   feed: Grid3x3,
+  mensagens: MessageCircle,
+  estrategia: Compass,
+  documentos: FolderOpen,
+  financeiro: Wallet,
+  manual: BookOpen,
   agenda: CalendarClock,
   contratos: FileText,
   equipe: Users,
@@ -61,7 +66,13 @@ export function MenuLateral({ itens, logo, nomeAgencia, nomeUsuario, rotuloPapel
                   }`}
                 >
                   <Icone aria-hidden className={`size-4.5 ${ativo ? "text-gold-light" : "text-muted"}`} />
-                  {item.rotulo}
+                  <span className="flex-1">{item.rotulo}</span>
+                  {!!item.contador && (
+                    <span className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${ativo ? "bg-gold-light text-brown-dark" : "bg-st-fix text-bg"}`}>
+                      {item.contador}
+                      <span className="sr-only"> não lidas</span>
+                    </span>
+                  )}
                 </Link>
               </li>
             );

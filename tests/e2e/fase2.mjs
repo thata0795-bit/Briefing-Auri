@@ -130,12 +130,19 @@ const semAssinatura = await fetch(`${BASE}/api/webhooks/assinatura`, {
 });
 ok(semAssinatura.status === 401, "webhook sem assinatura HMAC é recusado");
 
+// Manual da parceria
+await cli.goto(`${BASE}/entrada`);
+await cli.waitForURL("**/entrada/manual");
+await cli.getByRole("checkbox").check();
+await cli.getByRole("button", { name: "Concordo e continuar" }).click();
+await cli.waitForURL("**/entrada/briefing", { timeout: 15000 });
+ok(true, "manual da parceria aceito");
+
 // Briefing: começa e para no meio
-await cli.goto(`${BASE}/entrada/briefing`);
-await cli.getByLabel(/Nome do negócio ou da marca/).fill(NOME_CLIENTE);
+await cli.getByLabel(/Nome da empresa ou da marca/).fill(NOME_CLIENTE);
 await cli.getByRole("button", { name: "Alimentação", exact: true }).click();
-await cli.getByLabel(/O que a marca vende ou oferece/).fill("Cafés especiais e bolos caseiros.");
-await cli.getByLabel(/Cidade e região/).fill("Belo Horizonte");
+await cli.getByLabel(/Conte a história da empresa/).fill("Cafés especiais e bolos caseiros.");
+await cli.getByLabel(/Cidades de atuação/).fill("Belo Horizonte");
 await cli.getByText("Tudo salvo").waitFor({ timeout: 10000 });
 await cli.waitForTimeout(1200);
 await captura(cli, "cliente-briefing");
@@ -157,12 +164,12 @@ ok(true, "ao voltar, o cliente cai direto na etapa onde parou");
 // O briefing reabre na primeira parte com pergunta obrigatória em aberto; volta para a 01.
 ok((await cli.getByRole("button", { name: "02" }).getAttribute("aria-current")) === "step", "reabre na primeira parte ainda pendente");
 await cli.getByRole("button", { name: "01" }).click();
-ok((await cli.getByLabel(/Nome do negócio ou da marca/).inputValue()) === NOME_CLIENTE, "resposta de texto continua lá");
-ok((await cli.getByLabel(/Cidade e região/).inputValue()) === "Belo Horizonte", "texto digitado logo antes de sair foi salvo");
+ok((await cli.getByLabel(/Nome da empresa ou da marca/).inputValue()) === NOME_CLIENTE, "resposta de texto continua lá");
+ok((await cli.getByLabel(/Cidades de atuação/).inputValue()) === "Belo Horizonte", "texto digitado logo antes de sair foi salvo");
 ok((await cli.getByRole("button", { name: "Alimentação", exact: true }).getAttribute("aria-pressed")) === "true", "escolha continua marcada");
 
 // Concluir cedo mostra o que falta
-await cli.getByRole("button", { name: "10" }).click();
+await cli.getByRole("button", { name: /^10 / }).click();
 await cli.waitForTimeout(800);
 await semRolagem(cli, "briefing na parte 10, 360px");
 await cli.getByRole("button", { name: "Concluir briefing" }).click();
@@ -171,17 +178,16 @@ ok(true, "concluir antes da hora aponta as perguntas que faltam");
 
 // Responde tudo, seção por seção
 for (let s = 0; s < 10; s++) {
-  await cli.getByRole("button", { name: String(s + 1).padStart(2, "0") }).click();
+  await cli.getByRole("button", { name: new RegExp(`^${String(s + 1).padStart(2, "0")} `) }).click();
   const secao = cli.locator("section").filter({ has: cli.locator("header h2") }).first();
-  if (s === 4) {
-    await secao.getByRole("button", { name: "Sim, completa (logo, cores e fontes)" }).click();
+  if (s === 6) {
     await secao.getByLabel("Envie a logo").setInputFiles("public/brand/monograma-dourado.png");
     await secao.getByText("monograma-dourado.png", { exact: true }).waitFor({ timeout: 15000 });
     ok((await secao.getByText("monograma-dourado.png", { exact: true }).count()) === 1, "arquivo enviado aparece uma vez na pergunta");
   }
-  if (s === 7) {
+  if (s === 8) {
     // Uma obrigatória fica para depois
-    await secao.locator("#q-objetivos-tres_meses").waitFor();
+    await secao.locator("#q-objetivos-sucesso").waitFor();
     await secao.getByRole("button", { name: "Responder depois" }).nth(1).click();
     await secao.getByText("Marcada para responder depois").waitFor();
   }
@@ -192,7 +198,7 @@ for (let s = 0; s < 10; s++) {
   }
   for (const campo of await secao.locator('input[type="text"], input[type="url"], textarea').all()) {
     if (!(await campo.isVisible()) || (await campo.inputValue())) continue;
-    if ((await campo.getAttribute("id")) === "q-objetivos-tres_meses") continue; // ficou para depois
+    if ((await campo.getAttribute("id")) === "q-objetivos-sucesso") continue; // ficou para depois
     const tipo = await campo.getAttribute("type");
     await campo.fill(tipo === "url" ? "pinterest.com/exemplo" : "Resposta de teste");
   }
@@ -250,7 +256,7 @@ await admin.getByRole("heading", { name: "Briefing" }).waitFor();
 await admin.waitForLoadState("networkidle");
 await admin.evaluate(() => document.querySelectorAll("details").forEach((d) => (d.open = true)));
 const ficha = await admin.locator("main").innerText();
-ok((ficha.match(/Concluído/g) ?? []).length >= 5, "as 5 etapas aparecem concluídas na ficha");
+ok((ficha.match(/Concluído/g) ?? []).length >= 6, "as 6 etapas aparecem concluídas na ficha");
 ok(ficha.includes("Cafés especiais e bolos caseiros."), "agência lê as respostas do briefing");
 ok(ficha.includes("Cliente vai responder depois"), "agência vê a pergunta deixada para depois");
 ok(ficha.includes("monograma-dourado.png"), "agência vê o arquivo enviado");

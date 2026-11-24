@@ -7,6 +7,7 @@ export const metadata: Metadata = { title: "Boas-vindas" };
 
 const PROXIMOS = [
   { titulo: "Contrato", texto: "Você lê e assina o contrato pelo celular, com assinatura eletrônica." },
+  { titulo: "Manual da parceria", texto: "Os combinados de comunicação, prazos, materiais e escopo." },
   { titulo: "Briefing", texto: "Perguntas sobre a sua marca, público e objetivos. Salva sozinho a cada resposta." },
   { titulo: "Acessos", texto: "Você libera Instagram, Meta e Google para a agência, sem passar senha." },
   { titulo: "Primeira reunião", texto: "Você escolhe o melhor horário para a nossa conversa inicial." },

@@ -1,23 +1,24 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Download, Paperclip } from "lucide-react";
+import { ArrowLeft, Download } from "lucide-react";
 import { exigirPapel } from "@/lib/sessao";
 import { criarClienteServidor } from "@/lib/supabase/server";
 import { ETAPAS } from "@/lib/entrada";
-import { SECOES, respondida, visivel, type Respostas } from "@/lib/briefing/perguntas";
+import type { Respostas } from "@/lib/briefing/perguntas";
 import { ACESSOS, ROTULO_ACESSO, type StatusAcesso } from "@/lib/acessos";
 import { dataCurta } from "@/lib/datas";
 import { diaSemana, hora } from "@/lib/agenda";
 import type { StatusItem } from "@/lib/status";
 import type { StatusCliente } from "@/lib/tipos";
-import { Cartao, Vazio } from "@/components/ui/cartao";
+import { Cartao } from "@/components/ui/cartao";
 import { CartaoStatus, SeloStatus } from "@/components/ui/status";
 import { SeloStatusCliente } from "@/components/ui/selo";
 import { BotaoEnviar } from "@/components/ui/botao-enviar";
 import { confirmarAcesso, enviarContrato, marcarContratoAssinadoManual, reenviarConvite } from "../acoes";
 import { FormConvidarPessoa } from "@/components/agencia/form-convidar-pessoa";
 import { FormEquipeCliente } from "@/components/agencia/form-equipe-cliente";
+import { BriefingRespostas } from "@/components/briefing/respostas";
 import { DEMO } from "@/lib/demo/config";
 
 export const metadata: Metadata = { title: "Cliente" };
@@ -112,7 +113,7 @@ export default async function FichaCliente({
 
       <section aria-labelledby="t-entrada">
         <h2 id="t-entrada" className="mb-3 text-2xl">Entrada</h2>
-        <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <ol className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
           {ETAPAS.map((e, i) => {
             const estado = etapaDe.get(e.id);
             const status = (estado?.status ?? "a_fazer") as StatusItem;
@@ -295,72 +296,7 @@ export default async function FichaCliente({
                 : ""}
           </p>
         </div>
-        {Object.keys(respostas).length === 0 ? (
-          <Vazio titulo="Briefing ainda não começou" texto="As respostas aparecem aqui assim que o cliente começar a preencher." />
-        ) : (
-          <div className="flex flex-col gap-3">
-            {SECOES.map((s, i) => {
-              const perguntas = s.perguntas.filter((p) => visivel(p, respostas));
-              const feitas = perguntas.filter((p) => respondida(respostas[`${s.id}.${p.id}`])).length;
-              return (
-                <details key={s.id} className="group rounded-lg border border-line bg-card" open={i === 0}>
-                  <summary className="flex min-h-12 cursor-pointer items-center justify-between gap-3 px-5 py-3">
-                    <span className="flex items-baseline gap-3">
-                      <span aria-hidden className="num-secao text-2xl">{String(i + 1).padStart(2, "0")}</span>
-                      <span className="font-medium text-text">{s.titulo}</span>
-                    </span>
-                    <span className="text-xs text-muted">
-                      {feitas} de {perguntas.length}
-                    </span>
-                  </summary>
-                  <dl className="grid gap-4 border-t border-line px-5 py-4 sm:grid-cols-2">
-                    {perguntas.map((p) => {
-                      const chave = `${s.id}.${p.id}`;
-                      const v = respostas[chave];
-                      return (
-                        <div key={chave} className="min-w-0">
-                          <dt className="text-xs font-medium text-muted">{p.rotulo}</dt>
-                          <dd className="mt-0.5 text-sm break-words whitespace-pre-wrap text-text">
-                            {puladas.includes(chave) ? (
-                              <span className="text-muted italic">Cliente vai responder depois</span>
-                            ) : !respondida(v) ? (
-                              <span className="text-muted">Sem resposta</span>
-                            ) : p.tipo === "arquivo" ? (
-                              <ul className="flex flex-col gap-1">
-                                {(v as string[]).map((aid) => {
-                                  const a = linkArquivo.get(aid);
-                                  return (
-                                    <li key={aid}>
-                                      {a?.url ? (
-                                        <a href={a.url} target="_blank" rel="noopener" className="inline-flex min-h-11 items-center gap-1 text-brown underline underline-offset-2">
-                                          <Paperclip aria-hidden className="size-3.5" /> {a.nome}
-                                        </a>
-                                      ) : (
-                                        "Arquivo indisponível"
-                                      )}
-                                    </li>
-                                  );
-                                })}
-                              </ul>
-                            ) : p.tipo === "url" ? (
-                              <a href={String(v)} target="_blank" rel="noopener noreferrer" className="text-brown underline underline-offset-2">
-                                {String(v)}
-                              </a>
-                            ) : Array.isArray(v) ? (
-                              v.join(", ")
-                            ) : (
-                              String(v)
-                            )}
-                          </dd>
-                        </div>
-                      );
-                    })}
-                  </dl>
-                </details>
-              );
-            })}
-          </div>
-        )}
+        <BriefingRespostas respostas={respostas} puladas={puladas} linkArquivo={linkArquivo} />
       </section>
     </>
   );

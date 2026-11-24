@@ -30,12 +30,12 @@ async function comoApos<T>(
 const liberarAteReuniao = `update public.etapas_entrada set status = 'concluido'
   where cliente_id = '${ID.cliente.bravo}' and etapa <> 'reuniao'`;
 const liberarAcessos = `update public.etapas_entrada set status = 'concluido'
-  where cliente_id = '${ID.cliente.bravo}' and etapa in ('boas_vindas', 'contrato', 'briefing')`;
+  where cliente_id = '${ID.cliente.bravo}' and etapa in ('boas_vindas', 'contrato', 'manual', 'briefing')`;
 
 describe("etapas da entrada", () => {
-  it("cliente novo nasce com as 5 etapas, briefing e checklist de acessos", async () => {
+  it("cliente novo nasce com as 6 etapas, briefing e checklist de acessos", async () => {
     const r = await db.query("select count(*)::int n from public.etapas_entrada where cliente_id = $1", [ID.cliente.bravo]);
-    expect(r.rows[0].n).toBe(5);
+    expect(r.rows[0].n).toBe(6);
     const a = await db.query("select count(*)::int n from public.acessos_cliente where cliente_id = $1", [ID.cliente.bravo]);
     expect(a.rows[0].n).toBe(4);
   });

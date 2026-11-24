@@ -5,6 +5,7 @@
  */
 import { createHash } from "node:crypto";
 import { comIdsPrevisiveis, inserirCru, type Banco, type Linha } from "./motor";
+import { MANUAL_PADRAO } from "../manual";
 
 export const AG = "a0000000-0000-4000-8000-0000000000d1";
 export const U = {
@@ -63,49 +64,44 @@ function usuario(db: Banco, id: string, email: string, meta: Linha) {
 }
 
 const RESPOSTAS_AURORA: Record<string, any> = {
-  "negocio.nome": "Padaria Aurora",
-  "negocio.segmento": "Alimentação",
-  "negocio.oferta": "Pães de fermentação natural, bolos caseiros e café da manhã para encomenda.",
-  "negocio.tempo": "Mais de 3 anos",
-  "negocio.cidade": "Belo Horizonte, bairro Santa Tereza, com entrega na região",
-  "negocio.historia": "Começou na cozinha de casa vendendo pão para vizinhos. Hoje tem loja própria e oito funcionários.",
+  "empresa.nome": "Padaria Aurora",
+  "empresa.cidades_atuacao": "Belo Horizonte, com entrega na região de Santa Tereza",
+  "empresa.segmento": "Alimentação",
+  "empresa.tempo_existencia": "De 3 a 5 anos",
+  "empresa.historia": "Começou na cozinha de casa vendendo pão para vizinhos. Hoje tem loja própria e oito funcionários.",
+  "empresa.canais_venda": ["Loja física", "WhatsApp", "Instagram"],
+  "posicionamento.alem_produto": "Um café da manhã com cara de casa de vó, sem pressa.",
+  "posicionamento.diferencial": "Fermentação de 24 horas e ingredientes de produtores de Minas.",
+  "posicionamento.tres_palavras": "Acolhedora, artesanal, mineira",
+  "posicionamento.valores": ["Qualidade", "Proximidade", "Tradição"],
+  "posicionamento.descricao_desejada": "A padaria do bairro que faz tudo na hora e conhece todo mundo pelo nome.",
+  "cliente_ideal.genero": "Equilibrado",
+  "cliente_ideal.faixa_etaria": "25 a 34",
+  "cliente_ideal.forma_compra": "Ambos",
+  "cliente_ideal.classe_social": "Média",
+  "cliente_ideal.influencia_decisao": ["Qualidade", "Indicação", "Atendimento"],
+  "cliente_ideal.o_que_faz_voltar": "O pão quente às 6h e o atendimento pelo nome.",
+  "cliente_ideal.principal_objecao": "Achar que pão artesanal é caro.",
   "produtos.principais": "Pão de fermentação natural, pão de queijo, bolos de festa, cestas de café da manhã.",
-  "produtos.carro_chefe": "Pão de fermentação natural",
-  "produtos.impulsionar": "Cestas de café da manhã para datas comemorativas e pedidos de empresas.",
-  "produtos.ticket": "Até R$ 100",
-  "produtos.diferenciais": "Fermentação de 24 horas, ingredientes de produtores de Minas e atendimento pelo nome.",
-  "produtos.canais_venda": ["Loja física", "WhatsApp", "Direct do Instagram"],
-  "publico.genero": "Ambos",
-  "publico.faixa": ["25 a 34", "35 a 44"],
-  "publico.classe": "Média (B)",
-  "publico.cliente_ideal": "Moradores do bairro que valorizam comida de verdade e compram para a família no fim de semana.",
-  "publico.percepcao": ["Acessível", "Confiável", "Natural"],
-  "concorrencia.concorrentes": "Duas padarias tradicionais do bairro e uma rede de cafeterias no centro.",
-  "concorrencia.admira": "Padarias artesanais de São Paulo com fotos de bastidor da produção.",
-  "concorrencia.nao_quer": "Parecer cara ou distante. Nada de linguagem de restaurante sofisticado.",
-  "concorrencia.referencia_link": "https://pinterest.com/exemplo-padaria",
-  "identidade.possui": "Parcial (só logo ou só cores)",
-  "identidade.paleta": ["Terrosos (terra, cobre, mostarda)"],
-  "identidade.cor_proibida": "Azul",
-  "identidade.estilo": "Orgânico e natural",
-  "voz.tom": "Descontraído e próximo",
-  "voz.tratamento": "Você",
-  "voz.palavras_usa": "fornada, quentinho, feito aqui, bom dia",
-  "voz.palavras_evita": "gourmet, premium",
-  "voz.emojis": "Com moderação",
-  "redes.quais": ["Instagram", "Status do WhatsApp"],
+  "produtos.mais_vendidos": "Pão de fermentação natural e pão de queijo.",
+  "produtos.vender_mais": "Cestas de café da manhã para datas comemorativas e pedidos de empresas.",
+  "produtos.caracteristicas_encantam": "Casca crocante, miolo macio e o cheiro na rua às 6h.",
+  "produtos.elogio_frequente": "O melhor pão de queijo do bairro.",
+  "produtos.reclamacoes": "Fila na porta no sábado de manhã.",
   "redes.perfil_instagram": "@padaria.aurora.exemplo",
-  "redes.formatos": ["Reels e vídeos curtos", "Stories", "Carrossel"],
-  "redes.frequencia": "5 vezes por semana",
-  "redes.aparece": "Apareço se precisar",
-  "objetivos.principal": "Vender mais",
-  "objetivos.tres_meses": "Dobrar as encomendas de cestas e ter a agenda de pedidos de fim de ano cheia até novembro.",
-  "objetivos.datas": "Dia das Mães, Páscoa, aniversário da padaria em setembro, Natal.",
-  "materiais.fornece": "Tenho algum material",
-  "materiais.local_captacao": "Na própria padaria, de preferência às 6h, durante a primeira fornada.",
-  "materiais.dias_captacao": ["Terça", "Quinta"],
-  "combinados.aprovacao": "Marina Lopes, sócia. Ela dá a palavra final.",
-  "combinados.prazo_aprovacao": "Em até 24 horas",
+  "redes.canal_funciona_melhor": "Presencial",
+  "redes.conteudo_nao_deseja": ["Danças e trends", "Política ou religião"],
+  "redes.perfis_referencia": "Padarias artesanais com fotos de bastidor da produção.",
+  "concorrencia.principais": "Duas padarias tradicionais do bairro e uma rede de cafeterias no centro.",
+  "concorrencia.voce_faz_melhor": "Tudo é feito ali, na hora, com ingredientes locais.",
+  "producao.cronograma_stories": "Às vezes",
+  "producao.parceiros_gravacao": "Sim",
+  "producao.influenciadores": "Não",
+  "estrategia.assuntos_frequentes": "Bastidores da produção, novidades da semana, encomendas.",
+  "estrategia.mensagens_recorrentes": "Feito aqui, na hora, com ingrediente de Minas.",
+  "objetivos.seis_meses": "Vender mais",
+  "objetivos.sucesso": "Dobrar as encomendas de cestas e ter a agenda de pedidos de fim de ano cheia até novembro.",
+  "importantes.destaque": "Cestas de Natal a partir de novembro.",
 };
 
 export function criarBancoDemo(): Banco {
@@ -123,6 +119,7 @@ function montarBanco(): Banco {
     email_contato: "contato@agencia-exemplo.com.br",
     telefone: null,
     ativa: true,
+    manual_parceria: MANUAL_PADRAO,
   });
 
   usuario(db, U.taynara, "taynara@agencia-exemplo.com.br", { papel: "admin", nome: "Taynara Castro" });
@@ -256,6 +253,7 @@ As partes tratam os dados pessoais envolvidos conforme a Lei 13.709/2018 (LGPD).
     inserirCru(db, "horarios_livres", { agencia_id: AG, responsavel_id: U.taynara, inicio: emDias(d, "15:00"), fim: emDias(d, "16:00"), formato: "presencial", local: "Escritório da agência" });
   }
   semearConteudos(db);
+  semearRelacionamento(db);
   return db;
 }
 
@@ -354,5 +352,71 @@ function semearConteudos(db: Banco) {
       criado_por: U.julia,
       ...campos,
     });
+  }
+}
+
+function semearRelacionamento(db: Banco) {
+  const msg = (cliente: string, autor: string, texto: string, horasAtras: number) =>
+    inserirCru(db, "mensagens", { cliente_id: cliente, agencia_id: AG, autor_id: autor, texto, criado_em: new Date(Date.now() - horasAtras * 3600 * 1000).toISOString() });
+  msg(C.aurora, U.marina, "Oi, Júlia! As cestas de Natal podem entrar no calendário já na semana que vem?", 30);
+  msg(C.aurora, U.julia, "Oi, Marina! Podem sim. Coloquei um carrossel com as datas limite para encomenda. Está em produção, te mando para aprovar até sexta.", 29);
+  msg(C.aurora, U.marina, "Perfeito. Mais uma coisa: a captação de quinta pode começar às 6h? É quando sai a primeira fornada.", 5);
+  msg(C.aurora, U.taynara, "Pode, Marina. Já ajustei o horário na agenda e você recebe o lembrete dois dias antes.", 4);
+  msg(C.bravo, U.carla, "Bom dia! Recebi o contrato. Posso assinar pelo celular mesmo?", 2);
+  // A agência já leu a conversa da Aurora até a última mensagem dela; a da Carla está sem leitura.
+  for (const u of [U.taynara, U.julia]) {
+    inserirCru(db, "leituras_conversa", { cliente_id: C.aurora, agencia_id: AG, user_id: u, lido_ate: new Date(Date.now() - 3.9 * 3600 * 1000).toISOString() });
+  }
+  inserirCru(db, "leituras_conversa", { cliente_id: C.aurora, agencia_id: AG, user_id: U.marina, lido_ate: new Date(Date.now() - 4.5 * 3600 * 1000).toISOString() });
+
+  // Estratégia do mês da Aurora
+  const mes = new Date(Date.now() - 3 * 3600 * 1000).toISOString().slice(0, 7);
+  inserirCru(db, "estrategias", {
+    cliente_id: C.aurora,
+    agencia_id: AG,
+    mes,
+    versao: 1,
+    foco: "Encomendas de fim de ano. O mês prepara o público para as cestas de Natal, mostrando o cuidado na produção e abrindo as encomendas cedo.",
+    objetivos: "Abrir as encomendas de cestas de Natal\nAumentar os pedidos pelo WhatsApp\nReforçar a produção artesanal como diferencial",
+    pilares: "Bastidores da produção\nProduto em destaque\nClientes e bairro\nDicas de consumo",
+    metas: "40 encomendas de cestas até o dia 20\n5 reels no mês\nStories todos os dias úteis",
+    publicado_em: atras(6),
+    criado_por: U.julia,
+  });
+
+  // Reunião passada com resumo
+  inserirCru(db, "compromissos", {
+    cliente_id: C.aurora,
+    agencia_id: AG,
+    tipo: "reuniao",
+    titulo: "Alinhamento mensal",
+    inicio: new Date(Date.now() - 8 * dia).toISOString(),
+    fim: new Date(Date.now() - 8 * dia + 3600 * 1000).toISOString(),
+    formato: "online",
+    responsavel_id: U.julia,
+    status: "concluido",
+    resumo: "Revisamos os números do mês passado: os reels de bastidor tiveram o dobro de alcance. Decidimos abrir as encomendas de Natal mais cedo e gravar a captação na primeira fornada.",
+  });
+
+  // Mensalidades
+  const comp = (n: number) => {
+    const d = new Date(Date.now() - 3 * 3600 * 1000);
+    d.setUTCDate(1);
+    d.setUTCMonth(d.getUTCMonth() + n);
+    return d.toISOString().slice(0, 7);
+  };
+  for (const [cliente, valor, venc] of [[C.aurora, 1800, 10], [C.bravo, 2900, 5]] as const) {
+    for (const n of [-2, -1, 0]) {
+      if (cliente === C.bravo && n < 0) continue;
+      inserirCru(db, "mensalidades", {
+        cliente_id: cliente,
+        agencia_id: AG,
+        competencia: comp(n),
+        valor,
+        vencimento: `${comp(n)}-${String(venc).padStart(2, "0")}`,
+        status: n < 0 ? "pago" : "pendente",
+        pago_em: n < 0 ? atras(-n * 30 - 20) : null,
+      });
+    }
   }
 }

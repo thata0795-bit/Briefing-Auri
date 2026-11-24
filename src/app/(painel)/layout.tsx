@@ -3,12 +3,14 @@ import { montarMenu } from "@/lib/menu";
 import { estiloDaMarca, logoDaMarca } from "@/lib/marca";
 import { ROTULO_FUNCAO, ROTULO_PAPEL } from "@/lib/tipos";
 import { MenuLateral } from "@/components/painel/menu-lateral";
+import { resumoConversas } from "@/lib/chat";
 
 export default async function LayoutPainel({ children }: { children: React.ReactNode }) {
   const sessao = await obterSessao();
   const { perfil, agencia } = sessao;
   const { logo } = logoDaMarca(agencia.marca);
   const rotuloPapel = perfil.funcao ? ROTULO_FUNCAO[perfil.funcao] : ROTULO_PAPEL[perfil.papel];
+  const naoLidas = (await resumoConversas(sessao.userId).catch(() => [])).reduce((t, c) => t + c.naoLidas, 0);
 
   return (
     <div style={estiloDaMarca(agencia.marca)} className="min-h-dvh bg-bg lg:flex">
@@ -19,7 +21,7 @@ export default async function LayoutPainel({ children }: { children: React.React
         Pular para o conteúdo
       </a>
       <MenuLateral
-        itens={montarMenu(sessao)}
+        itens={montarMenu(sessao, naoLidas)}
         logo={logo}
         nomeAgencia={agencia.nome}
         nomeUsuario={perfil.nome || perfil.email}

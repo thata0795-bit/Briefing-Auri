@@ -38,7 +38,7 @@ describe("cliente", () => {
       expect(perfis).not.toContain(ID.user.bravo);
       expect(perfis).not.toContain(ID.user.cedro);
       expect(perfis).not.toContain(ID.user.designer); // designer não atende Aurora
-      expect(perfis).toEqual([ID.user.social, ID.user.aurora, ID.user.socioAurora].sort());
+      expect(perfis).toEqual([ID.user.adminTc, ID.user.social, ID.user.aurora, ID.user.socioAurora].sort());
     });
   });
 

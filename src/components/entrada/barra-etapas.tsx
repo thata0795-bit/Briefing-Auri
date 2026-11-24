@@ -32,7 +32,7 @@ export function BarraEtapas({ estados, atual }: { estados: Estado[]; atual: stri
       >
         <div className="h-full rounded-full bg-st-done transition-[width] duration-200" style={{ width: `${pct}%` }} />
       </div>
-      <ol className="mt-4 grid grid-cols-5 gap-1">
+      <ol className="mt-4 grid grid-cols-6 gap-1">
         {ETAPAS_PUBLICAS.map((etapa, i) => {
           const estado = estados.find((e) => e.etapa === etapa.id);
           const concluida = estado?.status === "concluido";

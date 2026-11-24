@@ -23,7 +23,7 @@ export default async function Reuniao() {
     const responsavel = (r?.responsavel as unknown as { nome: string } | null)?.nome;
     return (
       <div className="max-w-2xl">
-        <span aria-hidden className="num-secao text-7xl">05</span>
+        <span aria-hidden className="num-secao text-7xl">06</span>
         <h1 className="mt-2 text-4xl">Tudo pronto para começar</h1>
         <p className="mt-3 text-base text-text">
           Sua entrada está completa. A equipe já começou a preparar a primeira estratégia da {cliente.nome}.
@@ -97,7 +97,7 @@ export default async function Reuniao() {
 
   return (
     <div className="max-w-3xl">
-      <span aria-hidden className="num-secao text-7xl">05</span>
+      <span aria-hidden className="num-secao text-7xl">06</span>
       <h1 className="mt-2 text-4xl">Primeira reunião</h1>
       <p className="mt-3 text-base text-text">
         Escolha o melhor horário para a nossa conversa inicial. Ela dura cerca de uma hora e serve para alinhar objetivos e o primeiro

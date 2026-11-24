@@ -41,6 +41,17 @@ export async function concluirBoasVindas(_: Resultado | null, dados: FormData): 
   return { ok: true, destino: "/entrada" };
 }
 
+export async function concluirManual(): Promise<Resultado> {
+  try {
+    const { supabase, clienteId } = await minhaConta();
+    const { error } = await supabase.rpc("concluir_manual", { p_cliente: clienteId });
+    if (error) throw error;
+  } catch (e) {
+    return { ok: false, erro: mensagem(e) };
+  }
+  return { ok: true, destino: "/entrada" };
+}
+
 export async function salvarResposta(chave: string, valor: unknown): Promise<Resultado> {
   const pergunta = acharPergunta(chave);
   if (!pergunta || pergunta.tipo === "arquivo") return { ok: false, erro: "Pergunta inválida." };
@@ -154,7 +165,7 @@ export async function concluirBriefing(): Promise<Resultado & { faltam?: string[
       .from("etapas_entrada")
       .select("etapa, status")
       .eq("cliente_id", clienteId)
-      .in("etapa", ["boas_vindas", "contrato"]);
+      .in("etapa", ["boas_vindas", "contrato", "manual"]);
     if ((etapas ?? []).some((e) => e.status !== "concluido")) {
       return { ok: false, erro: "Conclua as etapas anteriores primeiro." };
     }

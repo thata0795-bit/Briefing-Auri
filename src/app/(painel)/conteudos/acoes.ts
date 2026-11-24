@@ -9,6 +9,8 @@ export type Resultado = { ok: true; destino?: string } | { ok: false; erro: stri
 
 const uuid = z.string().uuid();
 const TipoItem = z.enum(["conteudo", "roteiro"]);
+const TipoComentavel = z.enum(["conteudo", "roteiro", "estrategia"]);
+const TABELA = { conteudo: "conteudos", roteiro: "roteiros", estrategia: "estrategias" } as const;
 
 function erroDoBanco(e: unknown, padrao = "Não foi possível salvar. Tente de novo.") {
   const m = (e as { message?: string })?.message;
@@ -44,14 +46,13 @@ export async function aprovarVarios(itens: { tipo: string; id: string }[]): Prom
 }
 
 export async function comentar(tipo: string, id: string, texto: string): Promise<Resultado> {
-  const t = TipoItem.safeParse(tipo);
+  const t = TipoComentavel.safeParse(tipo);
   const limpo = (texto ?? "").trim();
   if (!t.success || !uuid.safeParse(id).success) return { ok: false, erro: "Item inválido." };
   if (limpo.length < 1 || limpo.length > 4000) return { ok: false, erro: "Escreva um comentário de até 4.000 caracteres." };
   const sessao = await obterSessao();
   const supabase = await criarClienteServidor();
-  const tabela = t.data === "conteudo" ? "conteudos" : "roteiros";
-  const { data: item } = await supabase.from(tabela).select("cliente_id, agencia_id").eq("id", id).maybeSingle();
+  const { data: item } = await supabase.from(TABELA[t.data]).select("cliente_id, agencia_id").eq("id", id).maybeSingle();
   if (!item) return { ok: false, erro: "Item não encontrado." };
   const { error } = await supabase.from("comentarios").insert({
     cliente_id: item.cliente_id,

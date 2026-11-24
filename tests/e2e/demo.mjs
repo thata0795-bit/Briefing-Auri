@@ -112,9 +112,15 @@ await n.getByRole("link", { name: /Assinar contrato/ }).click();
 await n.getByLabel("Nome completo de quem assina").fill("Helena Prado");
 await n.getByRole("button", { name: "Assinar contrato" }).click();
 await n.getByText("Contrato assinado").first().waitFor({ timeout: 15000 });
-await n.goto(`${BASE}/entrada/briefing`);
+await n.goto(`${BASE}/entrada`);
+await n.waitForURL("**/entrada/manual");
+await n.getByText("Prazos e aprovações").first().waitFor();
+await n.getByRole("checkbox").check();
+await n.getByRole("button", { name: "Concordo e continuar" }).click();
+await n.waitForURL("**/entrada/briefing", { timeout: 15000 });
+ok(true, "manual da parceria aceito na entrada");
 for (let s = 0; s < 10; s++) {
-  await n.getByRole("button", { name: String(s + 1).padStart(2, "0") }).click();
+  await n.getByRole("button", { name: new RegExp(`^${String(s + 1).padStart(2, "0")} `) }).click();
   const secao = n.locator("section").filter({ has: n.locator("header h2") }).first();
   for (const g of await secao.getByRole("group").all()) {
     if ((await g.locator('button[aria-pressed="true"]').count()) === 0) await g.locator("button:not([disabled])").first().click();
@@ -220,13 +226,70 @@ ok((await texto(novo)).includes("não vale mais"), "o link de acesso funciona um
   ok(t.includes("Post novo do teste") && t.includes("Ingredientes de produtores de Minas"), "cliente recebe o post novo e o reenviado");
 
   const cr = await entrar({}, "rafael");
-  const resp = await cr.goto(`${BASE}/calendario?cliente=c0000000-0000-4000-8000-0000000000d1`);
+  await cr.goto(`${BASE}/calendario?cliente=c0000000-0000-4000-8000-0000000000d1`);
   t = await texto(cr);
   ok(!t.includes("Promoção da semana"), "equipe não vê posts de cliente que não atende");
 
   await cm.goto(`${BASE}/feed`);
   ok((await texto(cm)).includes("@padaria.aurora.exemplo"), "prévia do feed abre com o perfil do cliente");
   await captura(cm, "demo-feed");
+}
+
+// Chat, estratégia, documentos e financeiro
+{
+  const cm = await entrar(celular, "marina");
+  await cm.goto(`${BASE}/mensagens`);
+  await cm.getByText("Já ajustei o horário na agenda").waitFor();
+  ok(true, "cliente vê o histórico do chat com a agência");
+  await cm.getByLabel("Mensagem").fill("Pode me mandar a arte da cesta antes de sexta?");
+  await cm.getByRole("button", { name: "Enviar" }).click();
+  await cm.getByText("Pode me mandar a arte da cesta antes de sexta?").waitFor({ timeout: 15000 });
+  await captura(cm, "demo-chat-cliente");
+
+  const ct = await entrar({ viewport: { width: 1280, height: 900 } }, "taynara");
+  await ct.goto(`${BASE}/mensagens`);
+  t = await texto(ct);
+  ok(t.includes("Padaria Aurora") && t.includes("Estúdio Bravo"), "agência vê a caixa de entrada com os clientes");
+  ok(/não lidas/.test(await ct.locator("nav[aria-label=Conversas]").innerHTML()), "caixa de entrada marca as não lidas");
+  await ct.getByRole("link", { name: /Padaria Aurora/ }).first().click();
+  await ct.getByText("Pode me mandar a arte da cesta antes de sexta?").last().waitFor();
+  await ct.getByLabel("Mensagem").fill("Mando sim, Marina. Até quinta à tarde.");
+  await ct.keyboard.press("Enter");
+  await ct.getByText("Mando sim, Marina. Até quinta à tarde.").last().waitFor({ timeout: 15000 });
+  await captura(ct, "demo-chat-agencia");
+  await cm.getByText("Mando sim, Marina. Até quinta à tarde.").last().waitFor({ timeout: 15000 });
+  ok(true, "resposta da agência chega no chat do cliente sem recarregar");
+
+  const cj = await entrar({}, "julia");
+  await cj.goto(`${BASE}/mensagens?cliente=c0000000-0000-4000-8000-0000000000d1`);
+  await cj.getByText("Mando sim, Marina. Até quinta à tarde.").last().waitFor();
+  ok(true, "conversa fica gravada para a equipe que atende o cliente");
+
+  await cm.goto(`${BASE}/estrategia`);
+  t = await texto(cm);
+  ok(t.includes("Encomendas de fim de ano") && t.includes("Alinhamento mensal") && t.includes("Briefing enviado"), "cliente vê estratégia, reuniões e briefing");
+  await captura(cm, "demo-estrategia");
+
+  await cj.goto(`${BASE}/estrategia?cliente=c0000000-0000-4000-8000-0000000000d1`);
+  await cj.getByLabel("Metas do mês").fill("50 encomendas de cestas até o dia 20");
+  await cj.getByRole("button", { name: "Salvar e publicar para o cliente" }).click();
+  await cj.getByText(/Versão 2, publicada/).waitFor({ timeout: 15000 });
+  await cm.reload();
+  ok((await texto(cm)).includes("50 encomendas de cestas"), "estratégia nova chega ao cliente como versão 2");
+
+  await cm.goto(`${BASE}/documentos`);
+  ok((await texto(cm)).includes("Prazos e aprovações"), "documentos mostram o manual da parceria");
+
+  await cm.goto(`${BASE}/financeiro`);
+  t = await texto(cm);
+  ok(t.includes("R$") && /Pago/.test(t), "cliente vê as próprias mensalidades");
+  await captura(cm, "demo-financeiro-cliente");
+  await cj.goto(`${BASE}/financeiro`);
+  ok(cj.url().endsWith("/inicio"), "equipe não abre o financeiro");
+  await ct.goto(`${BASE}/financeiro`);
+  t = await texto(ct);
+  ok(/previsto/i.test(t) && t.includes("Padaria Aurora") && t.includes("Estúdio Bravo"), "dona vê o financeiro de todos");
+  await captura(ct, "demo-financeiro-agencia");
 }
 
 // Só a dona zera a demonstração

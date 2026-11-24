@@ -108,7 +108,7 @@ export function SituacaoAgencia({ tipo, id, opcoes, depoisDeAjuste }: { tipo: "c
   );
 }
 
-export function NovoComentario({ tipo, id }: { tipo: "conteudo" | "roteiro"; id: string }) {
+export function NovoComentario({ tipo, id }: { tipo: "conteudo" | "roteiro" | "estrategia"; id: string }) {
   const [texto, setTexto] = useState("");
   const [erro, setErro] = useState<string>();
   const [pendente, iniciar] = useTransition();

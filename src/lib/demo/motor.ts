@@ -81,6 +81,7 @@ export class Regras {
       const meus = this.t("equipe_clientes").filter((x) => x.user_id === e.id).map((x) => x.cliente_id);
       return this.t("cliente_usuarios").some((u) => u.user_id === ele.id && meus.includes(u.cliente_id));
     }
+    if (ele.papel === "admin") return true;
     const minhas = this.t("cliente_usuarios").filter((u) => u.user_id === e.id).map((u) => u.cliente_id);
     return minhas.some(
       (c) =>
@@ -105,7 +106,12 @@ export class Regras {
         return this.podeVerCliente(r.id);
       case "financeiro_clientes":
       case "contratos":
+      case "mensalidades":
         return this.podeVerFinanceiro(r.cliente_id);
+      case "estrategias":
+        return this.podeEditarCliente(r.cliente_id) || (this.eUsuarioDoCliente(r.cliente_id) && !!r.publicado_em);
+      case "leituras_conversa":
+        return r.user_id === e.id && this.podeVerCliente(r.cliente_id);
       case "modelos_contrato":
       case "convites":
       case "auditoria":
@@ -142,6 +148,14 @@ export class Regras {
         return this.podeEditarCliente(r.cliente_id);
       case "comentarios":
         return this.podeVerCliente(r.cliente_id) && r.autor_id === e.id && r.tipo === "comentario";
+      case "mensagens":
+        return this.podeVerCliente(r.cliente_id) && r.autor_id === e.id;
+      case "leituras_conversa":
+        return r.user_id === e.id && this.podeVerCliente(r.cliente_id);
+      case "estrategias":
+        return this.podeEditarCliente(r.cliente_id);
+      case "mensalidades":
+        return this.eAdminDa(r.agencia_id);
       case "compromissos":
       case "briefings":
         return this.podeEditarCliente(r.cliente_id) || (tabela === "briefings" && this.eUsuarioDoCliente(r.cliente_id));
@@ -169,6 +183,7 @@ const RELACOES: Record<string, Relacao> = {
   "horarios_livres>perfis": { tipo: "um", chaveLocal: "responsavel_id", chaveAlvo: "id" },
   "convites>agencias": { tipo: "um", chaveLocal: "agencia_id", chaveAlvo: "id" },
   "comentarios>perfis": { tipo: "um", chaveLocal: "autor_id", chaveAlvo: "id" },
+  "mensagens>perfis": { tipo: "um", chaveLocal: "autor_id", chaveAlvo: "id" },
 };
 
 type Campo = { nome: string } | { alias: string; tabela: string; filhos: Campo[] } | { todos: true };
@@ -219,14 +234,17 @@ const PADROES: Record<string, () => Linha> = {
     publicado_em: null, lido_em: null, aprovado_em: null, aprovado_por: null,
   }),
   comentarios: () => ({ tipo: "comentario" }),
+  mensagens: () => ({ texto: null, arquivo_caminho: null, arquivo_nome: null }),
+  estrategias: () => ({ versao: 1, foco: null, objetivos: null, pilares: null, metas: null, publicado_em: null }),
+  mensalidades: () => ({ status: "pendente", pago_em: null, link_boleto: null, observacao: null }),
 };
 
-const ETAPAS = ["boas_vindas", "contrato", "briefing", "acessos", "reuniao"] as const;
+const ETAPAS = ["boas_vindas", "contrato", "manual", "briefing", "acessos", "reuniao"] as const;
 const TIPOS_ACESSO = ["instagram", "meta_business", "google_meu_negocio", "dominio"];
 
 function novaLinha(tabela: string, dados: Linha): Linha {
   const base: Linha = { ...(PADROES[tabela]?.() ?? {}), criado_em: agora(), atualizado_em: agora(), ...dados };
-  if (!("id" in base) && !["cliente_usuarios", "equipe_clientes", "etapas_entrada", "acessos_cliente", "financeiro_clientes", "plataforma_admins"].includes(tabela)) {
+  if (!("id" in base) && !["cliente_usuarios", "equipe_clientes", "etapas_entrada", "acessos_cliente", "financeiro_clientes", "plataforma_admins", "leituras_conversa"].includes(tabela)) {
     base.id = gerarId();
   }
   return base;
@@ -358,6 +376,20 @@ export function executarRpc(db: Banco, uid: string | null, servico: boolean, nom
       Object.assign(k, { status: "assinado", assinado_em: agora(), assinado_por: a.p_assinado_por, atualizado_em: agora() });
       auditar(db, { agencia_id: k.agencia_id, cliente_id: k.cliente_id, user_id: uid, acao: "contrato.assinado", entidade: "contratos", entidade_id: k.id, detalhes: { origem: a.p_origem } });
       concluirEtapa(db, k.cliente_id, "contrato", uid);
+      return { data: null, error: null };
+    }
+    case "concluir_manual": {
+      if (!r.eUsuarioDoCliente(a.p_cliente)) return erro("42501", "Sem acesso a este cliente.");
+      if (!etapaLiberada(db, a.p_cliente, "manual")) return erro("55000", "Conclua as etapas anteriores primeiro.");
+      const p = db.tabelas.perfis.find((x) => x.id === uid);
+      if (p) p.manual_aceito_em = agora();
+      concluirEtapa(db, a.p_cliente, "manual", uid);
+      return { data: null, error: null };
+    }
+    case "registrar_auditoria": {
+      const p = db.tabelas.perfis.find((x) => x.id === uid);
+      if (!p) return erro("42501", "Usuário sem agência.");
+      auditar(db, { agencia_id: p.agencia_id, cliente_id: a.p_cliente_id ?? null, user_id: uid, acao: a.p_acao, entidade: a.p_entidade ?? null, entidade_id: a.p_entidade_id ?? null, detalhes: a.p_detalhes ?? {} });
       return { data: null, error: null };
     }
     case "responder_item": {

@@ -36,7 +36,7 @@ export default async function Contrato({ searchParams }: { searchParams: Promise
           </p>
           <div className="mt-4"><SeloStatus status="concluido" rotulo="Assinado" /></div>
           <a href="/entrada" className="mt-8 inline-flex min-h-11 items-center rounded-md bg-brown px-5 text-sm font-medium text-bg hover:bg-brown-dark">
-            Continuar para o briefing
+            Continuar
           </a>
         </>
       ) : contrato?.status === "enviado" ? (

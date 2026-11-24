@@ -12,7 +12,7 @@ export default async function Acessos() {
 
   return (
     <div className="max-w-3xl">
-      <span aria-hidden className="num-secao text-7xl">04</span>
+      <span aria-hidden className="num-secao text-7xl">05</span>
       <h1 className="mt-2 text-4xl">Acessos e materiais</h1>
       <p className="mt-3 text-base text-text">
         Para trabalhar nas suas redes, a {sessao.agencia.nome} precisa de acesso às contas. Tudo é feito por convite, dentro de cada
