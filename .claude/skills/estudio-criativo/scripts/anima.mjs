@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // Grava cenas de motion design feitas em HTML/CSS/JS como video, quadro a quadro (sem perder quadros).
 //
-//   node anima.mjs cena.html --dur 4.5 --saida cena.mp4 [--cliente slug] [--fps 30] [--largura 1080 --altura 1920] [--hash nome]
+//   node anima.mjs cena.html --dur 4.5 --saida cena.mp4 [--cliente slug] [--fps 30] [--largura 1080 --altura 1920] [--hash nome] [--alfa]
+// --alfa: fundo transparente, saida .mov (qtrle) para sobrepor a um video com ffmpeg overlay (sem perder qualidade do video)
 //
 // A cena e controlada pelo tempo: todas as animacoes CSS/Web Animations sao pausadas e posicionadas em t,
 // e se a pagina definir window.cena = (t) => {...} (t em segundos), ela e chamada a cada quadro
@@ -28,6 +29,7 @@ const H = Number(opt('--altura', '1920'));
 const saida = path.resolve(opt('--saida', html.replace(/\.html$/, '.mp4')));
 const slug = opt('--cliente');
 const hash = opt('--hash', '');
+const alfa = args.includes('--alfa');  // fundo transparente: gera .mov com canal alfa para sobrepor ao video
 
 const aqui = path.dirname(fileURLToPath(import.meta.url));
 let raiz = path.resolve(aqui, '../../../..');
@@ -64,8 +66,9 @@ await page.evaluate(async () => {
 });
 
 fs.mkdirSync(path.dirname(saida), { recursive: true });
+const cod = alfa ? ['-c:v', 'qtrle', '-pix_fmt', 'argb'] : ['-c:v', 'libx264', '-preset', 'veryfast', '-crf', '12', '-pix_fmt', 'yuv420p'];
 const ff = spawn('ffmpeg', ['-y', '-hide_banner', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-i', '-',
-  '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '12', '-pix_fmt', 'yuv420p', '-r', String(fps), saida], { stdio: ['pipe', 'inherit', 'inherit'] });
+  ...cod, '-r', String(fps), saida], { stdio: ['pipe', 'inherit', 'inherit'] });
 const n = Math.round(dur * fps);
 for (let i = 0; i < n; i++) {
   const t = i / fps;
@@ -73,7 +76,7 @@ for (let i = 0; i < n; i++) {
     document.getAnimations().forEach((a) => { a.pause(); a.currentTime = t * 1000; });
     if (window.cena) await window.cena(t);
   }, t);
-  const buf = await page.screenshot({ type: 'jpeg', quality: 94 });
+  const buf = alfa ? await page.screenshot({ type: 'png', omitBackground: true }) : await page.screenshot({ type: 'jpeg', quality: 94 });
   if (!ff.stdin.write(buf)) await new Promise((r) => ff.stdin.once('drain', r));
 }
 ff.stdin.end();

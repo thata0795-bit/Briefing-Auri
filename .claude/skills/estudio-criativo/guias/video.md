@@ -76,6 +76,11 @@ Exemplo completo: `estudio/clientes/luana-personal-chef/projetos/natal-2026/`.
 Ideias que funcionam: foto em arco ou janela com Ken Burns ou panorâmica, moldura dourada que se desenha, texto subindo por máscara,
 rótulo em caixa alta com tracking, brilho percorrendo texto dourado, partículas de luz em canvas (`window.cena(t)`).
 
+## Qualidade com take gerado por IA ou vídeo real
+Nunca passe o vídeo pelo navegador (JPEG duas vezes perde qualidade). Trate o take no ffmpeg (nlmeans leve, scale lanczos,
+cas 0.5 a 0.7) e grave só os textos com `anima.mjs --alfa` (camada transparente .mov), depois una com `overlay` e x264 crf 14 a 16.
+Marca d'água do gerador (ex.: "CapCut AI"): recorte mínimo e reenquadre; avise para marcar "Informações de IA" ao publicar.
+
 ## Figura humana realista
 Para corpo humano (postura, saúde, fitness, anatomia) use o boneco 3D de `modelos/humano3d/` (homem realista com rosto, articulado,
 licença CC0). Nunca desenhe humano com formas 2D: fica caricato. Postura, giro e marcações por articulação estão no LEIAME de lá.
