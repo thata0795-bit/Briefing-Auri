@@ -10,7 +10,10 @@ afterAll(async () => {
   await db.end();
 });
 
-const ids = (rows: Record<string, unknown>[], col = "id") => rows.map((r) => r[col]).sort();
+// Considera só os registros fixos do seed: o roteiro de navegador cria clientes extras.
+const DO_SEED = new Set<unknown>([...Object.values(ID.cliente), ...Object.values(ID.user), ...Object.values(ID.agencia)]);
+const ids = (rows: Record<string, unknown>[], col = "id") =>
+  rows.map((r) => r[col]).filter((v) => DO_SEED.has(v)).sort();
 
 describe("visitante sem login", () => {
   it("não lê nenhuma tabela", async () => {
@@ -225,6 +228,6 @@ describe("verificação em duas etapas no banco", () => {
 
   it("depois do código confirmado, lê normalmente", async () => {
     const rows = await comFator("aal2", (q) => q("select id from public.clientes"));
-    expect(rows).toHaveLength(2);
+    expect(ids(rows)).toEqual([ID.cliente.aurora, ID.cliente.bravo].sort());
   });
 });

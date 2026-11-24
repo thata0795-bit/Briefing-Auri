@@ -70,7 +70,55 @@ insert into public.financeiro_clientes (cliente_id, agencia_id, plano, valor_men
   ('c0000000-0000-4000-8000-00000000000b', 'a0000000-0000-4000-8000-000000000001', 'Plano Completo', 2800.00, 5),
   ('c0000000-0000-4000-8000-00000000000c', 'a0000000-0000-4000-8000-000000000002', 'Plano Único', 900.00, 15);
 
-insert into public.briefings (cliente_id, agencia_id, respostas) values
-  ('c0000000-0000-4000-8000-00000000000a', 'a0000000-0000-4000-8000-000000000001', '{"negocio":{"nome":"Padaria Fictícia Aurora"}}'),
-  ('c0000000-0000-4000-8000-00000000000b', 'a0000000-0000-4000-8000-000000000001', '{}'),
-  ('c0000000-0000-4000-8000-00000000000c', 'a0000000-0000-4000-8000-000000000002', '{}');
+-- Briefing, etapas e acessos são criados por gatilho ao inserir o cliente.
+update public.briefings set respostas = '{"negocio.nome":"Padaria Fictícia Aurora","negocio.segmento":"Alimentação"}',
+       concluido_em = now() - interval '20 days'
+ where cliente_id = 'c0000000-0000-4000-8000-00000000000a';
+
+-- Aurora já passou pela entrada. Bravo está no começo.
+update public.etapas_entrada set status = 'concluido', concluido_em = now() - interval '20 days'
+ where cliente_id in ('c0000000-0000-4000-8000-00000000000a', 'c0000000-0000-4000-8000-00000000000c');
+update public.acessos_cliente set status = 'confirmado'
+ where cliente_id in ('c0000000-0000-4000-8000-00000000000a', 'c0000000-0000-4000-8000-00000000000c');
+update public.clientes set entrada_concluida_em = now() - interval '20 days'
+ where id in ('c0000000-0000-4000-8000-00000000000a', 'c0000000-0000-4000-8000-00000000000c');
+
+-- Modelo de contrato de exemplo. Substitua pelo texto-base real da agência.
+insert into public.modelos_contrato (agencia_id, nome, padrao, corpo) values
+  ('a0000000-0000-4000-8000-000000000001', 'Prestação de serviços de social media (exemplo)', true,
+'CONTRATO DE PRESTAÇÃO DE SERVIÇOS DE MARKETING DIGITAL
+
+MODELO DE EXEMPLO. Este texto existe só para testes e precisa ser substituído pelo contrato real da agência.
+
+CONTRATANTE: {{cliente.nome}}, representada por {{contato.nome}} ({{contato.email}}).
+CONTRATADA: {{agencia.nome}}.
+
+1. OBJETO
+A CONTRATADA prestará serviços de gestão de redes sociais conforme o {{plano.nome}}.
+
+2. VALOR E PAGAMENTO
+O valor mensal é de {{plano.valor}}, com vencimento todo dia {{plano.vencimento}}, por {{plano.forma_pagamento}}.
+
+3. VIGÊNCIA
+Início em {{contrato.inicio}}.
+
+4. DADOS PESSOAIS
+As partes tratam os dados pessoais envolvidos conforme a Lei 13.709/2018 (LGPD).
+
+Data de emissão: {{hoje}}.'),
+  ('a0000000-0000-4000-8000-000000000002', 'Contrato padrão (exemplo)', true,
+'MODELO DE EXEMPLO da Agência Exemplo Norte para {{cliente.nome}}. Valor: {{plano.valor}}.');
+
+-- Horários livres para a primeira reunião (sempre nos próximos dias, em horário de São Paulo).
+insert into public.horarios_livres (agencia_id, responsavel_id, inicio, fim, formato, link)
+select 'a0000000-0000-4000-8000-000000000001', '20000000-0000-4000-8000-000000000002',
+       ((current_date + d) + time '10:00') at time zone 'America/Sao_Paulo',
+       ((current_date + d) + time '11:00') at time zone 'America/Sao_Paulo',
+       'online', 'https://meet.google.com/exemplo-ficticio'
+from generate_series(2, 6) as d;
+insert into public.horarios_livres (agencia_id, responsavel_id, inicio, fim, formato, local)
+select 'a0000000-0000-4000-8000-000000000001', '20000000-0000-4000-8000-000000000001',
+       ((current_date + d) + time '15:00') at time zone 'America/Sao_Paulo',
+       ((current_date + d) + time '16:00') at time zone 'America/Sao_Paulo',
+       'presencial', 'Escritório da agência'
+from generate_series(3, 5) as d;

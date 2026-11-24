@@ -48,8 +48,7 @@ export async function como<T>(
     const claims = userId ? { sub: userId, role } : { role };
     await db.query("select set_config('request.jwt.claims', $1, true)", [JSON.stringify(claims)]);
     await db.query(`set local role ${role}`);
-    const q = async (sql: string, params?: unknown[]) => (await db.query(sql, params)).rows;
-    return await fn(q);
+    return await fn(consultaIsolada(db));
   } finally {
     await db.query("rollback");
   }
@@ -63,4 +62,22 @@ export async function erroDe(p: Promise<unknown>): Promise<string | null> {
   } catch (e) {
     return (e as { code?: string }).code ?? "erro";
   }
+}
+
+/**
+ * Cada consulta roda num ponto de restauração: um erro esperado não aborta
+ * a transação do teste, e as consultas seguintes continuam valendo.
+ */
+export function consultaIsolada(db: Client) {
+  return async (sql: string, params?: unknown[]) => {
+    await db.query("savepoint consulta");
+    try {
+      const r = await db.query(sql, params);
+      await db.query("release savepoint consulta");
+      return r.rows as Record<string, unknown>[];
+    } catch (e) {
+      await db.query("rollback to savepoint consulta");
+      throw e;
+    }
+  };
 }
