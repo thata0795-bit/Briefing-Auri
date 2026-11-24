@@ -1,0 +1,10 @@
+# Publicação da DEMONSTRAÇÃO do portal na Netlify: dados fictícios, sem Supabase.
+# Para a versão real, troque NEXT_PUBLIC_DEMO para "0" e configure as variáveis do Supabase no painel da Netlify.
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_PUBLIC_DEMO = "1"
+  NEXT_TELEMETRY_DISABLED = "1"

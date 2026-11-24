@@ -6,6 +6,7 @@ import { SITE_URL } from "@/lib/supabase/env";
 import { enviarEmail } from "@/lib/email/enviar";
 import { EmailConvite } from "@/emails/convite";
 import type { FuncaoEquipe, Papel } from "@/lib/tipos";
+import { DEMO } from "@/lib/demo/config";
 
 export const VALIDADE_CONVITE_DIAS = 7;
 
@@ -75,6 +76,8 @@ export async function enviarConvite(dados: {
     user_id: dados.userId,
     email: dados.email,
     token_hash: hashDoToken(token),
+    // Na demonstração não há e-mail: o link fica visível na ficha do cliente.
+    ...(DEMO ? { token_demo: token } : {}),
     expira_em: expira.toISOString(),
     criado_por: dados.criadoPor,
   });
@@ -84,7 +87,7 @@ export async function enviarConvite(dados: {
     await admin.from("clientes").update({ convidado_em: new Date().toISOString() }).eq("id", dados.clienteId);
   }
 
-  await enviarEmail({
+  if (!DEMO) await enviarEmail({
     para: dados.email,
     assunto: `Seu acesso ao portal da ${dados.nomeAgencia}`,
     nomeRemetente: dados.nomeAgencia,

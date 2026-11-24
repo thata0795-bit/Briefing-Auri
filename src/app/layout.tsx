@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
+import { BarraDemo } from "@/components/demo/barra-demo";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -30,7 +31,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${cormorant.variable} ${inter.variable} antialiased`}>{children}</body>
+      <body className={`${cormorant.variable} ${inter.variable} antialiased`}>
+        <BarraDemo />
+        {children}
+      </body>
     </html>
   );
 }

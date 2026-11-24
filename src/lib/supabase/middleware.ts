@@ -1,9 +1,11 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { COOKIE_SESSAO, COOKIE_USUARIO, DEMO } from "@/lib/demo/config";
 
 const ROTAS_PUBLICAS = ["/entrar", "/auth", "/privacidade", "/termos", "/convite", "/api/webhooks", "/assinatura-simulada"];
 
 export async function atualizarSessao(request: NextRequest) {
+  if (DEMO) return sessaoDemo(request);
   let resposta = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -54,5 +56,33 @@ export async function atualizarSessao(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  return resposta;
+}
+
+/** Demonstração: cada visitante ganha uma sessão própria; o login é a escolha de um perfil. */
+function sessaoDemo(request: NextRequest) {
+  const novaSessao = request.cookies.get(COOKIE_SESSAO)?.value ? null : crypto.randomUUID();
+  if (novaSessao) request.cookies.set(COOKIE_SESSAO, novaSessao);
+  const usuario = request.cookies.get(COOKIE_USUARIO)?.value;
+  const caminho = request.nextUrl.pathname;
+  const publica = ROTAS_PUBLICAS.some((r) => caminho === r || caminho.startsWith(`${r}/`)) || caminho.startsWith("/demo");
+
+  let resposta: NextResponse;
+  if (!usuario && !publica) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/entrar";
+    url.search = "";
+    resposta = NextResponse.redirect(url);
+  } else if (usuario && caminho === "/entrar") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/inicio";
+    url.search = "";
+    resposta = NextResponse.redirect(url);
+  } else {
+    resposta = NextResponse.next({ request });
+  }
+  if (novaSessao) {
+    resposta.cookies.set(COOKIE_SESSAO, novaSessao, { httpOnly: true, sameSite: "lax", path: "/", maxAge: 60 * 60 * 24 * 30, secure: request.nextUrl.protocol === "https:" });
+  }
   return resposta;
 }

@@ -18,6 +18,7 @@ import { BotaoEnviar } from "@/components/ui/botao-enviar";
 import { confirmarAcesso, enviarContrato, marcarContratoAssinadoManual, reenviarConvite } from "../acoes";
 import { FormConvidarPessoa } from "@/components/agencia/form-convidar-pessoa";
 import { FormEquipeCliente } from "@/components/agencia/form-equipe-cliente";
+import { DEMO } from "@/lib/demo/config";
 
 export const metadata: Metadata = { title: "Cliente" };
 
@@ -75,6 +76,13 @@ export default async function FichaCliente({
   const etapaDe = new Map((etapas.data ?? []).map((e) => [e.etapa, e]));
   const pessoasCliente = (pessoas.data ?? []).map((p) => p.perfil as unknown as { id: string; nome: string; email: string; termos_aceitos_em: string | null });
 
+  // Demonstração: sem e-mail, o convite pendente aparece como link na ficha.
+  const convitesDemo = new Map<string, string>();
+  if (DEMO && admin) {
+    const { data } = await supabase.from("convites").select("user_id, token_demo, usado_em").eq("cliente_id", id).is("usado_em", null);
+    for (const c of (data ?? []) as { user_id: string; token_demo?: string }[]) if (c.token_demo) convitesDemo.set(c.user_id, c.token_demo);
+  }
+
   return (
     <>
       <Link href="/clientes" className="mb-6 inline-flex min-h-11 items-center gap-2 text-sm text-brown underline-offset-4 hover:underline">
@@ -93,6 +101,7 @@ export default async function FichaCliente({
       {convidado && (
         <p role="status" className="mb-6 rounded-md border border-st-done/50 bg-st-done/10 px-4 py-3 text-sm text-text">
           Cliente cadastrado e convite enviado. Você acompanha cada etapa aqui.
+          {DEMO && " Na demonstração o e-mail não sai: use o link \"Abrir convite\" em Pessoas com acesso para ver o que o cliente vê."}
         </p>
       )}
 
@@ -188,7 +197,12 @@ export default async function FichaCliente({
                   </div>
                   <div className="flex items-center gap-3">
                     <SeloStatus status={p.termos_aceitos_em ? "concluido" : "a_fazer"} rotulo={p.termos_aceitos_em ? "Já entrou" : "Convite pendente"} />
-                    {admin && !p.termos_aceitos_em && (
+                    {convitesDemo.has(p.id) && (
+                      <Link href={`/convite/${convitesDemo.get(p.id)}`} className="inline-flex min-h-11 items-center text-sm font-medium text-brown underline underline-offset-4">
+                        Abrir convite
+                      </Link>
+                    )}
+                    {admin && !p.termos_aceitos_em && !DEMO && (
                       <form action={reenviarConvite}>
                         <input type="hidden" name="user_id" value={p.id} />
                         <BotaoEnviar variante="texto" className="px-0" textoEnviando="Enviando...">Reenviar</BotaoEnviar>

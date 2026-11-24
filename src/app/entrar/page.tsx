@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { FormularioEntrada } from "@/components/auth/formulario-entrada";
+import { EscolhaPerfil } from "@/components/demo/escolha-perfil";
+import { DEMO } from "@/lib/demo/config";
 
 export const metadata: Metadata = { title: "Entrar" };
 
@@ -43,7 +45,7 @@ export default async function Entrar({
             </p>
           )}
 
-          <FormularioEntrada voltar={voltar} />
+          {DEMO ? <EscolhaPerfil /> : <FormularioEntrada voltar={voltar} />}
         </div>
       </section>
     </main>

@@ -9,4 +9,6 @@ export const SUPABASE_ANON_KEY = () =>
   obrigatoria("NEXT_PUBLIC_SUPABASE_ANON_KEY", process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 export const SUPABASE_SERVICE_ROLE_KEY = () =>
   obrigatoria("SUPABASE_SERVICE_ROLE_KEY", process.env.SUPABASE_SERVICE_ROLE_KEY);
-export const SITE_URL = () => process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+// Na demonstração os links ficam relativos ao endereço em que o site estiver.
+export const SITE_URL = () =>
+  process.env.NEXT_PUBLIC_DEMO === "1" ? "" : (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000");
