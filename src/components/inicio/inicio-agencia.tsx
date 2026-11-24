@@ -49,7 +49,7 @@ export async function InicioAgencia({ sessao }: { sessao: Sessao }) {
             titulo="Nenhum cliente por aqui ainda"
             texto={
               admin
-                ? "O cadastro e o convite de clientes chegam na próxima fase."
+                ? "Cadastre o primeiro cliente para enviar o convite."
                 : "Quando a agência atribuir um cliente a você, ele aparece nesta lista."
             }
           />
@@ -58,7 +58,7 @@ export async function InicioAgencia({ sessao }: { sessao: Sessao }) {
             {clientes.map((c) => (
               <li key={c.id} className="flex flex-col gap-2 py-3 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between">
                 <div className="min-w-0">
-                  <p className="truncate font-medium text-text">{c.nome}</p>
+                  <Link href={`/clientes/${c.id}`} className="block truncate font-medium text-brown-dark underline-offset-4 hover:underline">{c.nome}</Link>
                   <p className="text-xs text-muted">
                     {[c.segmento, c.responsavel?.nome && `Responsável: ${c.responsavel.nome}`].filter(Boolean).join(" · ")}
                   </p>

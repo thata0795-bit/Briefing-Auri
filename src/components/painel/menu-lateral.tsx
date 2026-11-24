@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Building2, House, LogOut, Menu, ShieldCheck, Users, UsersRound, X } from "lucide-react";
+import { Building2, CalendarClock, FileText, House, LogOut, Menu, ShieldCheck, Users, UsersRound, X } from "lucide-react";
 import type { ItemMenu, NomeIcone } from "@/lib/menu";
 
 const ICONES: Record<NomeIcone, typeof House> = {
   inicio: House,
   clientes: UsersRound,
+  agenda: CalendarClock,
+  contratos: FileText,
   equipe: Users,
   seguranca: ShieldCheck,
   plataforma: Building2,

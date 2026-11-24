@@ -3,6 +3,7 @@ import { exigirPapel } from "@/lib/sessao";
 import { criarClienteServidor } from "@/lib/supabase/server";
 import { ROTULO_FUNCAO, ROTULO_PAPEL, type FuncaoEquipe, type Papel } from "@/lib/tipos";
 import { CabecalhoPagina, Cartao, Vazio } from "@/components/ui/cartao";
+import { FormMembro } from "@/components/agencia/form-membro";
 
 export const metadata: Metadata = { title: "Equipe" };
 
@@ -56,6 +57,10 @@ export default async function Equipe() {
             ))}
           </ul>
         )}
+      </Cartao>
+      <Cartao titulo="Convidar pessoa" className="mt-6">
+        <p className="mb-5 text-sm text-muted">A pessoa recebe um convite por e-mail e cria a própria senha no primeiro acesso.</p>
+        <FormMembro />
       </Cartao>
     </>
   );

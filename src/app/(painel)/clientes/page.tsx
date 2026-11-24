@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { Plus } from "lucide-react";
 import { exigirPapel } from "@/lib/sessao";
 import { criarClienteServidor } from "@/lib/supabase/server";
 import type { StatusCliente } from "@/lib/tipos";
@@ -41,6 +43,14 @@ export default async function Clientes() {
             : "Os clientes que você atende."
         }
       />
+      {sessao.perfil.papel === "admin" && (
+        <Link
+          href="/clientes/novo"
+          className="mb-6 inline-flex min-h-11 items-center gap-2 rounded-md bg-brown px-5 text-sm font-medium text-bg hover:bg-brown-dark"
+        >
+          <Plus aria-hidden className="size-4" /> Novo cliente
+        </Link>
+      )}
       <Cartao
         titulo={`${clientes.length} ${clientes.length === 1 ? "cliente" : "clientes"}`}
       >
@@ -58,7 +68,7 @@ export default async function Clientes() {
                   className="flex flex-col gap-2 py-3 first:pt-0 last:pb-0"
                 >
                   <div>
-                    <p className="font-medium text-text">{c.nome}</p>
+                    <Link href={`/clientes/${c.id}`} className="font-medium text-brown-dark underline-offset-4 hover:underline">{c.nome}</Link>
                     {c.segmento && (
                       <p className="text-xs text-muted">{c.segmento}</p>
                     )}
@@ -99,7 +109,7 @@ export default async function Clientes() {
                   {clientes.map((c) => (
                     <tr key={c.id}>
                       <td className="px-5 py-3">
-                        <p className="font-medium text-text">{c.nome}</p>
+                        <Link href={`/clientes/${c.id}`} className="font-medium text-brown-dark underline-offset-4 hover:underline">{c.nome}</Link>
                         {c.segmento && (
                           <p className="text-xs text-muted">{c.segmento}</p>
                         )}
