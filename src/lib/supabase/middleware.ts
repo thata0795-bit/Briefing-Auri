@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
-const ROTAS_PUBLICAS = ["/entrar", "/auth", "/privacidade", "/termos"];
+const ROTAS_PUBLICAS = ["/entrar", "/auth", "/privacidade", "/termos", "/convite", "/api/webhooks", "/assinatura-simulada"];
 
 export async function atualizarSessao(request: NextRequest) {
   let resposta = NextResponse.next({ request });
