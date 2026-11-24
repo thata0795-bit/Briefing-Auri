@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+/*
+ * Tokens da marca. A agência pode sobrescrever qualquer um deles pelo campo
+ * "marca" (aplicado no layout do painel). Nenhuma cor solta no código:
+ * use sempre as classes geradas a partir do @theme abaixo.
+ */
+:root {
+  --bg: #faf6ee;
+  --card: #ffffff;
+  --soft: #f3ebdc;
+  --brown: #5f3c26;
+  --brown-dark: #3f2616;
+  --brown-mid: #6a442d;
+  --gold: #c9a45f;
+  --gold-light: #eed191;
+  --text: #2b1a10;
+  /* #8A7762 medido na logo não passa AA como texto (3,98:1 no fundo).
+     Para texto usamos --muted; o tom original fica em --muted-soft para ícones e detalhes. */
+  --muted: #6e5b48;
+  --muted-soft: #8a7762;
+  --line: #e6dcc8;
+
+  /* Status (seção 8). A cor nunca aparece sozinha: sempre com texto e ícone. */
+  --st-todo: #e9dfc9;
+  --st-doing: #c9a45f;
+  --st-review: #6f8ca8;
+  --st-fix: #b5593c;
+  --st-ok: #9db27a;
+  --st-sched: #8a6a4f;
+  --st-done: #6f8a4b;
+  --st-late: #a63a3a;
+
+  --danger: #a63a3a;
+  --success: #4f6a33;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-soft: var(--soft);
+  --color-brown: var(--brown);
+  --color-brown-dark: var(--brown-dark);
+  --color-brown-mid: var(--brown-mid);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-muted-soft: var(--muted-soft);
+  --color-line: var(--line);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+
+  --color-st-todo: var(--st-todo);
+  --color-st-doing: var(--st-doing);
+  --color-st-review: var(--st-review);
+  --color-st-fix: var(--st-fix);
+  --color-st-ok: var(--st-ok);
+  --color-st-sched: var(--st-sched);
+  --color-st-done: var(--st-done);
+  --color-st-late: var(--st-late);
+
+  --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-inter), Inter, system-ui, sans-serif;
+
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-inter), Inter, system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+    color: var(--brown-dark);
+    font-weight: 600;
+    letter-spacing: 0.005em;
+  }
+
+  /* Cormorant usa algarismos antigos por padrão; aqui os números ficam alinhados. */
+  h1,
+  h2,
+  h3,
+  .font-serif {
+    font-variant-numeric: lining-nums;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--brown);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--gold-light);
+    color: var(--brown-dark);
+  }
+}
+
+@layer components {
+  /* Número de seção grande e esmaecido */
+  .num-secao {
+    font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+    font-variant-numeric: lining-nums;
+    color: var(--gold-light);
+    font-weight: 500;
+    line-height: 0.8;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}
