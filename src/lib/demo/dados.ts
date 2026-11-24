@@ -4,7 +4,7 @@
  * Datas são relativas ao momento da criação, para a agenda sempre ter horários futuros.
  */
 import { createHash } from "node:crypto";
-import { inserirCru, type Banco, type Linha } from "./motor";
+import { comIdsPrevisiveis, inserirCru, type Banco, type Linha } from "./motor";
 
 export const AG = "a0000000-0000-4000-8000-0000000000d1";
 export const U = {
@@ -109,6 +109,10 @@ const RESPOSTAS_AURORA: Record<string, any> = {
 };
 
 export function criarBancoDemo(): Banco {
+  return comIdsPrevisiveis(montarBanco);
+}
+
+function montarBanco(): Banco {
   const db: Banco = { tabelas: {}, usuarios: [] };
 
   inserirCru(db, "agencias", {

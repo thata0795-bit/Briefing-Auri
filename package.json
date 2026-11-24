@@ -15,7 +15,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@netlify/blobs": "^11.1.11",
     "@react-email/components": "^1.0.12",
     "@react-email/render": "^2.3.1",
     "@supabase/ssr": "^0.12.7",

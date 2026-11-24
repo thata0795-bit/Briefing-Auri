@@ -2,6 +2,11 @@
 export function EntradaDemo({ erro }: { erro?: string }) {
   return (
     <form action="/demo/entrar" method="post" className="mt-8 flex flex-col gap-5">
+      {erro === "falha" && (
+        <p role="alert" className="rounded-md border border-st-fix/40 bg-st-fix/10 px-4 py-3 text-sm text-text">
+          Não foi possível entrar agora. Tente de novo em alguns segundos.
+        </p>
+      )}
       {erro === "senha" && (
         <p role="alert" className="rounded-md border border-st-fix/40 bg-st-fix/10 px-4 py-3 text-sm text-text">
           E-mail ou senha incorretos. Confira e tente de novo.

@@ -16,9 +16,17 @@ export async function POST(request: NextRequest) {
 
   const esperado = SENHAS_DEMO[email];
   const recebido = createHash("sha256").update(`${email}:${senha}`).digest("hex");
-  const db = esperado && esperado === recebido ? await carregarBanco() : null;
-  const usuario = db?.usuarios.find((u) => u.email === email);
-  const perfil = usuario && db?.tabelas.perfis.find((p) => p.id === usuario.id && p.ativo);
+  let perfil: { id?: string } | undefined;
+  try {
+    const db = esperado && esperado === recebido ? await carregarBanco() : null;
+    const usuario = db?.usuarios.find((u) => u.email === email);
+    perfil = usuario ? db?.tabelas.perfis.find((p) => p.id === usuario.id && p.ativo) : undefined;
+  } catch (e) {
+    console.error("[demo] falha na entrada:", e);
+    destino.pathname = "/entrar";
+    destino.searchParams.set("erro", "falha");
+    return NextResponse.redirect(destino, { status: 303 });
+  }
 
   if (!perfil) {
     // Pequena espera para dificultar tentativas em sequência.
@@ -30,7 +38,7 @@ export async function POST(request: NextRequest) {
 
   destino.pathname = "/inicio";
   const r = NextResponse.redirect(destino, { status: 303 });
-  r.cookies.set(COOKIE_USUARIO, await assinarUsuario(perfil.id), {
+  r.cookies.set(COOKIE_USUARIO, await assinarUsuario(String(perfil.id)), {
     httpOnly: true,
     sameSite: "lax",
     path: "/",

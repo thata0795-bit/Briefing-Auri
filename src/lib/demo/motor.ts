@@ -8,6 +8,20 @@
  */
 import { randomUUID } from "node:crypto";
 
+// Gerador de ids. Na criação dos dados iniciais ele fica previsível, para que
+// qualquer servidor monte exatamente o mesmo banco de partida.
+let gerarId: () => string = () => randomUUID();
+export function comIdsPrevisiveis<T>(fn: () => T): T {
+  let n = 0;
+  const anterior = gerarId;
+  gerarId = () => `e0000000-0000-4000-8000-${String(++n).padStart(12, "0")}`;
+  try {
+    return fn();
+  } finally {
+    gerarId = anterior;
+  }
+}
+
 export type Linha = Record<string, any>;
 export type Banco = { tabelas: Record<string, Linha[]>; usuarios: { id: string; email: string; app_metadata: Linha }[] };
 type Resultado = { data: any; error: any; count?: number | null };
@@ -199,7 +213,7 @@ const TIPOS_ACESSO = ["instagram", "meta_business", "google_meu_negocio", "domin
 function novaLinha(tabela: string, dados: Linha): Linha {
   const base: Linha = { ...(PADROES[tabela]?.() ?? {}), criado_em: agora(), atualizado_em: agora(), ...dados };
   if (!("id" in base) && !["cliente_usuarios", "equipe_clientes", "etapas_entrada", "acessos_cliente", "financeiro_clientes", "plataforma_admins"].includes(tabela)) {
-    base.id = randomUUID();
+    base.id = gerarId();
   }
   return base;
 }
