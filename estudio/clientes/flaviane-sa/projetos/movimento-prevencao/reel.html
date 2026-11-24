@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Movimento também é prevenção</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,600,50;1,9..144,600,50&family=Montserrat:wght@500;600;700&display=block" rel="stylesheet">
+<style>
+  :root{--dark:#3D2050;--acc:#7B5B8E;--suave:#9E82AE;--medio:#5A3E70;--claro:#F5F0F8;
+        --serif:'Fraunces',Georgia,serif;--sans:'Montserrat',Arial,sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:1080px;height:1920px;overflow:hidden;background:#fff}
+  #fundo{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;transform-origin:50% 60%}
+  .luz{position:absolute;inset:0;background:linear-gradient(180deg,rgba(245,240,248,.78) 0%,rgba(245,240,248,.55) 22%,rgba(245,240,248,0) 42%)}
+  .assina{position:absolute;top:96px;left:0;right:0;text-align:center;font-family:var(--sans);font-size:22px;letter-spacing:.2em;color:var(--dark);
+          font-weight:600;animation:fade .8s ease .2s both}
+  .assina b{font-weight:700}
+  .assina span{color:var(--acc)}
+  .frase{position:absolute;left:80px;right:80px;top:200px;text-align:center;font-family:var(--serif);font-weight:600;color:var(--dark);
+         font-size:104px;line-height:1.02;letter-spacing:-.015em;font-variation-settings:'opsz' 28,'SOFT' 50}
+  .frase em{font-style:italic;color:var(--acc)}
+  .frase .l{display:block;overflow:hidden;padding-bottom:10px}
+  .frase .l>span{display:block;animation:sobe .75s cubic-bezier(.2,.8,.1,1) both}
+  @keyframes sobe{from{transform:translateY(108%)}to{transform:translateY(0)}}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .f1{animation:sai .5s cubic-bezier(.6,0,.8,.3) 3.05s forwards}
+  .f2{animation:sai .5s cubic-bezier(.6,0,.8,.3) 6.45s forwards}
+  @keyframes sai{to{opacity:0;filter:blur(14px);transform:translateY(-30px)}}
+  .linha{position:absolute;left:50%;height:3px;background:var(--acc);border-radius:3px;width:0;transform:translateX(-50%)}
+  .cta{position:absolute;left:50%;top:560px;transform:translateX(-50%);background:var(--dark);color:var(--claro);border-radius:999px;
+       font-family:var(--sans);font-weight:600;font-size:30px;letter-spacing:.16em;padding:22px 44px;white-space:nowrap;
+       animation:pop .7s cubic-bezier(.2,.8,.1,1) 7.9s both}
+  @keyframes pop{0%{opacity:0;transform:translateX(-50%) scale(.8)}65%{opacity:1;transform:translateX(-50%) scale(1.04)}100%{transform:translateX(-50%) scale(1)}}
+</style>
+</head>
+<body>
+<img id="fundo" src="quadros/f_0001.jpg" alt="">
+<div class="luz"></div>
+<div class="assina"><b>DRA. FLAVIANE SÁ</b> <span>·</span> FISIOTERAPIA E PILATES</div>
+
+<div class="frase f1">
+  <span class="l"><span style="animation-delay:.35s"><em>Movimento</em></span></span>
+  <span class="l"><span style="animation-delay:.55s">também é</span></span>
+  <span class="l"><span style="animation-delay:.75s">prevenção!</span></span>
+</div>
+<div class="frase f2">
+  <span class="l"><span style="animation-delay:3.65s">Pilates e</span></span>
+  <span class="l"><span style="animation-delay:3.85s"><em>autocuidado</em></span></span>
+  <span class="l"><span style="animation-delay:4.05s">caminham juntos.</span></span>
+</div>
+<div class="frase f3">
+  <span class="l"><span style="animation-delay:7.0s">Agende sua</span></span>
+  <span class="l"><span style="animation-delay:7.2s"><em>avaliação.</em></span></span>
+</div>
+
+<script>
+(function () {
+  var fundo = document.getElementById('fundo'), TOTAL = 302;
+  function carrega(n) {
+    var src = 'quadros/f_' + String(n).padStart(4, '0') + '.jpg';
+    if (fundo.getAttribute('src') === src && fundo.complete) return Promise.resolve();
+    return new Promise(function (ok) { fundo.onload = ok; fundo.onerror = ok; fundo.src = src; });
+  }
+  window.cena = function (t) {
+    var n = Math.min(TOTAL, Math.max(1, Math.floor(t * 30) + 1));
+    fundo.style.transform = 'scale(' + (1 + 0.03 * Math.min(1, t / 10)) + ')';
+    return carrega(n);
+  };
+})();
+</script>
+</body>
+</html>
