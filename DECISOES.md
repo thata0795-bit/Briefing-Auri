@@ -102,3 +102,12 @@ Registro das decisões tomadas durante a construção do portal. Cada item diz o
 
 ## 020. Ainda não feito nesta fase (vai para a Fase 4)
 - Aviso em tempo real para a agência a cada etapa concluída (sino) e alerta de cliente parado 3 dias. Os dados já estão gravados (etapas com data e auditoria); falta a central de notificações e o agendador.
+
+## 021. Demonstração na Netlify, sem Supabase
+- Para mostrar o portal antes de existir a conta no Supabase, há um modo demonstração (`NEXT_PUBLIC_DEMO=1`). O código das telas é o mesmo do app real; só o acesso aos dados é trocado por um banco em memória (`src/lib/demo/`) que segue as mesmas regras de quem vê o quê.
+- Acesso particular: cada pessoa entra com e-mail e senha próprios. As senhas não ficam no código, só o resumo (sha256 de e-mail e senha). O acesso fica num cookie assinado com HMAC; o segredo é sorteado a cada construção na Netlify e entra só no código do servidor.
+- Dados compartilhados entre todas as pessoas, como no app real, guardados no Netlify Blobs com conferência de versão ao gravar. Se duas pessoas salvarem no mesmo instante, a segunda recebe "tente de novo".
+- Sem e-mail: o convite de um cliente novo aparece como "Link de acesso" na ficha, para a agência enviar. Assinatura do contrato simulada. Arquivos enviados não são guardados.
+- Só a dona da agência zera a demonstração (tela Segurança).
+- A cada nova publicação, todos precisam entrar de novo (o segredo do cookie muda).
+- Não serve para dados reais: é uma vitrine. A versão real usa o Supabase, como descrito no README.
