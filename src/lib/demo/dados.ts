@@ -255,6 +255,7 @@ As partes tratam os dados pessoais envolvidos conforme a Lei 13.709/2018 (LGPD).
     inserirCru(db, "horarios_livres", { agencia_id: AG, responsavel_id: U.julia, inicio: emDias(d, "10:00"), fim: emDias(d, "11:00"), formato: "online", link: "https://meet.google.com/exemplo" });
     inserirCru(db, "horarios_livres", { agencia_id: AG, responsavel_id: U.taynara, inicio: emDias(d, "15:00"), fim: emDias(d, "16:00"), formato: "presencial", local: "Escritório da agência" });
   }
+  semearConteudos(db);
   return db;
 }
 
@@ -262,4 +263,96 @@ function concluirBoasVindasDemo(db: Banco, cliente: string, user: string) {
   db.tabelas.perfis.find((p) => p.id === user)!.termos_aceitos_em = atras(2);
   const etapas = db.tabelas.etapas_entrada.filter((e) => e.cliente_id === cliente);
   Object.assign(etapas.find((e) => e.etapa === "boas_vindas")!, { status: "concluido", concluido_em: atras(2) });
+}
+
+/** Data (AAAA-MM-DD) em São Paulo, daqui a `d` dias. */
+function diaRel(d: number) {
+  return new Date(Date.now() + d * dia - 3 * 3600 * 1000).toISOString().slice(0, 10);
+}
+
+function semearConteudos(db: Banco) {
+  const posts: [string, number, string, string, string, string][] = [
+    // cliente, dias a partir de hoje, formato, título, situação, legenda
+    [C.aurora, -12, "feed", "Bom dia com pão quentinho", "concluido", "A primeira fornada sai às 6h. Quem chega cedo leva o pão ainda quente."],
+    [C.aurora, -9, "reels", "Bastidores da fermentação de 24 horas", "concluido", "Por que o nosso pão leva um dia inteiro para ficar pronto. Spoiler: vale a espera."],
+    [C.aurora, -5, "carrossel", "4 jeitos de servir o pão de fermentação natural", "concluido", "Do café da manhã ao jantar: salve este post para não esquecer."],
+    [C.aurora, -2, "stories", "Enquete: doce ou salgado no café da manhã?", "concluido", "Enquete nos stories com resultado no dia seguinte."],
+    [C.aurora, 1, "feed", "Cesta de café da manhã para presentear", "programado", "Encomende até quinta e receba no sábado. Link na bio."],
+    [C.aurora, 3, "reels", "Da massa ao forno em 30 segundos", "aprovado", "O caminho do pão de queijo, do jeito que a vovó fazia."],
+    [C.aurora, 5, "carrossel", "Ingredientes de produtores de Minas", "aguardando_aprovacao", "Conheça quem planta o trigo, produz o queijo e a manteiga que usamos aqui."],
+    [C.aurora, 7, "feed", "Promoção da semana: bolo de fubá", "aguardando_aprovacao", "Toda quarta, bolo de fubá com 15% de desconto no balcão."],
+    [C.aurora, 9, "reels", "Pergunta do cliente: o pão engorda?", "ajuste_solicitado", "Respondemos a dúvida que mais aparece no direct, com a nossa nutricionista parceira."],
+    [C.aurora, 12, "stories", "Bastidores da entrega das cestas", "aguardando_aprovacao", "Sequência de 4 stories mostrando a montagem e a entrega."],
+    [C.aurora, 14, "feed", "Depoimento de cliente", "em_andamento", "Rascunho: aguardando foto da cliente."],
+    [C.aurora, 18, "carrossel", "Calendário de encomendas de fim de ano", "em_andamento", "Rascunho: datas limite para Natal e Ano-Novo."],
+    [C.bravo, 4, "feed", "Apresentação do Estúdio Bravo", "aguardando_aprovacao", "Prazer, somos o Estúdio Bravo. Cuidamos de você do cabelo à pele."],
+    [C.bravo, 8, "reels", "Antes e depois: corte e coloração", "em_andamento", "Rascunho."],
+  ];
+  const ids: Record<string, string> = {};
+  for (const [cliente, d, formato, titulo, status, legenda] of posts) {
+    const linha = inserirCru(db, "conteudos", {
+      cliente_id: cliente,
+      agencia_id: AG,
+      data_publicacao: diaRel(d),
+      horario: formato === "stories" ? null : "18:00",
+      formato,
+      titulo,
+      legenda,
+      status,
+      criado_por: U.julia,
+      aprovado_em: ["aprovado", "programado", "concluido"].includes(status) ? atras(Math.max(1, -d + 3)) : null,
+      aprovado_por: ["aprovado", "programado", "concluido"].includes(status) ? (cliente === C.aurora ? U.marina : U.carla) : null,
+    });
+    ids[titulo] = linha.id;
+  }
+  const comentario = (item: string, autor: string, tipo: string, texto: string, quando: number) =>
+    inserirCru(db, "comentarios", { cliente_id: C.aurora, agencia_id: AG, item_tipo: "conteudo", item_id: item, autor_id: autor, tipo, texto, criado_em: atras(quando) });
+  comentario(ids["Pergunta do cliente: o pão engorda?"], U.marina, "ajuste", "Gostei, mas troca a trilha. Essa música não combina com a padaria. E pode citar o nome da nutricionista na legenda?", 1);
+  comentario(ids["Da massa ao forno em 30 segundos"], U.marina, "aprovacao", "Aprovado. Ficou lindo!", 2);
+  comentario(ids["Ingredientes de produtores de Minas"], U.julia, "comentario", "Marina, as fotos dos produtores chegaram ontem. Usei as três melhores.", 0.5);
+
+  const roteiros: [string, number, string, string, string, boolean, Record<string, string>][] = [
+    [C.aurora, 6, "reels", "Da massa ao forno em 30 segundos", "aprovado", true, {
+      objetivo: "Mostrar que o pão de queijo é feito ali, na hora.",
+      gancho: "Close no queijo sendo ralado, com o som bem alto.",
+      falas: "Marina: Aqui o pão de queijo não vem congelado de fábrica. A gente rala o queijo, sova a massa e assa na hora.\nMarina: Quer ver?",
+      cenas: "1. Queijo sendo ralado\n2. Massa sendo sovada\n3. Bandeja entrando no forno\n4. Pão de queijo saindo, mordida",
+      o_que_levar: "Avental da padaria, queijo meia cura, bandeja limpa.",
+    }],
+    [C.aurora, 6, "stories", "Um dia na padaria", "aguardando_aprovacao", true, {
+      objetivo: "Aproximar o público da rotina da equipe.",
+      gancho: "Relógio marcando 5h30 e as luzes acendendo.",
+      falas: "Sequência sem fala. Textos curtos na tela: 5h30 a gente chega. 6h sai a primeira fornada. 7h fila na porta.",
+      cenas: "1. Porta abrindo\n2. Forno ligando\n3. Primeira fornada\n4. Primeiro cliente do dia",
+      o_que_levar: "Celular carregado, tripé pequeno.",
+    }],
+    [C.aurora, 10, "reels", "Pergunta do cliente: o pão engorda?", "aguardando_aprovacao", true, {
+      objetivo: "Responder a dúvida mais frequente do direct e gerar autoridade.",
+      gancho: "Pão engorda? A resposta curta é: depende.",
+      falas: "Nutricionista: Não existe alimento que engorda sozinho. O que conta é a quantidade e o que acompanha.\nMarina: E o nosso, de fermentação natural, ainda é mais fácil de digerir.",
+      cenas: "1. Pergunta na tela\n2. Nutricionista no balcão\n3. Marina cortando o pão\n4. Prato montado",
+      referencias: "@exemplo.nutri",
+      o_que_levar: "Pão de fermentação natural inteiro, tábua de madeira.",
+    }],
+    [C.aurora, 16, "reels", "Encomendas de Natal", "em_andamento", false, { objetivo: "Abrir as encomendas de fim de ano." }],
+    [C.bravo, 9, "reels", "Antes e depois: corte e coloração", "aguardando_aprovacao", true, {
+      objetivo: "Mostrar o resultado do serviço mais procurado.",
+      gancho: "Começar pelo depois, voltar para o antes.",
+      cenas: "1. Resultado final\n2. Volta no tempo\n3. Processo acelerado\n4. Reação da cliente",
+    }],
+  ];
+  for (const [cliente, d, tipo, titulo, status, publicado, campos] of roteiros) {
+    inserirCru(db, "roteiros", {
+      cliente_id: cliente,
+      agencia_id: AG,
+      tipo,
+      titulo,
+      data_gravacao: diaRel(d),
+      status,
+      publicado_em: publicado ? atras(2) : null,
+      lido_em: status === "aprovado" ? atras(1.5) : null,
+      criado_por: U.julia,
+      ...campos,
+    });
+  }
 }

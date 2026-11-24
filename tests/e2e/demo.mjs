@@ -160,6 +160,75 @@ ok((await texto(novo)).includes("Loja Teste Demo"), "cliente cadastrado entra pe
 await novo.goto(`${BASE}${link}`);
 ok((await texto(novo)).includes("não vale mais"), "o link de acesso funciona uma vez só");
 
+// Calendário, aprovações e ajustes (Fase 3)
+{
+  const cm = await entrar(celular, "marina");
+  await cm.goto(`${BASE}/calendario`);
+  t = await texto(cm);
+  // Os itens da demonstração ficam nos próximos dias: lê também o mês seguinte.
+  await cm.getByRole("link", { name: "Próximo mês" }).click();
+  await cm.waitForURL(/mes=/);
+  t += await texto(cm);
+  await cm.goBack();
+  ok(t.includes("Promoção da semana: bolo de fubá") && t.includes("Um dia na padaria"), "calendário do cliente mostra posts e roteiros");
+  ok(!t.includes("Encomendas de Natal"), "roteiro não publicado não aparece para o cliente");
+  ok(!t.includes("Apresentação do Estúdio Bravo"), "calendário não mistura clientes");
+  const larg = await cm.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  ok(larg <= 0, `calendário sem rolagem horizontal no celular (${larg}px)`);
+  await captura(cm, "demo-calendario-celular");
+
+  await cm.goto(`${BASE}/aprovacoes`);
+  t = await texto(cm);
+  ok(/esperando você \(5\)/i.test(t), "aprovações lista 3 posts e 2 roteiros");
+  await captura(cm, "demo-aprovacoes");
+  await cm.getByLabel("Selecionar Promoção da semana: bolo de fubá").check();
+  await cm.getByLabel("Selecionar Um dia na padaria").check();
+  await cm.getByRole("button", { name: /Aprovar 2 selecionados/ }).click();
+  await cm.getByText(/Esperando você \(3\)/i).waitFor({ timeout: 15000 });
+  ok(true, "aprova dois itens de uma vez");
+
+  await cm.getByRole("link", { name: /Ingredientes de produtores de Minas/ }).click();
+  await cm.getByRole("button", { name: "Solicitar ajuste" }).click();
+  await cm.getByLabel("O que precisa mudar?").fill("Troca a segunda foto, por favor. Prefiro a do queijo.");
+  await cm.getByRole("button", { name: "Enviar pedido de ajuste" }).click();
+  await cm.getByText("Pedido de ajuste").first().waitFor({ timeout: 15000 });
+  ok((await texto(cm)).includes("Troca a segunda foto"), "pedido de ajuste fica no histórico");
+  await captura(cm, "demo-post-ajuste");
+
+  const ca = await entrar({ viewport: { width: 1280, height: 900 } }, "taynara");
+  await ca.goto(`${BASE}/aprovacoes`);
+  t = await texto(ca);
+  ok(t.includes("Ingredientes de produtores de Minas"), "agência vê o pedido de ajuste");
+  await ca.getByRole("link", { name: /Ingredientes de produtores de Minas/ }).first().click();
+  await ca.getByRole("button", { name: "Ajuste feito: reenviar para aprovação" }).click();
+  await ca.getByText("Reenviado").first().waitFor({ timeout: 15000 });
+  ok(true, "agência reenvia depois do ajuste");
+
+  await ca.goto(`${BASE}/calendario?cliente=c0000000-0000-4000-8000-0000000000d1`);
+  await ca.getByRole("link", { name: "Novo post" }).click();
+  await ca.getByLabel("Título interno").fill("Post novo do teste");
+  await ca.getByLabel("Data de publicação").fill(new Date(Date.now() + 2 * 86400000).toISOString().slice(0, 10));
+  await ca.getByLabel("Legenda").fill("Legenda de teste.");
+  await ca.getByRole("button", { name: "Salvar e enviar para aprovação" }).click();
+  await ca.waitForURL(/\/conteudos\/[0-9a-f-]{36}/, { timeout: 15000 });
+  await ca.getByText("Aguardando aprovação").first().waitFor();
+  ok(true, "agência cria post e envia para aprovação");
+  await captura(ca, "demo-calendario-agencia");
+
+  await cm.goto(`${BASE}/aprovacoes`);
+  t = await texto(cm);
+  ok(t.includes("Post novo do teste") && t.includes("Ingredientes de produtores de Minas"), "cliente recebe o post novo e o reenviado");
+
+  const cr = await entrar({}, "rafael");
+  const resp = await cr.goto(`${BASE}/calendario?cliente=c0000000-0000-4000-8000-0000000000d1`);
+  t = await texto(cr);
+  ok(!t.includes("Promoção da semana"), "equipe não vê posts de cliente que não atende");
+
+  await cm.goto(`${BASE}/feed`);
+  ok((await texto(cm)).includes("@padaria.aurora.exemplo"), "prévia do feed abre com o perfil do cliente");
+  await captura(cm, "demo-feed");
+}
+
 // Só a dona zera a demonstração
 const resp = await m.request.post(`${BASE}/demo/recomecar`, { headers: { origin: BASE } });
 ok(resp.status() === 403, "cliente não consegue zerar a demonstração");

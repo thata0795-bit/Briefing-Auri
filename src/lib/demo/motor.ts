@@ -112,6 +112,8 @@ export class Regras {
         return this.eAdminDa(r.agencia_id);
       case "horarios_livres":
         return this.eDaAgencia(r.agencia_id) || (r.agencia_id === e.agencia_id && !r.cliente_id && r.inicio > agora());
+      case "roteiros":
+        return this.podeEditarCliente(r.cliente_id) || (this.eUsuarioDoCliente(r.cliente_id) && !!r.publicado_em);
       default:
         return r.cliente_id ? this.podeVerCliente(r.cliente_id) : false;
     }
@@ -135,6 +137,11 @@ export class Regras {
         return this.eAdminDa(r.agencia_id ?? r.id);
       case "horarios_livres":
         return this.eDaAgencia(r.agencia_id);
+      case "conteudos":
+      case "roteiros":
+        return this.podeEditarCliente(r.cliente_id);
+      case "comentarios":
+        return this.podeVerCliente(r.cliente_id) && r.autor_id === e.id && r.tipo === "comentario";
       case "compromissos":
       case "briefings":
         return this.podeEditarCliente(r.cliente_id) || (tabela === "briefings" && this.eUsuarioDoCliente(r.cliente_id));
@@ -161,6 +168,7 @@ const RELACOES: Record<string, Relacao> = {
   "horarios_livres>clientes": { tipo: "um", chaveLocal: "cliente_id", chaveAlvo: "id" },
   "horarios_livres>perfis": { tipo: "um", chaveLocal: "responsavel_id", chaveAlvo: "id" },
   "convites>agencias": { tipo: "um", chaveLocal: "agencia_id", chaveAlvo: "id" },
+  "comentarios>perfis": { tipo: "um", chaveLocal: "autor_id", chaveAlvo: "id" },
 };
 
 type Campo = { nome: string } | { alias: string; tabela: string; filhos: Campo[] } | { todos: true };
@@ -205,6 +213,12 @@ const PADROES: Record<string, () => Linha> = {
   modelos_contrato: () => ({ padrao: false }),
   convites: () => ({ usado_em: null }),
   auditoria: () => ({ detalhes: {} }),
+  conteudos: () => ({ status: "em_andamento", horario: null, legenda: null, arte_caminho: null, aprovado_em: null, aprovado_por: null }),
+  roteiros: () => ({
+    status: "em_andamento", objetivo: null, gancho: null, falas: null, cenas: null, referencias: null, o_que_levar: null,
+    publicado_em: null, lido_em: null, aprovado_em: null, aprovado_por: null,
+  }),
+  comentarios: () => ({ tipo: "comentario" }),
 };
 
 const ETAPAS = ["boas_vindas", "contrato", "briefing", "acessos", "reuniao"] as const;
@@ -346,6 +360,39 @@ export function executarRpc(db: Banco, uid: string | null, servico: boolean, nom
       concluirEtapa(db, k.cliente_id, "contrato", uid);
       return { data: null, error: null };
     }
+    case "responder_item": {
+      if (!["conteudo", "roteiro"].includes(a.p_tipo) || !["aprovar", "ajuste"].includes(a.p_acao)) return erro("22023", "Ação inválida.");
+      const tabela = a.p_tipo === "conteudo" ? "conteudos" : "roteiros";
+      const item = db.tabelas[tabela]?.find((x) => x.id === a.p_id && (a.p_tipo === "conteudo" || x.publicado_em));
+      if (!item || !r.eUsuarioDoCliente(item.cliente_id)) return erro("P0002", "Item não encontrado.");
+      if (item.status !== "aguardando_aprovacao") return erro("55000", "Este item não está esperando a sua aprovação.");
+      const texto = String(a.p_texto ?? "").trim();
+      if (a.p_acao === "ajuste" && texto.length < 3) return erro("22023", "Descreva o ajuste que você precisa.");
+      const aprovou = a.p_acao === "aprovar";
+      Object.assign(item, {
+        status: aprovou ? "aprovado" : "ajuste_solicitado",
+        aprovado_em: aprovou ? agora() : null,
+        aprovado_por: aprovou ? uid : null,
+        atualizado_em: agora(),
+        ...(a.p_tipo === "roteiro" ? { lido_em: item.lido_em ?? agora() } : {}),
+      });
+      inserirCru(db, "comentarios", {
+        cliente_id: item.cliente_id,
+        agencia_id: item.agencia_id,
+        item_tipo: a.p_tipo,
+        item_id: item.id,
+        autor_id: uid,
+        tipo: aprovou ? "aprovacao" : "ajuste",
+        texto: aprovou ? texto || "Aprovado." : texto,
+      });
+      auditar(db, { agencia_id: item.agencia_id, cliente_id: item.cliente_id, user_id: uid, acao: `${a.p_tipo}.${a.p_acao}`, entidade: tabela, entidade_id: item.id });
+      return { data: null, error: null };
+    }
+    case "marcar_roteiro_lido": {
+      const item = db.tabelas.roteiros?.find((x) => x.id === a.p_id);
+      if (item && !item.lido_em && item.publicado_em && r.eUsuarioDoCliente(item.cliente_id)) item.lido_em = agora();
+      return { data: null, error: null };
+    }
     case "concluir_etapa_servico": {
       if (!servico) return erro("42501", "Sem permissão.");
       concluirEtapa(db, a.p_cliente, a.p_etapa, a.p_quem);
@@ -421,6 +468,14 @@ export class Consulta implements PromiseLike<Resultado> {
   }
   gt(c: string, v: any) {
     this.filtros.push((r) => r[c] != null && r[c] > v);
+    return this;
+  }
+  gte(c: string, v: any) {
+    this.filtros.push((r) => r[c] != null && r[c] >= v);
+    return this;
+  }
+  lte(c: string, v: any) {
+    this.filtros.push((r) => r[c] != null && r[c] <= v);
     return this;
   }
   order(c: string, o?: { ascending?: boolean }) {
