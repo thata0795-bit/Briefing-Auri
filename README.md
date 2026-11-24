@@ -22,7 +22,24 @@ cp .env.example .env.local  # preencha com os valores de `npx supabase status`
 npm run dev                 # http://localhost:3000
 ```
 
-Os e-mails enviados no ambiente local (link mágico, nova senha) chegam na caixa de teste em http://127.0.0.1:54324.
+Os e-mails enviados no ambiente local (convite, link mágico, nova senha) chegam na caixa de teste em http://127.0.0.1:54324.
+
+No `.env.local`, para desenvolvimento, use também:
+
+```
+EMAIL_SMTP_URL=smtp://127.0.0.1:54325
+ASSINATURA_PROVEDOR=simulado
+ASSINATURA_WEBHOOK_SECRET=qualquer-texto-com-16-ou-mais-caracteres
+```
+
+### Testar a entrada de um cliente novo
+
+1. Entre como admin e vá em Clientes, Novo cliente. Use um e-mail fictício.
+2. Abra a caixa de teste (http://127.0.0.1:54324) e clique no convite.
+3. Faça a entrada: aceite os termos, assine o contrato na tela de assinatura simulada, responda o briefing, marque os acessos e escolha um horário.
+4. Volte como admin na ficha do cliente para ver tudo concluído.
+
+Para ter horários na primeira reunião, abra alguns em Horários livres (o seed já cria alguns nos próximos dias).
 
 ### Usuários de teste (todos fictícios)
 
@@ -43,10 +60,12 @@ Essas senhas existem só no banco local. Em produção não há seed.
 
 ```bash
 npm test            # testes de RLS: provam que ninguém vê dados de outro cliente ou agência
-npm run test:e2e    # roteiro no navegador (precisa do app rodando em localhost:3000)
+npm run test:e2e    # roteiros no navegador das fases 1 e 2 (precisa do app rodando em localhost:3000)
 ```
 
-O roteiro de navegador entra com cada perfil no desktop e no celular, confere o que cada um vê, testa o link mágico aberto em outro aparelho, confere que não há rolagem horizontal a 360 px e liga e desliga a verificação em duas etapas. Para salvar capturas de tela: `node tests/e2e/fase1.mjs pasta-de-saida`.
+O roteiro da Fase 2 cadastra um cliente novo, abre o convite no celular (360 px), assina o contrato, começa o briefing, fecha o navegador, volta por link mágico em outro "aparelho", confere que nada se perdeu, conclui tudo e confere a ficha do lado da agência.
+
+O roteiro da Fase 1 entra com cada perfil no desktop e no celular, confere o que cada um vê, testa o link mágico aberto em outro aparelho, confere que não há rolagem horizontal a 360 px e liga e desliga a verificação em duas etapas. Para salvar capturas de tela: `node tests/e2e/fase1.mjs pasta-de-saida`.
 
 ## Variáveis de ambiente
 
@@ -59,6 +78,10 @@ Veja `.env.example`. Resumo:
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase > Project Settings > API | pública, protegida pelo RLS |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase > Project Settings > API | **secreta**, só no servidor |
 | `SUPABASE_DB_URL` | `npx supabase status` | só para os testes |
+| `RESEND_API_KEY` | resend.com > API Keys | **secreta**; sem ela, usa `EMAIL_SMTP_URL` |
+| `EMAIL_REMETENTE` | domínio verificado no Resend | ex.: portal@suaagencia.com.br |
+| `ASSINATURA_PROVEDOR` | `simulado` por enquanto | Autentique ou ZapSign na integração |
+| `ASSINATURA_WEBHOOK_SECRET` | você gera | **secreta**, 16+ caracteres |
 
 ## Configurar o Supabase em produção
 
@@ -67,7 +90,7 @@ Veja `.env.example`. Resumo:
 3. Em Authentication > URL Configuration, coloque o domínio do sistema em Site URL e em Redirect URLs.
 4. Em Authentication > Sign In / Providers, desligue "Allow new users to sign up". Só a agência cria acessos.
 5. Em Authentication > Multi-Factor, ligue TOTP.
-6. Em Authentication > Emails, cole os modelos de `supabase/templates/` (link mágico, convite e nova senha) e configure o SMTP do Resend com o remetente verificado da agência.
+6. Em Authentication > Emails, cole os modelos de `supabase/templates/` (link mágico e nova senha) e configure o SMTP do Resend com o remetente verificado. O convite sai pelo próprio sistema, não pelo Supabase.
 7. Cadastre as variáveis de ambiente na Vercel.
 
 ## Estrutura

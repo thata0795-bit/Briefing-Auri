@@ -59,3 +59,46 @@ Registro das decisões tomadas durante a construção do portal. Cada item diz o
 
 ## 011. Ambiente local
 - O Supabase local roda pelo Docker (`npx supabase start`), com banco, autenticação e caixa de e-mail de teste. Os testes de RLS usam essa mesma instância.
+
+## 012. Convite com token próprio (Fase 2)
+- O link do convite não é o link mágico do Supabase, que vence em 1 hora. É um token nosso, de 7 dias e uso único, guardado só como hash (`convites.token_hash`).
+- O link abre uma tela com o botão "Entrar no portal". A sessão só é criada no clique (POST), porque leitores de e-mail corporativo abrem links sozinhos e queimariam um convite que abrisse direto.
+- Reenviar convite invalida o anterior.
+- Os e-mails do sistema saem pelo nosso código (React Email), não pelos modelos do Supabase. Assim cada agência manda com o próprio nome e o visual dela. Canal: Resend quando houver `RESEND_API_KEY`, SMTP local em desenvolvimento.
+- Limitação: um e-mail tem acesso a uma agência só. Se a mesma pessoa for cliente de duas agências, usa dois e-mails. Dá para mudar depois, se for comum.
+
+## 013. Perfil criado também na atualização do usuário
+- O Auth do Supabase cria o usuário e grava `app_metadata` num segundo passo. O gatilho que cria o perfil passou a rodar também nessa atualização. Um perfil existente nunca muda de agência ou papel por esse caminho (há teste cobrindo).
+
+## 014. Entrada em ordem, garantida no banco
+- Etapas: boas-vindas (aceite dos termos), contrato, briefing, acessos, primeira reunião. Cada uma só abre com a anterior concluída. A regra vale nas funções do banco, não só na tela.
+- O contrato só conclui pela confirmação da assinatura (webhook com HMAC) ou quando o admin marca "assinado fora do sistema", e isso fica na auditoria.
+- A reserva da primeira reunião é atômica: o horário é travado na transação, então dois clientes não pegam o mesmo.
+- Concluir a última etapa muda o cliente para "Ativo".
+
+## 015. Assinatura eletrônica simulada até a escolha da ferramenta
+- `ProvedorAssinatura` é a interface; Autentique e ZapSign entram como implementações. Enquanto nenhuma é escolhida, um provedor simulado gera uma tela de assinatura local que chama o mesmo webhook, com a mesma verificação HMAC. Ele não roda em produção.
+- O contrato é gerado a partir de um modelo da agência com campos `{{cliente.nome}}`, `{{plano.valor}}` etc. O modelo do seed é um texto de exemplo e precisa ser trocado pelo contrato real.
+- Por enquanto o contrato é texto. O PDF para a ferramenta de assinatura entra junto com a integração escolhida.
+
+## 016. Briefing
+- 10 partes: negócio, produtos, público, concorrência, identidade visual, tom de voz, redes, objetivos, materiais e captação, combinados. As partes 1, 3, 5, 7 e 10 reaproveitam as perguntas e opções do protótipo da Auri Studio.
+- Cada resposta salva sozinha: escolhas na hora, texto 0,7 s depois de parar de digitar ou ao sair do campo. A gravação é por pergunta (`jsonb_set`), então duas abas abertas não apagam a resposta uma da outra.
+- "Responder depois" marca a pergunta; obrigatória marcada para depois não impede concluir, e a agência vê a lista.
+- Arquivos (logo, manual, fotos) vão direto do navegador para o bucket privado `arquivos`, no caminho `{agencia}/{cliente}/briefing/`. As regras do bucket conferem agência e cliente pelo caminho. A agência abre os arquivos por links assinados de 5 minutos.
+- Limite de 50 MB por arquivo (o limite do plano gratuito do Supabase). Vídeos brutos maiores entram pela área de arquivos na Fase 3, com envio em partes.
+
+## 017. Horários livres e fuso
+- A agência abre horários (com repetição semanal). Datas digitadas são lidas como horário de Brasília (UTC-3; o Brasil não tem horário de verão desde 2019) e gravadas em UTC.
+- Cada compromisso tem .ics e link do Google Agenda. O lembrete de 48h entra na Fase 4, que vai ler os compromissos.
+
+## 018. Navegação depois de ações no Next 15.5
+- Em telas dentro de uma fronteira de carregamento (`loading.tsx`), o Next 15.5 às vezes não aplica a resposta de uma ação do servidor (redirecionamento ou atualização). Medido nos testes de navegador.
+- Por isso: a tela de carregamento fica só no Início, que não tem ações; e depois de concluir uma etapa ou cadastrar um cliente, o navegador carrega a próxima tela inteira (`navegarDepoisDeSalvar`). Reavaliar quando atualizar o Next.
+
+## 019. Termos e política de privacidade
+- Textos em `/termos` e `/privacidade`, versão `2026-11-v1`, aceitos nas boas-vindas e registrados com data e versão no perfil e na auditoria.
+- São um ponto de partida e precisam de revisão jurídica antes do lançamento.
+
+## 020. Ainda não feito nesta fase (vai para a Fase 4)
+- Aviso em tempo real para a agência a cada etapa concluída (sino) e alerta de cliente parado 3 dias. Os dados já estão gravados (etapas com data e auditoria); falta a central de notificações e o agendador.
