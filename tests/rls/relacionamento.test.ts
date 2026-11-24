@@ -77,3 +77,31 @@ describe("estratégia e mensalidades", () => {
     await como(ID.user.adminTc, async (q) => expect(await q("update public.mensalidades set status = 'pago' returning id")).toHaveLength(1));
   });
 });
+
+describe("relatórios de métricas", () => {
+  it("cliente vê só os meses publicados do próprio perfil", async () => {
+    await como(ID.user.aurora, async (q) => {
+      expect(await q("select mes from public.relatorios")).toHaveLength(3);
+      expect(await q("select id from public.relatorios where publicado_em is null")).toHaveLength(0);
+    });
+    await como(ID.user.bravo, async (q) => expect(await q("select id from public.relatorios")).toHaveLength(0));
+  });
+  it("cliente não edita nem cria relatório", async () => {
+    await como(ID.user.aurora, async (q) => {
+      expect(await q("update public.relatorios set seguidores = 1 returning id")).toHaveLength(0);
+      expect(
+        await erroDe(q("insert into public.relatorios (cliente_id, agencia_id, mes, seguidores) values ($1, $2, '2020-01', 1)", [ID.cliente.aurora, ID.agencia.tc])),
+      ).toBe("42501");
+    });
+  });
+  it("equipe atribuída vê o rascunho e edita; equipe não atribuída não vê", async () => {
+    await como(ID.user.social, async (q) => {
+      expect(await q("select id from public.relatorios")).toHaveLength(4);
+      expect(await q("update public.relatorios set seguidores = 5 returning id")).toHaveLength(4);
+    });
+    await como(ID.user.designer, async (q) => expect(await q("select id from public.relatorios")).toHaveLength(0));
+  });
+  it("outra agência não vê nada", async () => {
+    await como(ID.user.adminNorte, async (q) => expect(await q("select id from public.relatorios")).toHaveLength(0));
+  });
+});

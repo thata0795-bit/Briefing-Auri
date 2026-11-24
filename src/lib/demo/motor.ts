@@ -109,6 +109,7 @@ export class Regras {
       case "mensalidades":
         return this.podeVerFinanceiro(r.cliente_id);
       case "estrategias":
+      case "relatorios":
         return this.podeEditarCliente(r.cliente_id) || (this.eUsuarioDoCliente(r.cliente_id) && !!r.publicado_em);
       case "leituras_conversa":
         return r.user_id === e.id && this.podeVerCliente(r.cliente_id);
@@ -153,6 +154,7 @@ export class Regras {
       case "leituras_conversa":
         return r.user_id === e.id && this.podeVerCliente(r.cliente_id);
       case "estrategias":
+      case "relatorios":
         return this.podeEditarCliente(r.cliente_id);
       case "mensalidades":
         return this.eAdminDa(r.agencia_id);
@@ -236,6 +238,10 @@ const PADROES: Record<string, () => Linha> = {
   comentarios: () => ({ tipo: "comentario" }),
   mensagens: () => ({ texto: null, arquivo_caminho: null, arquivo_nome: null }),
   estrategias: () => ({ versao: 1, foco: null, objetivos: null, pilares: null, metas: null, publicado_em: null }),
+  relatorios: () => ({
+    seguidores: null, alcance: null, impressoes: null, interacoes: null, visitas_perfil: null, cliques_link: null, publicacoes: null,
+    destaques: null, analise: null, proximos_passos: null, publicado_em: null,
+  }),
   mensalidades: () => ({ status: "pendente", pago_em: null, link_boleto: null, observacao: null }),
 };
 

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, Building2, CalendarClock, CalendarDays, CheckCheck, Compass, FileText, FolderOpen, Grid3x3, House, LogOut, Menu, MessageCircle, ShieldCheck, Users, UsersRound, Wallet, X } from "lucide-react";
+import { BookOpen, ChartNoAxesColumn, Building2, CalendarClock, CalendarDays, CheckCheck, Compass, FileText, FolderOpen, Grid3x3, House, LogOut, Menu, MessageCircle, ShieldCheck, Users, UsersRound, Wallet, X } from "lucide-react";
 import type { ItemMenu, NomeIcone } from "@/lib/menu";
 
 const ICONES: Record<NomeIcone, typeof House> = {
@@ -15,6 +15,7 @@ const ICONES: Record<NomeIcone, typeof House> = {
   feed: Grid3x3,
   mensagens: MessageCircle,
   estrategia: Compass,
+  relatorios: ChartNoAxesColumn,
   documentos: FolderOpen,
   financeiro: Wallet,
   manual: BookOpen,

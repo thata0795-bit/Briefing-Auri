@@ -8,6 +8,7 @@ export type NomeIcone =
   | "aprovacoes"
   | "mensagens"
   | "estrategia"
+  | "relatorios"
   | "feed"
   | "documentos"
   | "financeiro"
@@ -29,6 +30,7 @@ export function montarMenu(sessao: Sessao, naoLidas = 0): ItemMenu[] {
     { href: "/aprovacoes", rotulo: "Aprovações", icone: "aprovacoes" },
     { href: "/mensagens", rotulo: agencia ? "Mensagens" : "Chat com a agência", icone: "mensagens", contador: naoLidas },
     { href: "/estrategia", rotulo: "Estratégia e reuniões", icone: "estrategia" },
+    { href: "/relatorios", rotulo: "Relatórios", icone: "relatorios" },
     { href: "/feed", rotulo: "Prévia do feed", icone: "feed" },
     { href: "/documentos", rotulo: "Documentos", icone: "documentos" },
   );

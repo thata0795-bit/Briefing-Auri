@@ -292,6 +292,38 @@ ok((await texto(novo)).includes("não vale mais"), "o link de acesso funciona um
   await captura(ct, "demo-financeiro-agencia");
 }
 
+// Relatórios de métricas mês a mês
+{
+  const AURORA = "c0000000-0000-4000-8000-0000000000d1";
+  const cm = await entrar(celular, "marina");
+  await cm.goto(`${BASE}/relatorios`);
+  t = await texto(cm);
+  ok(t.includes("Desde a entrada") && t.includes("7 meses de acompanhamento") && t.includes("Recorde de alcance"), "cliente vê o relatório desde a entrada e o último mês");
+  ok((await cm.locator("table tbody tr").count()) >= 7, "tabela mostra todos os meses");
+  await captura(cm, "demo-relatorios-cliente");
+
+  const cj = await entrar({ viewport: { width: 1280, height: 900 } }, "julia");
+  const agora = new Date(Date.now() - 3 * 3600 * 1000).toISOString().slice(0, 7);
+  await cj.goto(`${BASE}/relatorios?cliente=${AURORA}&mes=${agora}`);
+  await cj.getByRole("textbox", { name: "Seguidores", exact: true }).fill("2.410");
+  await cj.getByRole("textbox", { name: "Alcance", exact: true }).fill("21000");
+  await cj.getByLabel("Destaques do mês").fill("Parcial do mês: encomendas abertas.");
+  await cj.getByRole("button", { name: "Salvar rascunho" }).click();
+  await cj.getByText("Rascunho: o cliente ainda não vê este relatório.").waitFor({ timeout: 15000 });
+  await cm.goto(`${BASE}/relatorios?mes=${agora}`);
+  ok(!(await texto(cm)).includes("Parcial do mês"), "rascunho não aparece para o cliente");
+  await cj.getByRole("button", { name: "Salvar e publicar para o cliente" }).click();
+  await cj.getByText(/Publicado em/).first().waitFor({ timeout: 15000 });
+  await captura(cj, "demo-relatorios-agencia");
+  await cm.reload();
+  t = await texto(cm);
+  ok(t.includes("Parcial do mês") && t.includes("2.410"), "relatório publicado chega ao cliente");
+
+  const cr = await entrar({}, "rafael");
+  await cr.goto(`${BASE}/relatorios?cliente=${AURORA}`);
+  ok(!(await texto(cr)).includes("Recorde de alcance"), "equipe não atribuída não vê o relatório do cliente");
+}
+
 // Só a dona zera a demonstração
 const resp = await m.request.post(`${BASE}/demo/recomecar`, { headers: { origin: BASE } });
 ok(resp.status() === 403, "cliente não consegue zerar a demonstração");

@@ -122,3 +122,12 @@ select 'a0000000-0000-4000-8000-000000000001', '20000000-0000-4000-8000-00000000
        ((current_date + d) + time '16:00') at time zone 'America/Sao_Paulo',
        'presencial', 'Escritório da agência'
 from generate_series(3, 5) as d;
+
+-- Relatórios de métricas da Aurora: três meses publicados e o mês passado em rascunho.
+insert into public.relatorios (cliente_id, agencia_id, mes, seguidores, alcance, interacoes, publicacoes, destaques, publicado_em)
+select 'c0000000-0000-4000-8000-00000000000a', 'a0000000-0000-4000-8000-000000000001',
+       to_char(date_trunc('month', current_date) - make_interval(months => n), 'YYYY-MM'),
+       1000 + (5 - n) * 150, 4000 + (5 - n) * 1200, 300 + (5 - n) * 80, 12,
+       'Mês de teste ' || n,
+       case when n = 1 then null else now() - make_interval(days => n * 30) end
+from generate_series(1, 4) as n;

@@ -126,7 +126,7 @@ function montarBanco(): Banco {
   usuario(db, U.julia, "julia@agencia-exemplo.com.br", { papel: "equipe", funcao: "social_media", nome: "Júlia Martins" });
   usuario(db, U.rafael, "rafael@agencia-exemplo.com.br", { papel: "equipe", funcao: "designer", nome: "Rafael Souza" });
 
-  inserirCru(db, "clientes", { id: C.aurora, agencia_id: AG, nome: "Padaria Aurora", segmento: "Alimentação", status: "ativo", responsavel_id: U.julia, criado_em: atras(40), convidado_em: atras(40), entrada_concluida_em: atras(33) });
+  inserirCru(db, "clientes", { id: C.aurora, agencia_id: AG, nome: "Padaria Aurora", segmento: "Alimentação", status: "ativo", responsavel_id: U.julia, criado_em: atras(215), convidado_em: atras(215), entrada_concluida_em: atras(208) });
   inserirCru(db, "clientes", { id: C.bravo, agencia_id: AG, nome: "Estúdio Bravo", segmento: "Beleza e bem-estar", status: "onboarding", responsavel_id: U.julia, criado_em: atras(3), convidado_em: atras(3) });
   inserirCru(db, "clientes", { id: C.serena, agencia_id: AG, nome: "Clínica Serena", segmento: "Saúde", status: "convidado", responsavel_id: U.taynara, criado_em: atras(0.2), convidado_em: atras(0.2) });
 
@@ -405,6 +405,36 @@ function semearRelacionamento(db: Banco) {
     d.setUTCMonth(d.getUTCMonth() + n);
     return d.toISOString().slice(0, 7);
   };
+  // Relatórios mensais da Aurora, desde a entrada (o mês corrente ainda está em andamento)
+  const RELATORIOS_AURORA = [
+    [1180, 3900, 7100, 310, 240, 18, 10],
+    [1265, 5200, 9800, 402, 310, 26, 12],
+    [1390, 7400, 13900, 590, 420, 41, 13],
+    [1520, 8100, 15200, 655, 480, 47, 14],
+    [1710, 11800, 22400, 980, 690, 73, 16],
+    [1905, 13200, 25100, 1090, 760, 88, 16],
+    [2240, 19600, 37800, 1610, 1120, 142, 18],
+  ] as const;
+  const TEXTOS_AURORA = [
+    ["Primeiro mês: organizamos o perfil, a bio e os destaques.", "Base para comparar os próximos meses. O alcance ainda depende quase só de quem já segue.", "Começar os reels de bastidor."],
+    ["O primeiro reel de bastidor teve o maior alcance do mês.", "Vídeos curtos da produção chamam quem ainda não conhece a padaria.", "Dois reels por semana mostrando a fornada."],
+    ["Reel da primeira fornada: 2.100 contas alcançadas.", "O alcance cresceu 42% e a maior parte veio de quem não segue o perfil.", "Testar carrossel com o cardápio da semana."],
+    ["Carrossel do cardápio foi o post mais salvo do mês.", "Salvamentos mostram que o público usa o perfil para decidir o que comprar.", "Repetir o cardápio toda segunda-feira."],
+    ["Collab com a cafeteria vizinha trouxe 120 seguidores em uma semana.", "Parcerias locais aproximam clientes do bairro. Os cliques no WhatsApp quase dobraram.", "Mais uma parceria no mês que vem."],
+    ["Sorteio do café da manhã: 340 comentários.", "O engajamento se manteve alto mesmo com menos posts promocionais.", "Abrir as encomendas de fim de ano mais cedo."],
+    ["Recorde de alcance com o reel da cesta de Natal.\nPedidos pelo WhatsApp: 142 cliques no link.", "O melhor mês desde a entrada. A combinação de bastidor e produto em destaque funciona.", "Manter dois reels por semana e reforçar as encomendas até o dia 20."],
+  ];
+  RELATORIOS_AURORA.forEach(([seguidores, alcance, impressoes, interacoes, visitas_perfil, cliques_link, publicacoes], i) => {
+    const mesRel = comp(i - RELATORIOS_AURORA.length);
+    const [destaques, analise, proximos_passos] = TEXTOS_AURORA[i];
+    inserirCru(db, "relatorios", {
+      cliente_id: C.aurora, agencia_id: AG, mes: mesRel,
+      seguidores, alcance, impressoes, interacoes, visitas_perfil, cliques_link, publicacoes,
+      destaques, analise, proximos_passos,
+      publicado_em: atras(30 * (RELATORIOS_AURORA.length - 1 - i) + 2), criado_por: U.julia,
+    });
+  });
+
   for (const [cliente, valor, venc] of [[C.aurora, 1800, 10], [C.bravo, 2900, 5]] as const) {
     for (const n of [-2, -1, 0]) {
       if (cliente === C.bravo && n < 0) continue;

@@ -111,3 +111,11 @@ Registro das decisões tomadas durante a construção do portal. Cada item diz o
 - Só a dona da agência zera a demonstração (tela Segurança).
 - A cada nova publicação, todos precisam entrar de novo (o segredo do cookie muda).
 - Não serve para dados reais: é uma vitrine. A versão real usa o Supabase, como descrito no README.
+
+## 022. Relatório de métricas mês a mês
+- Tabela `relatorios`, um por cliente e mês: seguidores (total no fim do mês), alcance, visualizações, interações, visitas ao perfil, cliques no link, publicações, e três textos (destaques, análise, próximos passos).
+- A agência (admin e equipe atribuída) preenche e publica; o cliente lê só o que foi publicado. Rascunho fica invisível para ele (RLS, testado).
+- "Desde a entrada" começa no mês de cadastro do cliente ou no primeiro relatório lançado, o que vier antes. Assim a agência pode lançar os meses anteriores ao portal de quem já era cliente.
+- Engajamento é calculado (interações sobre alcance), não digitado.
+- Preenchimento manual por enquanto. A leitura automática pelo Metricool entra depois, quando houver acesso à conta da agência; os campos já seguem os nomes das métricas de lá.
+- Gráficos em SVG próprio, sem biblioteca: uma série por gráfico, um eixo, valor ao tocar e tabela com todos os números.
