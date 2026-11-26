@@ -152,23 +152,6 @@ details.body summary::-webkit-details-marker{display:none}
 .block a{color:var(--gold);overflow-wrap:anywhere}
 .new-tag{font-size:10px;font-weight:800;letter-spacing:.14em;background:var(--gold);color:var(--on-gold);padding:2px 7px;border-radius:4px}
 
-/* Disponibilidade */
-.board-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
-table.board{border-collapse:collapse;width:100%;min-width:860px}
-.board th,.board td{border-bottom:1px solid var(--line);padding:10px;vertical-align:top;text-align:left}
-.board th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;white-space:nowrap}
-.board th.today{color:var(--gold)}
-.board td.who{width:170px;white-space:nowrap}
-.board td.who strong{display:block;font-size:13px}
-.board td.who small{color:var(--muted);font-size:11px}
-.slot{display:block;font-size:11.5px;font-weight:600;padding:3px 6px;border-radius:5px;background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--fg);margin-bottom:3px;white-space:nowrap}
-.busy{display:block;font-size:11px;color:var(--muted);margin-bottom:3px;white-space:nowrap}
-.none{color:var(--muted);font-size:12px}
-.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:18px}
-.finder{padding:16px;display:flex;flex-direction:column;gap:12px}
-.results{display:flex;flex-direction:column;gap:6px}
-.result{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border-radius:8px;background:var(--surface-2);font-size:13px}
-
 /* Alertas */
 .alerts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
 .al{display:flex;gap:12px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
@@ -224,20 +207,23 @@ dialog::backdrop{background:rgba(5,4,2,.66)}
 @media (max-width:1080px){
   .agenda,.alerts,.grid2{grid-template-columns:minmax(0,1fr)}
 }
+.nav-sep{height:1px;background:var(--line);margin:10px 6px}
+.scrim{display:none}
+#menu-btn{position:relative}
+#menu-btn svg{width:20px;height:20px}
+#menu-btn .badge{position:absolute;top:-2px;right:-4px;min-width:16px;height:16px;font-size:9px;margin:0}
 @media (max-width:860px){
   .app{grid-template-columns:minmax(0,1fr)}
-  .rail{position:fixed;inset:auto 0 0 0;top:auto;height:auto;flex-direction:row;padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px));border-right:0;border-top:1px solid var(--line);z-index:20;gap:0}
-  .rail .brand,.rail-foot{display:none}
-  nav.tabs{flex-direction:row;width:100%;justify-content:space-around}
-  .tab{flex-direction:column;gap:3px;font-size:10px;padding:6px 4px;flex:1;align-items:center}
-  .tab[aria-current="page"]::before{left:25%;right:25%;top:-6px;bottom:auto;width:auto;height:3px;border-radius:0 0 3px 3px}
-  .tab .badge{position:absolute;top:0;right:calc(50% - 22px);margin:0;min-width:17px;height:17px;font-size:10px}
-  .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:env(safe-area-inset-top,0px);z-index:15;background:var(--bg);padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line)}
-  .topbar .brand{padding:0}
+  .rail{position:fixed;top:0;left:0;bottom:0;height:auto;width:min(280px,84vw);z-index:40;transform:translateX(-105%);transition:transform .22s ease;padding-top:calc(22px + env(safe-area-inset-top,0px));padding-bottom:calc(22px + env(safe-area-inset-bottom,0px))}
+  .app.menu-open .rail{transform:none;box-shadow:12px 0 40px rgba(0,0,0,.4)}
+  .app.menu-open .scrim{display:block;position:fixed;inset:0;z-index:35;background:rgba(5,4,2,.55)}
+  .topbar{display:flex;align-items:center;gap:10px;position:sticky;top:env(safe-area-inset-top,0px);z-index:15;background:var(--bg);padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line)}
+  .topbar .brand{padding:0;margin-right:auto}
   .topbar .me{width:auto;padding:4px}
   .topbar .me > div{display:none}
-  main{padding-block:18px calc(96px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  main{padding-block:18px calc(40px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 }
+@media (max-width:860px) and (prefers-reduced-motion:reduce){.rail{transition:none}}
 @media (max-width:640px){
   .cell{min-height:54px;padding:4px}
   .cell .ev-mini,.cell .more{display:none}
@@ -270,20 +256,23 @@ dialog::backdrop{background:rgba(5,4,2,.66)}
       <div class="rule"></div>
       <div class="word"><b>FLUX</b><span>APP</span></div>
     </div>
-    <nav class="tabs" id="tabs" aria-label="Seções">
-      <button class="tab" data-view="agenda"><svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg><span>Agenda</span></button>
-      <button class="tab" data-view="roteiros"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10.5 5-3v9l-5-3"/></svg><span>Roteiros</span><span class="badge" id="b-roteiros" hidden></span></button>
-      <button class="tab" data-view="disponibilidade"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Horários</span></button>
+    <nav class="tabs" id="tabs" aria-label="Menu">
+      <button class="tab" data-view="roteiros"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg><span>Roteiros</span><span class="badge" id="b-roteiros" hidden></span></button>
+      <button class="tab" data-view="captacoes"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10.5 5-3v9l-5-3"/></svg><span>Captações</span></button>
+      <button class="tab" data-view="reunioes"><svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg><span>Reuniões</span></button>
+      <button class="tab" data-view="time"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17.5" cy="9" r="2.6"/><path d="M17 14.6c2.4.2 4 1.8 4.6 4.4"/></svg><span>Time</span></button>
+      <div class="nav-sep"></div>
       <button class="tab" data-view="alertas"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 1 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span>Alertas</span><span class="badge" id="b-alertas" hidden></span></button>
-      <button class="tab" data-view="equipe"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17.5" cy="9" r="2.6"/><path d="M17 14.6c2.4.2 4 1.8 4.6 4.4"/></svg><span>Equipe</span></button>
     </nav>
     <div class="rail-foot">
       <button class="me" id="me-btn-rail" data-action="profile"></button>
     </div>
   </aside>
 
+  <div class="scrim" id="scrim"></div>
   <div style="min-width:0">
     <header class="topbar">
+      <button class="btn icon ghost" id="menu-btn" aria-label="Abrir menu" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span class="badge" id="b-menu" hidden></span></button>
       <div class="brand">
         <svg class="mark"><use href="#flux-mark"/></svg>
         <div class="rule"></div>
@@ -324,7 +313,8 @@ const fmtDay = d => `${WD_SHORT[d.getDay()]}, ${d.getDate()} ${MONTHS[d.getMonth
 const fmtLong = d => `${WD_LONG[d.getDay()]}, ${d.getDate()} de ${MONTHS[d.getMonth()]}`;
 const fmtBR = d => `${pad(d.getDate())}/${pad(d.getMonth()+1)}`;
 const TYPE = { reuniao: "Reunião de alinhamento", captacao: "Captação" };
-const ROLES = ["Direção","Atendimento / CRM","Social media","Videomaker","Designer","Tráfego","Copywriter","Outro"];
+const ROLES = ["Direção e estratégia","Social media","Videomaker","CRM","Designer","Tráfego","Copywriter","Outro"];
+const VIEWS = ["roteiros","captacoes","reunioes","time","alertas"];
 const STATUS = { rascunho: ["Rascunho",""], lancado: ["Lançado","gold"], gravado: ["Gravado","ok"] };
 const uidSafe = v => /^[A-Za-z0-9_\-.~:@+]+$/.test(String(v||""));
 const initials = n => (String(n||"?").trim().split(/\s+/).map(p => p[0]).slice(0,2).join("") || "?").toUpperCase();
@@ -353,20 +343,21 @@ const store = {
 const today = new Date();
 const S = {
   db: null, user: null, desktop: null, uid: null, canWrite: true, offline: false, slow: false, ready: false,
-  members: {}, events: [], scripts: [], avail: {}, ustate: {}, got: { members:false, events:false, scripts:false, avail:false },
-  view: (["agenda","roteiros","disponibilidade","alertas","equipe"].includes(location.hash.slice(1)) ? location.hash.slice(1) : null) || store.get("flux-view") || "agenda",
+  members: {}, events: [], scripts: [], ustate: {}, got: { members:false, events:false, scripts:false },
+  view: (VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : null) || (VIEWS.includes(store.get("flux-view")) ? store.get("flux-view") : "roteiros"),
   cal: new Date(today.getFullYear(), today.getMonth(), 1),
-  day: ymd(today), filter: "todos",
-  sMonth: ymOf(today), week: mondayOf(today),
-  finder: { ids: [], dur: 60 }
+  day: ymd(today),
+  sMonth: ymOf(today)
 };
 
 /* ---------- derived ---------- */
 const memberName = id => S.members[id]?.name || "Membro";
+/* The member card that belongs to the signed-in account (claimed via accountId) */
+const meId = () => { if (!S.uid) return null; const m = Object.values(S.members).find(x => x.accountId === S.uid); return m ? m.id : (S.members[S.uid] ? S.uid : null); };
 const membersSorted = () => Object.values(S.members).sort((a,b) => String(a.name).localeCompare(String(b.name), "pt-BR"));
 const evStart = e => { const d = parseYmd(e.date); const m = toMin(e.start) ?? 540; d.setHours(Math.floor(m/60), m%60, 0, 0); return d; };
 const evEndMin = e => toMin(e.end) ?? ((toMin(e.start) ?? 540) + 60);
-const eventsOn = (dstr) => S.events.filter(e => e.date === dstr && (S.filter === "todos" || e.type === S.filter)).sort((a,b) => (a.start||"").localeCompare(b.start||""));
+const eventsOn = (dstr, type) => S.events.filter(e => e.date === dstr && e.type === type).sort((a,b) => (a.start||"").localeCompare(b.start||""));
 const hoursUntil = e => (evStart(e) - Date.now()) / 36e5;
 const waNumber = raw => { let d = String(raw||"").replace(/\D/g, ""); if (!d) return ""; if (d.length <= 11) d = "55" + d; return d; };
 const waLink = (num, text) => `https://wa.me/${waNumber(num)}?text=${encodeURIComponent(text)}`;
@@ -452,62 +443,21 @@ function dueScriptDispatch(){
 }
 function myAlerts(){
   const out = [];
-  if (!S.uid) return out;
+  const me = meId();
+  if (!me) return out;
   for (const e of S.events){
     const h = hoursUntil(e);
-    if (h > 0 && h <= 48 && (e.participants||[]).includes(S.uid)) out.push({ kind:"event", e, win: h <= 24 ? "24" : "48", h });
+    if (h > 0 && h <= 48 && (e.participants||[]).includes(me)) out.push({ kind:"event", e, win: h <= 24 ? "24" : "48", h });
   }
   const seen = S.ustate.lastSeenScripts || 0;
   for (const s of S.scripts){
     if (s.status === "rascunho" || !s.releasedAt) continue;
-    const mine = scriptTargets(s).includes(S.uid) || !(s.videomakers||[]).length;
+    const mine = scriptTargets(s).includes(me) || !(s.videomakers||[]).length;
     if (mine && s.releasedAt > seen) out.push({ kind:"script", s });
   }
   return out;
 }
 const unseenScripts = () => myAlerts().filter(a => a.kind === "script").length;
-
-/* Free windows for one member on one date */
-function freeFor(id, date){
-  const a = S.avail[id];
-  if (!a) return { set:false, free:[], busy:[] };
-  const dstr = ymd(date);
-  let free = ((a.weekly||{})[String(date.getDay())] || []).map(r => [toMin(r.s), toMin(r.e)]).filter(([s,e]) => s!=null && e!=null && e>s).sort((x,y)=>x[0]-y[0]);
-  const busy = [];
-  for (const e of S.events) if (e.date === dstr && (e.participants||[]).includes(id)) busy.push({ s: toMin(e.start) ?? 0, e: evEndMin(e), label: e.title });
-  for (const b of (a.blocks||[])) if (b.date === dstr) busy.push({ s: toMin(b.s) ?? 0, e: toMin(b.e) ?? 1440, label: b.note || "Ausência" });
-  for (const b of busy){
-    const next = [];
-    for (const [s,e] of free){
-      if (b.e <= s || b.s >= e) { next.push([s,e]); continue; }
-      if (b.s > s) next.push([s, b.s]);
-      if (b.e < e) next.push([b.e, e]);
-    }
-    free = next;
-  }
-  return { set:true, free: free.filter(([s,e]) => e - s >= 30), busy: busy.sort((x,y)=>x.s-y.s) };
-}
-function commonSlots(ids, dur){
-  const out = [];
-  for (let i = 0; i < 7; i++){
-    const d = addDays(S.week, i);
-    if (ymd(d) < ymd(today)) continue;
-    let acc = null;
-    for (const id of ids){
-      const f = freeFor(id, d).free;
-      if (acc === null) { acc = f; continue; }
-      const next = [];
-      for (const [a1,a2] of acc) for (const [b1,b2] of f){ const s = Math.max(a1,b1), e = Math.min(a2,b2); if (e > s) next.push([s,e]); }
-      acc = next;
-    }
-    for (const [s,e] of (acc||[])) {
-      let st = s;
-      if (ymd(d) === ymd(new Date())) { const nowM = new Date().getHours()*60 + new Date().getMinutes(); st = Math.max(st, Math.ceil(nowM/30)*30); }
-      if (e - st >= dur) out.push({ d, s: st, e });
-    }
-  }
-  return out;
-}
 
 /* ---------- writes ---------- */
 function toast(msg){
@@ -542,11 +492,12 @@ async function markScriptsSeen(){
 
 /* ---------- render: shell ---------- */
 function renderMe(){
-  const m = S.uid && S.members[S.uid];
+  const m = S.members[meId()];
   const html = m
     ? `<span class="face lg" style="${faceStyle(m.id)}">${esc(initials(m.name))}</span><div><strong>${esc(m.name)}</strong><small>${esc(m.role||"Equipe")}</small></div>`
     : `<span class="face lg" style="background:var(--surface-2)">?</span><div><strong>Seu perfil</strong><small>Toque para completar</small></div>`;
   $("#me-btn-rail").innerHTML = html; $("#me-btn-top").innerHTML = html;
+  const mb = $("#b-menu"); if (mb) { const n = (+$("#b-roteiros").textContent || 0) + (+$("#b-alertas").textContent || 0); mb.textContent = n; mb.hidden = !n; }
 }
 function renderNav(){
   $$(".tab").forEach(t => t.setAttribute("aria-current", t.dataset.view === S.view ? "page" : "false"));
@@ -560,7 +511,12 @@ function banners(){
   if (S.offline) h += `<div class="notice">Este app guarda a agenda da equipe no claude.ai. Abra pelo link compartilhado, com sua conta, para ver e editar os dados.</div>`;
   else if (!S.uid) h += `<div class="notice">Entre na sua conta do claude.ai para editar a agenda e receber seus alertas.</div>`;
   else if (!S.canWrite) h += `<div class="notice">Você está com acesso de leitura. Para editar a agenda, peça ao dono do app acesso de Colaborador.</div>`;
-  else if (S.got.members && !S.members[S.uid]) h += `<div class="banner"><p><b>Complete seu perfil.</b> Com nome, função e WhatsApp você aparece na agenda, recebe os lembretes e entra no quadro de horários do CRM.</p><button class="btn primary" data-action="profile">Completar perfil</button></div>`;
+  else if (S.got.members && !meId()) {
+    const free = membersSorted().filter(m => !m.accountId && !String(m.id).startsWith("u_"));
+    h += free.length
+      ? `<div class="banner"><p><b>Quem é você no time?</b> Escolha seu nome para ligar o perfil à sua conta. Assim você recebe seus lembretes e avisos de roteiro.</p><div class="actions">${free.map(m => `<button class="btn" data-action="claim" data-id="${esc(m.id)}">Este perfil é meu: ${esc(m.name)}</button>`).join("")}<button class="btn ghost" data-action="profile">Não estou na lista</button></div></div>`
+      : `<div class="banner"><p><b>Complete seu perfil.</b> Com nome, função e WhatsApp você aparece no time e recebe os lembretes.</p><button class="btn primary" data-action="profile">Completar perfil</button></div>`;
+  }
   if (S.slow && !S.got.events) h += `<div class="notice">A agenda está demorando para carregar. Os dados podem estar desatualizados.</div>`;
   return h;
 }
@@ -568,7 +524,7 @@ function render(){
   renderMe(); renderNav();
   const main = $("#main");
   if (!S.ready) return;
-  const v = { agenda: vAgenda, roteiros: vRoteiros, disponibilidade: vDisp, alertas: vAlertas, equipe: vEquipe }[S.view] || vAgenda;
+  const v = { captacoes: () => vAgenda("captacao"), reunioes: () => vAgenda("reuniao"), roteiros: vRoteiros, alertas: vAlertas, time: vTime }[S.view] || vRoteiros;
   main.innerHTML = banners() + v();
 }
 
@@ -593,39 +549,39 @@ function evCard(e, showDate){
     </span>
   </button>`;
 }
-function vAgenda(){
+function vAgenda(type){
   const y = S.cal.getFullYear(), m = S.cal.getMonth();
+  const isCapt = type === "captacao";
   const start = mondayOf(new Date(y, m, 1));
   let cells = "";
   for (let i = 0; i < 42; i++){
     const d = addDays(start, i);
     if (i === 35 && d.getMonth() !== m) break;
-    const ds = ymd(d), evs = eventsOn(ds);
-    cells += `<button class="cell${d.getMonth() !== m ? " out" : ""}${ds === ymd(today) ? " today" : ""}" data-action="pick-day" data-day="${ds}" aria-pressed="${ds === S.day}" aria-label="${esc(fmtLong(d))}, ${evs.length} evento(s)">
+    const ds = ymd(d), evs = eventsOn(ds, type);
+    cells += `<button class="cell${d.getMonth() !== m ? " out" : ""}${ds === ymd(today) ? " today" : ""}" data-action="pick-day" data-day="${ds}" aria-pressed="${ds === S.day}" aria-label="${esc(fmtLong(d))}, ${evs.length} ${isCapt ? "captação(ões)" : "reunião(ões)"}">
       <span class="n tnum">${d.getDate()}</span>
-      ${evs.slice(0,3).map(e => `<span class="ev-mini ${esc(e.type)}">${esc(e.start||"")} ${esc(e.title)}</span>`).join("")}
+      ${evs.slice(0,3).map(e => `<span class="ev-mini ${esc(e.type)}">${esc(e.start||"")} ${esc(e.client || e.title)}</span>`).join("")}
       ${evs.length > 3 ? `<span class="more">+${evs.length-3}</span>` : ""}
       <span class="dots">${evs.slice(0,4).map(e => `<span class="dot ${esc(e.type)}"></span>`).join("")}</span>
     </button>`;
   }
-  const dayEv = eventsOn(S.day);
+  const dayEv = eventsOn(S.day, type);
   const now = Date.now();
-  const next = S.events.filter(e => { const t = evStart(e).getTime(); return t >= now && t <= now + 14*864e5 && (S.filter === "todos" || e.type === S.filter); }).sort((a,b) => evStart(a) - evStart(b)).slice(0, 8);
-  const monthCount = t => S.events.filter(e => e.date.startsWith(ymOf(S.cal)) && e.type === t).length;
+  const next = S.events.filter(e => { const t = evStart(e).getTime(); return e.type === type && t >= now && t <= now + 30*864e5; }).sort((a,b) => evStart(a) - evStart(b)).slice(0, 8);
+  const n = S.events.filter(e => e.type === type && e.date.startsWith(ymOf(S.cal))).length;
+  const can = S.canWrite && S.uid;
+  const word = isCapt ? (n === 1 ? "captação" : "captações") : (n === 1 ? "reunião" : "reuniões");
   return `
   <section class="view-head">
-    <div><p class="eyebrow">Agenda integrada</p><h1>${cap(MONTHS[m])} ${y}</h1>
-      <p class="sub">${(n => n === 1 ? "1 reunião de alinhamento" : n + " reuniões de alinhamento")(monthCount("reuniao"))} e ${(n => n === 1 ? "1 captação" : n + " captações")(monthCount("captacao"))} neste mês.</p></div>
+    <div><p class="eyebrow">${isCapt ? "Agenda de captação" : "Reuniões de alinhamento"}</p><h1>${cap(MONTHS[m])} ${y}</h1>
+      <p class="sub">${n} ${word} neste mês.</p></div>
     <div class="actions">
       <button class="btn icon" data-action="cal-prev" aria-label="Mês anterior">${icons.l}</button>
       <button class="btn" data-action="cal-today">Hoje</button>
       <button class="btn icon" data-action="cal-next" aria-label="Próximo mês">${icons.r}</button>
-      <button class="btn primary" data-action="new-event" ${S.canWrite && S.uid ? "" : "disabled"}>${icons.plus}Novo evento</button>
+      <button class="btn primary" data-action="new-event" data-type="${type}" ${can ? "" : "disabled"}>${icons.plus}${isCapt ? "Nova captação" : "Nova reunião"}</button>
     </div>
   </section>
-  <div class="chips" role="group" aria-label="Filtrar">
-    ${[["todos","Tudo",""],["reuniao","Reuniões de alinhamento","reuniao"],["captacao","Captações","captacao"]].map(([k,l,dc]) => `<button class="chip" data-action="filter" data-f="${k}" aria-pressed="${S.filter === k}">${dc ? `<span class="dot ${dc}"></span>` : ""}${l}</button>`).join("")}
-  </div>
   <div class="agenda">
     <div class="panel month">
       <div class="wk head">${["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"].map(d => `<div>${d}</div>`).join("")}</div>
@@ -635,13 +591,13 @@ function vAgenda(){
       <div class="panel">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px">
           <h2 style="margin:0">${esc(cap(fmtLong(parseYmd(S.day))))}</h2>
-          ${S.canWrite && S.uid ? `<button class="btn sm" data-action="new-event" data-date="${S.day}">${icons.plus}Adicionar</button>` : ""}
+          ${can ? `<button class="btn sm" data-action="new-event" data-type="${type}" data-date="${S.day}">${icons.plus}Adicionar</button>` : ""}
         </div>
-        <div class="list">${dayEv.length ? dayEv.map(e => evCard(e)).join("") : `<div class="empty">Nada marcado neste dia.</div>`}</div>
+        <div class="list">${dayEv.length ? dayEv.map(e => evCard(e)).join("") : `<div class="empty">${isCapt ? "Nenhuma captação" : "Nenhuma reunião"} neste dia.</div>`}</div>
       </div>
       <div class="panel">
-        <h2>Próximos 14 dias</h2>
-        <div class="list">${next.length ? next.map(e => evCard(e, true)).join("") : `<div class="empty">Nenhuma reunião ou captação nos próximos 14 dias. Use <b>Novo evento</b> para agendar a primeira.</div>`}</div>
+        <h2>Próximos 30 dias</h2>
+        <div class="list">${next.length ? next.map(e => evCard(e, true)).join("") : `<div class="empty">${isCapt ? "Nenhuma captação agendada. Use <b>Nova captação</b> para marcar a primeira." : "Nenhuma reunião agendada. Use <b>Nova reunião</b> para marcar o alinhamento do mês."}</div>`}</div>
       </div>
     </div>
   </div>`;
@@ -698,55 +654,6 @@ function vRoteiros(){
     <div class="stat"><b class="tnum">${count("gravado")}</b><span>gravados</span></div>
   </div>
   ${list.length ? `<div class="scripts">${cards}</div>` : `<div class="empty">Nenhum roteiro em ${MONTHS[mm-1]}. Use <b>Novo roteiro</b> para cadastrar o planejamento de Reels do mês. Salve como rascunho e lance quando estiver aprovado.</div>`}`;
-}
-
-function vDisp(){
-  const days = Array.from({length:7}, (_,i) => addDays(S.week, i));
-  const ms = membersSorted();
-  const rows = ms.map(m => {
-    const tds = days.map(d => {
-      const f = freeFor(m.id, d);
-      if (!f.set) return `<td><span class="none">Sem horários</span></td>`;
-      const free = f.free.map(([s,e]) => `<span class="slot tnum">${fromMin(s)} às ${fromMin(e)}</span>`).join("");
-      const busy = f.busy.map(b => `<span class="busy tnum" title="${esc(b.label)}">Ocupado ${fromMin(b.s)}${b.e < 1440 ? "-" + fromMin(b.e) : ""}</span>`).join("");
-      return `<td>${free || `<span class="none">Indisponível</span>`}${busy}</td>`;
-    }).join("");
-    return `<tr><td class="who"><strong>${esc(m.name)}${m.id === S.uid ? " (você)" : ""}</strong><small>${esc(m.role||"")}</small></td>${tds}</tr>`;
-  }).join("");
-  const sel = S.finder.ids.filter(id => S.members[id]);
-  const res = sel.length ? commonSlots(sel, S.finder.dur) : [];
-  const resHtml = !sel.length ? `<div class="empty">Escolha quem participa para ver os horários livres em comum nesta semana.</div>`
-    : res.length ? res.slice(0, 12).map(r => `<div class="result tnum"><span>${esc(cap(fmtDay(r.d)))}</span><b>${fromMin(r.s)} às ${fromMin(r.e)}</b></div>`).join("")
-    : `<div class="empty">Sem horário em comum com essa duração nesta semana. Tente outra semana ou menos pessoas.</div>`;
-  const label = `${days[0].getDate()} ${MONTHS[days[0].getMonth()].slice(0,3)} a ${days[6].getDate()} ${MONTHS[days[6].getMonth()].slice(0,3)}`;
-  return `
-  <section class="view-head">
-    <div><p class="eyebrow">Disponibilidade da equipe</p><h1>Semana de ${esc(label)}</h1>
-      <p class="sub">Cada pessoa cadastra seus horários fixos e ausências. Reuniões e captações já marcadas saem do horário livre automaticamente.</p></div>
-    <div class="actions">
-      <button class="btn icon" data-action="w-prev" aria-label="Semana anterior">${icons.l}</button>
-      <button class="btn" data-action="w-today">Esta semana</button>
-      <button class="btn icon" data-action="w-next" aria-label="Próxima semana">${icons.r}</button>
-      <button class="btn primary" data-action="edit-avail" ${S.canWrite && S.uid ? "" : "disabled"}>Meus horários</button>
-    </div>
-  </section>
-  ${ms.length ? `<div class="board-wrap"><table class="board">
-    <thead><tr><th>Equipe</th>${days.map(d => `<th class="${ymd(d) === ymd(today) ? "today" : ""}">${esc(fmtDay(d))}</th>`).join("")}</tr></thead>
-    <tbody>${rows}</tbody></table></div>` : `<div class="empty">Ninguém da equipe completou o perfil ainda. Cada membro abre o app, completa o perfil e cadastra seus horários.</div>`}
-  <div class="grid2">
-    <div class="panel finder">
-      <div><p class="eyebrow">Para o CRM</p><h2>Encontrar horário com o cliente</h2></div>
-      <div class="checks" role="group" aria-label="Participantes">${ms.map(m => `<label><input type="checkbox" data-action="finder-toggle" value="${esc(m.id)}" ${sel.includes(m.id) ? "checked" : ""}>${esc(m.name)}</label>`).join("") || `<span class="none">Sem membros cadastrados.</span>`}</div>
-      <label class="f" style="max-width:220px"><span>Duração</span>
-        <select id="finder-dur" data-action="finder-dur">${[30,60,90,120,180,240].map(n => `<option value="${n}" ${S.finder.dur === n ? "selected" : ""}>${n < 60 ? n + " min" : (n/60) + (n === 60 ? " hora" : " horas")}</option>`).join("")}</select></label>
-      <div class="results">${resHtml}</div>
-      ${res.length ? `<div><button class="btn" data-action="copy-slots">${icons.copy}Copiar horários para o CRM</button></div>` : ""}
-    </div>
-    <div class="panel finder">
-      <div><p class="eyebrow">Resumo</p><h2>Quem ainda não cadastrou horários</h2></div>
-      <div class="list">${ms.filter(m => !S.avail[m.id]).map(m => `<div class="result"><span>${esc(m.name)}</span><span class="none">${esc(m.role||"")}</span></div>`).join("") || `<div class="empty">Todos os membros já cadastraram seus horários.</div>`}</div>
-    </div>
-  </div>`;
 }
 
 function vAlertas(){
@@ -811,22 +718,25 @@ function vAlertas(){
   </div>`;
 }
 
-function vEquipe(){
+function vTime(){
   const ms = membersSorted();
+  const me = meId();
+  const can = S.canWrite && S.uid;
   return `
-  <section class="view-head"><div><p class="eyebrow">Equipe</p><h1>Quem está no FLUX</h1>
-    <p class="sub">Cada membro abre o app com a própria conta e completa o perfil. O WhatsApp é usado nos lembretes.</p></div>
-    <div class="actions"><button class="btn primary" data-action="profile" ${S.uid && S.canWrite ? "" : "disabled"}>${S.members[S.uid] ? "Editar meu perfil" : "Completar meu perfil"}</button></div></section>
+  <section class="view-head"><div><p class="eyebrow">Time</p><h1>Quem faz o FLUX acontecer</h1>
+    <p class="sub">O WhatsApp de cada pessoa é usado nos lembretes de 48h e 24h e nos avisos de roteiro.</p></div>
+    <div class="actions"><button class="btn primary" data-action="new-member" ${can ? "" : "disabled"}>${icons.plus}Adicionar pessoa</button></div></section>
   ${ms.length ? `<div class="team">${ms.map(m => {
-    const a = S.avail[m.id];
-    const days = a ? Object.entries(a.weekly||{}).filter(([,r]) => r && r.length).map(([k]) => WD_SHORT[+k]).join(", ") : "";
     const next = S.events.filter(e => (e.participants||[]).includes(m.id) && evStart(e) > new Date()).sort((x,y) => evStart(x)-evStart(y))[0];
+    const linked = !!m.accountId || String(m.id).startsWith("u_");
     return `<div class="panel member"><span class="face lg" style="${faceStyle(m.id)}">${esc(initials(m.name))}</span>
-      <div style="min-width:0"><h3>${esc(m.name)}${m.id === S.uid ? ` <span class="pill gold">você</span>` : ""}</h3>
-      <p>${esc(m.role||"Equipe")}${m.whatsapp ? " · " + esc(m.whatsapp) : " · sem WhatsApp"}</p>
-      <p>${days ? "Atende " + esc(days) : "Horários não cadastrados"}</p>
-      ${next ? `<p>Próximo: ${esc(next.title)} (${esc(fmtDay(evStart(next)))})</p>` : ""}</div></div>`;
-  }).join("")}</div>` : `<div class="empty">Ninguém completou o perfil ainda. Comece pelo seu e compartilhe o link do app com a equipe.</div>`}`;
+      <div style="min-width:0;flex:1"><h3>${esc(m.name)}${m.id === me ? ` <span class="pill gold">você</span>` : ""}</h3>
+      <p>${esc(m.role||"Time")}</p>
+      <p class="tnum">${m.whatsapp ? "WhatsApp " + esc(m.whatsapp) : `<span style="color:var(--warn)">WhatsApp não cadastrado</span>`}</p>
+      <p>${linked ? "Conta ligada ao app" : "Ainda não entrou no app"}</p>
+      ${next ? `<p>Próximo: ${esc(next.title)} (${esc(fmtDay(evStart(next)))})</p>` : ""}
+      ${can ? `<div class="actions" style="margin-top:8px"><button class="btn sm" data-action="edit-member" data-id="${esc(m.id)}">Editar</button></div>` : ""}</div></div>`;
+  }).join("")}</div>` : `<div class="empty">Nenhuma pessoa no time ainda. Use <b>Adicionar pessoa</b>.</div>`}`;
 }
 
 /* ---------- dialogs ---------- */
@@ -835,24 +745,26 @@ function openDlg(html){ inner.innerHTML = html; if (!dlg.open) { try { dlg.showM
 function closeDlg(){ try { dlg.close(); } catch { dlg.removeAttribute("open"); } inner.innerHTML = ""; }
 const head = t => `<div class="dlg-head"><h2>${esc(t)}</h2><button class="btn icon ghost" data-action="close" aria-label="Fechar">${icons.x}</button></div>`;
 
-function profileDlg(){
-  if (!S.uid) { toast("Entre na sua conta do claude.ai para criar seu perfil."); return; }
-  const m = S.members[S.uid] || {};
-  openDlg(`<form id="f-profile">${head("Meu perfil")}
+function memberDlg(id, self){
+  if (!S.uid) { toast("Entre na sua conta do claude.ai para editar o time."); return; }
+  const m = (id && S.members[id]) || {};
+  const title = self ? "Meu perfil" : (id ? "Editar pessoa" : "Adicionar pessoa");
+  openDlg(`<form id="f-member" data-id="${esc(id||"")}" data-self="${self ? "1" : ""}">${head(title)}
     <div class="dlg-body">
-      <label class="f"><span>Nome</span><input id="p-name" required maxlength="60" value="${esc(m.name || S.myName || "")}"></label>
+      <label class="f"><span>Nome</span><input id="p-name" required maxlength="60" value="${esc(m.name || (self ? S.myName : "") || "")}"></label>
       <div class="row2">
-        <label class="f"><span>Função</span><select id="p-role">${ROLES.map(r => `<option ${m.role === r ? "selected" : ""}>${r}</option>`).join("")}</select></label>
+        <label class="f"><span>Função</span><select id="p-role">${[...new Set([...(m.role ? [m.role] : []), ...ROLES])].map(r => `<option ${m.role === r ? "selected" : ""}>${esc(r)}</option>`).join("")}</select></label>
         <label class="f"><span>WhatsApp com DDD</span><input id="p-wa" inputmode="tel" placeholder="(11) 98765-4321" maxlength="20" value="${esc(m.whatsapp||"")}"></label>
       </div>
-      <p class="sub" style="margin:0">Seu WhatsApp aparece só para a equipe e é usado nos lembretes de 48h e 24h e nos avisos de roteiro.</p>
+      <p class="sub" style="margin:0">O WhatsApp aparece só para o time e é usado nos lembretes de 48h e 24h e nos avisos de roteiro.</p>
     </div>
-    <div class="dlg-foot"><span></span><div class="actions"><button type="button" class="btn ghost" data-action="close">Cancelar</button><button class="btn primary" type="submit">Salvar perfil</button></div></div></form>`);
+    <div class="dlg-foot">${id && !self && id !== meId() ? `<button type="button" class="btn danger" data-action="del-member" data-id="${esc(id)}">Excluir</button>` : "<span></span>"}<div class="actions"><button type="button" class="btn ghost" data-action="close">Cancelar</button><button class="btn primary" type="submit">Salvar</button></div></div></form>`);
 }
+function profileDlg(){ memberDlg(meId(), true); }
 
-function eventDlg(id, date){
+function eventDlg(id, date, presetType){
   const e = id ? S.events.find(x => x.id === id) : null;
-  const v = e || { type:"reuniao", date: date || S.day, start:"10:00", end:"11:00", participants: S.uid && S.members[S.uid] ? [S.uid] : [] };
+  const v = e || { type: presetType || "reuniao", title: presetType === "captacao" ? "Captação" : "", date: date || S.day, start:"10:00", end:"11:00", participants: meId() ? [meId()] : [] };
   const ms = membersSorted();
   const scripts = S.scripts.filter(s => s.status !== "rascunho" || s.id === v.scriptId);
   openDlg(`<form id="f-event" data-id="${esc(e ? e.id : "")}">${head(e ? "Editar evento" : "Novo evento")}
@@ -895,8 +807,6 @@ function checkConflicts(){
       const es = toMin(e.start) ?? 0, ee = evEndMin(e);
       if (s < ee && en > es) msgs.push(`${memberName(p)} já tem "${e.title}" das ${e.start} às ${fromMin(ee)}.`);
     }
-    const f = freeFor(p, parseYmd(date));
-    if (f.set && !f.free.some(([a,b]) => s >= a && en <= b) && !msgs.some(m => m.startsWith(memberName(p)))) msgs.push(`${memberName(p)} não marcou esse horário como disponível.`);
   }
   box.textContent = msgs.join(" ");
 }
@@ -965,36 +875,6 @@ function scriptDlg(id){
     </div></form>`);
 }
 
-function availDlg(){
-  if (!S.uid) return;
-  const a = S.avail[S.uid] || { weekly: {}, blocks: [] };
-  const order = [1,2,3,4,5,6,0];
-  const rangeRow = (r) => `<div class="range"><input type="time" class="r-s" value="${esc(r.s||"09:00")}" aria-label="Início"><span class="none">às</span><input type="time" class="r-e" value="${esc(r.e||"18:00")}" aria-label="Fim"><button type="button" class="btn sm ghost" data-action="rm-range" aria-label="Remover faixa">${icons.x}</button></div>`;
-  const blocks = (a.blocks||[]).filter(b => b.date >= ymd(today));
-  openDlg(`<form id="f-avail">${head("Meus horários")}
-    <div class="dlg-body">
-      <p class="sub" style="margin:0">Marque as faixas em que você pode atender clientes ou gravar. O CRM vê esses horários menos o que já estiver agendado.</p>
-      <div>${order.map(k => `<div class="dayrow" data-day="${k}"><b>${cap(WD_LONG[k])}</b>
-        <div class="ranges">${((a.weekly||{})[String(k)]||[]).map(rangeRow).join("")}
-          <div><button type="button" class="btn sm" data-action="add-range">${icons.plus}Adicionar faixa</button></div></div></div>`).join("")}</div>
-      <div>
-        <p class="eyebrow" style="margin-top:6px">Ausências e bloqueios</p>
-        <div id="blocks" class="list">${blocks.map(b => `<div class="result blk" data-date="${esc(b.date)}" data-s="${esc(b.s||"")}" data-e="${esc(b.e||"")}" data-note="${esc(b.note||"")}"><span class="tnum">${esc(cap(fmtDay(parseYmd(b.date))))}${b.s ? `, ${esc(b.s)} às ${esc(b.e||"")}` : ", dia todo"} ${b.note ? "· " + esc(b.note) : ""}</span><button type="button" class="btn sm ghost" data-action="rm-block">Remover</button></div>`).join("")}</div>
-        <div class="row3" style="margin-top:10px;align-items:end">
-          <label class="f"><span>Data</span><input type="date" id="b-date" min="${ymd(today)}"></label>
-          <label class="f"><span>De (vazio = dia todo)</span><input type="time" id="b-s"></label>
-          <label class="f"><span>Até</span><input type="time" id="b-e"></label>
-        </div>
-        <div class="row2" style="margin-top:10px;align-items:end">
-          <label class="f"><span>Motivo</span><input id="b-note" maxlength="60" placeholder="Folga, consulta, outro cliente"></label>
-          <div><button type="button" class="btn" data-action="add-block">${icons.plus}Adicionar ausência</button></div>
-        </div>
-      </div>
-    </div>
-    <div class="dlg-foot"><span></span><div class="actions"><button type="button" class="btn ghost" data-action="close">Cancelar</button><button class="btn primary" type="submit">Salvar horários</button></div></div></form>`);
-  availDlg.rangeRow = rangeRow;
-}
-
 /* ---------- events ---------- */
 function setView(v){
   S.view = v; store.set("flux-view", v);
@@ -1002,8 +882,13 @@ function setView(v){
   render(); window.scrollTo(0, 0);
   if (v === "roteiros") markScriptsSeen();
 }
-$("#tabs").addEventListener("click", ev => { const b = ev.target.closest(".tab"); if (b) setView(b.dataset.view); });
-window.addEventListener("hashchange", () => { const v = location.hash.slice(1); if (v && v !== S.view && ["agenda","roteiros","disponibilidade","alertas","equipe"].includes(v)) setView(v); });
+$("#tabs").addEventListener("click", ev => { const b = ev.target.closest(".tab"); if (b) { setView(b.dataset.view); setMenu(false); } });
+window.addEventListener("hashchange", () => { const v = location.hash.slice(1); if (v && v !== S.view && VIEWS.includes(v)) setView(v); });
+const appEl = document.querySelector(".app");
+const setMenu = open => { appEl.classList.toggle("menu-open", open); $("#menu-btn").setAttribute("aria-expanded", String(open)); };
+$("#menu-btn").addEventListener("click", () => setMenu(!appEl.classList.contains("menu-open")));
+$("#scrim").addEventListener("click", () => setMenu(false));
+document.addEventListener("keydown", ev => { if (ev.key === "Escape") setMenu(false); });
 
 function armDelete(btn, run){
   if (btn.classList.contains("armed")) { run(); return; }
@@ -1022,8 +907,16 @@ document.addEventListener("click", async ev => {
     case "cal-next": S.cal = new Date(S.cal.getFullYear(), S.cal.getMonth()+1, 1); render(); break;
     case "cal-today": S.cal = new Date(today.getFullYear(), today.getMonth(), 1); S.day = ymd(today); render(); break;
     case "pick-day": S.day = el.dataset.day; { const d = parseYmd(S.day); if (d.getMonth() !== S.cal.getMonth()) S.cal = new Date(d.getFullYear(), d.getMonth(), 1); } render(); break;
-    case "filter": S.filter = el.dataset.f; render(); break;
-    case "new-event": eventDlg(null, el.dataset.date); break;
+    case "new-event": eventDlg(null, el.dataset.date, el.dataset.type); break;
+    case "new-member": memberDlg(null); break;
+    case "edit-member": memberDlg(id, id === meId()); break;
+    case "del-member": armDelete(el, async () => { if (await write(() => S.db.collection("members").doc(id).delete(), "Pessoa removida do time")) closeDlg(); }); break;
+    case "claim": {
+      const m = S.members[id];
+      if (!m || m.accountId || !S.uid) { toast("Esse perfil já foi ligado a outra conta."); break; }
+      write(() => S.db.collection("members").doc(id).update({ accountId: S.uid }), `Pronto, ${m.name}. Seu perfil está ligado à sua conta.`);
+      break;
+    }
     case "open-event": eventDetail(id); break;
     case "edit-event": eventDlg(id); break;
     case "del-event": armDelete(el, async () => { if (await write(() => S.db.collection("events").doc(id).delete(), "Evento excluído")) closeDlg(); }); break;
@@ -1035,30 +928,6 @@ document.addEventListener("click", async ev => {
     case "script-status": await write(() => S.db.collection("scripts").doc(id).update({ status: el.dataset.st }), "Roteiro marcado como gravado"); break;
     case "del-script": armDelete(el, async () => { if (await write(() => S.db.collection("scripts").doc(id).delete(), "Roteiro excluído")) closeDlg(); }); break;
     case "goto-script": S.sMonth = el.dataset.month; setView("roteiros"); break;
-    case "w-prev": S.week = addDays(S.week, -7); render(); break;
-    case "w-next": S.week = addDays(S.week, 7); render(); break;
-    case "w-today": S.week = mondayOf(new Date()); render(); break;
-    case "edit-avail": availDlg(); break;
-    case "add-range": { const wrap = el.closest(".ranges"); el.parentElement.insertAdjacentHTML("beforebegin", availDlg.rangeRow({ s: "09:00", e: "18:00" })); wrap.querySelector(".range:last-of-type .r-s")?.focus(); break; }
-    case "rm-range": el.closest(".range").remove(); break;
-    case "add-block": {
-      const date = $("#b-date").value; if (!date) { toast("Escolha a data da ausência."); break; }
-      const s = $("#b-s").value, e = $("#b-e").value, note = $("#b-note").value.trim();
-      if (s && e && toMin(e) <= toMin(s)) { toast("O horário final precisa ser depois do inicial."); break; }
-      const row = document.createElement("div"); row.className = "result blk"; row.dataset.date = date; row.dataset.s = s; row.dataset.e = s ? (e || "23:59") : ""; row.dataset.note = note;
-      const sp = document.createElement("span"); sp.className = "tnum"; sp.textContent = `${cap(fmtDay(parseYmd(date)))}${s ? `, ${s} às ${e || "23:59"}` : ", dia todo"}${note ? " · " + note : ""}`;
-      const rm = document.createElement("button"); rm.type = "button"; rm.className = "btn sm ghost"; rm.dataset.action = "rm-block"; rm.textContent = "Remover";
-      row.append(sp, rm); $("#blocks").appendChild(row);
-      $("#b-date").value = ""; $("#b-s").value = ""; $("#b-e").value = ""; $("#b-note").value = "";
-      break;
-    }
-    case "rm-block": el.closest(".blk").remove(); break;
-    case "copy-slots": {
-      const sel = S.finder.ids.filter(i => S.members[i]);
-      const res = commonSlots(sel, S.finder.dur).slice(0, 12);
-      const txt = [`Horários livres (${sel.map(memberName).join(", ")}), duração ${S.finder.dur} min:`, ...res.map(r => `${cap(fmtDay(r.d))}: ${fromMin(r.s)} às ${fromMin(r.e)}`)].join("\n");
-      copy(txt, "Horários copiados"); break;
-    }
     case "copy-text": copy(el.dataset.text, "Mensagem copiada"); break;
     case "mark-sent": {
       const key = el.dataset.key, kind = el.dataset.kind;
@@ -1073,8 +942,6 @@ document.addEventListener("click", async ev => {
 });
 document.addEventListener("change", ev => {
   const el = ev.target;
-  if (el.dataset.action === "finder-toggle"){ const set = new Set(S.finder.ids); el.checked ? set.add(el.value) : set.delete(el.value); S.finder.ids = [...set]; render(); }
-  if (el.dataset.action === "finder-dur"){ S.finder.dur = +el.value; render(); }
   if (el.name === "ev-type"){ const w = $("#e-script-wrap"); if (w) w.hidden = el.value !== "captacao"; }
   if (el.closest && el.closest("#f-event")) checkConflicts();
 });
@@ -1085,9 +952,15 @@ dlg.addEventListener("submit", async ev => {
   ev.preventDefault();
   const f = ev.target;
   if (!S.db || !S.uid) { toast("Entre na sua conta do claude.ai para salvar."); return; }
-  if (f.id === "f-profile"){
+  if (f.id === "f-member"){
     const name = $("#p-name").value.trim(); if (!name) return;
-    const ok = await write(() => S.db.collection("members").doc(S.uid).set({ name, role: $("#p-role").value, whatsapp: $("#p-wa").value.trim(), updatedAt: Date.now() }), "Perfil salvo");
+    const id = f.dataset.id, self = f.dataset.self === "1";
+    const prev = id ? S.members[id] : null;
+    const data = { name, role: $("#p-role").value, whatsapp: $("#p-wa").value.trim(), updatedAt: Date.now() };
+    if (prev && prev.accountId) data.accountId = prev.accountId;
+    if (self && !prev) data.accountId = S.uid;
+    const docId = id || (self ? S.uid : "m-" + Date.now().toString(36) + Math.random().toString(36).slice(2,6));
+    const ok = await write(() => S.db.collection("members").doc(docId).set(data), self ? "Perfil salvo" : "Time atualizado");
     if (ok) closeDlg();
   }
   if (f.id === "f-event"){
@@ -1127,19 +1000,6 @@ dlg.addEventListener("submit", async ev => {
     const ok = await write(() => ref.set(data), release ? "Roteiro lançado. O aviso entrou na fila de disparos." : "Roteiro salvo");
     if (ok) { closeDlg(); S.sMonth = data.month; render(); }
   }
-  if (f.id === "f-avail"){
-    const weekly = {};
-    let bad = false;
-    $$(".dayrow", f).forEach(row => {
-      const rs = $$(".range", row).map(r => ({ s: $(".r-s", r).value, e: $(".r-e", r).value })).filter(r => r.s && r.e);
-      if (rs.some(r => toMin(r.e) <= toMin(r.s))) bad = true;
-      if (rs.length) weekly[row.dataset.day] = rs.sort((x,y) => x.s.localeCompare(y.s));
-    });
-    if (bad) { toast("Em cada faixa, o fim precisa ser depois do início."); return; }
-    const blocks = $$(".blk", f).map(b => ({ date: b.dataset.date, s: b.dataset.s, e: b.dataset.e, note: b.dataset.note })).filter(b => b.date >= ymd(today)).slice(0, 120);
-    const ok = await write(() => S.db.collection("availability").doc(S.uid).set({ weekly, blocks, updatedAt: Date.now() }), "Horários salvos");
-    if (ok) closeDlg();
-  }
 });
 
 /* ---------- desktop notifications ---------- */
@@ -1176,7 +1036,6 @@ async function boot(){
   db.collection("members").onSnapshot(sn => { const o = {}; sn.docs.forEach(d => { o[d.id] = { id: d.id, ...d.data() }; }); S.members = o; done("members")(sn); sched(); }, onErr);
   db.collection("events").onSnapshot(sn => { S.events = sn.docs.map(d => ({ id: d.id, ...d.data() })).filter(e => e.date && e.title); done("events")(sn); sched(); }, onErr);
   db.collection("scripts").onSnapshot(sn => { S.scripts = sn.docs.map(d => ({ id: d.id, ...d.data() })).filter(s => s.title && s.month); done("scripts")(sn); sched(); }, onErr);
-  db.collection("availability").onSnapshot(sn => { const o = {}; sn.docs.forEach(d => { o[d.id] = d.data(); }); S.avail = o; done("avail")(sn); sched(); }, onErr);
   if (S.uid) db.doc(`data/users/${S.uid}/state`).onSnapshot(sn => { S.ustate = sn.exists ? { ...sn.data() } : {}; sched(); }, () => {});
   render();
   setInterval(() => { render(); desktopTick(); }, 5 * 60 * 1000);
