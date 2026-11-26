@@ -1,3 +1,4 @@
+import { getStore } from "@netlify/blobs";
 import {
   store, json, fail, str, newId, safeId, listJSON, hashPw, newSalt, safeEq, checkSetupCode, secret, makeToken, readToken,
   accessCode, ensureSeed, publicUser, runDue, sendWhatsApp, waNumber
@@ -40,16 +41,26 @@ function cleanEvent(b, prev, me) {
 
 function cleanScript(b, prev, me) {
   if (!ymRe.test(b.month || "")) return null;
-  const status = ["rascunho", "lancado", "gravado"].includes(b.status) ? b.status : "rascunho";
-  const released = status === "lancado" && (!prev || prev.status === "rascunho");
+  const files = (Array.isArray(b.files) ? b.files : []).filter((f) => f && safeId(f.id)).slice(0, 20)
+    .map((f) => ({ id: f.id, name: str(f.name, 120) || "arquivo", size: Math.max(0, +f.size || 0), type: str(f.type, 80) }));
+  const links = String(b.links || "").split(/\n+/).map((l) => l.trim()).filter(Boolean).slice(0, 20).map((l) => l.slice(0, 500)).join("\n");
+  if (!files.length && !links) return null;
+  const status = prev && ["lancado", "gravado"].includes(b.status) ? b.status : "lancado";
+  const first = files[0] ? files[0].name.replace(/\.[a-z0-9]{1,5}$/i, "") : "";
   return {
-    client: str(b.client, 60), title: str(b.title, 100) || "Roteiro sem título", month: b.month,
-    recordDate: ymdRe.test(b.recordDate || "") ? b.recordDate : "", format: str(b.format, 40),
-    hook: str(b.hook, 600), scenes: str(b.scenes, 8000), caption: str(b.caption, 2200), cta: str(b.cta, 160), refs: str(b.refs, 2000),
-    videomakers: Array.isArray(b.videomakers) ? b.videomakers.filter(safeId).slice(0, 10) : [],
-    status, releasedAt: released ? Date.now() : (prev ? prev.releasedAt || 0 : 0),
+    title: first || (prev && prev.title) || "Roteiro de Reels", month: b.month, files, links,
+    status, releasedAt: prev ? prev.releasedAt || Date.now() : Date.now(), videomakers: [],
     createdBy: prev ? prev.createdBy : me.id, updatedAt: Date.now(),
   };
+}
+
+const fileStore = () => getStore({ name: "flux-files", consistency: "strong" });
+const CHUNK = 3 * 1024 * 1024, MAX_CHUNKS = 7;
+
+async function deleteFile(fid) {
+  const fs = fileStore();
+  const { blobs } = await fs.list({ prefix: `f/${fid}/` });
+  await Promise.all(blobs.map((b) => fs.delete(b.key)));
 }
 
 export default async (req, context) => {
@@ -59,7 +70,8 @@ export default async (req, context) => {
   const parts = url.pathname.replace(/^\/api\/?/, "").split("/").filter(Boolean);
   const method = req.method;
   let body = {};
-  if (method !== "GET") { try { body = await req.json(); } catch { body = {}; } }
+  const isChunk = parts[0] === "files" && parts[2] === "chunk";
+  if (method !== "GET" && !isChunk) { try { body = await req.json(); } catch { body = {}; } }
 
   /* ---------- public routes ---------- */
   if (parts[0] === "session" && method === "GET") {
@@ -199,16 +211,65 @@ export default async (req, context) => {
       const sid = id && safeId(id) ? id : newId("s");
       const prev = id ? await st.get(`scripts/${sid}`, { type: "json" }) : null;
       const data = cleanScript(body, prev, me);
-      if (!data) return fail("Informe o mês do roteiro.");
+      if (!data) return fail("Adicione pelo menos um arquivo ou um link.");
       await st.setJSON(`scripts/${sid}`, { id: sid, ...data });
+      if (prev) {
+        const keep = new Set(data.files.map((f) => f.id));
+        await Promise.all((prev.files || []).filter((f) => !keep.has(f.id)).map((f) => deleteFile(f.id)));
+      }
       if (data.status === "lancado") context.waitUntil(runDue(st).catch(() => {}));
       return json({ ok: true, id: sid });
     }
     if (method === "DELETE" && safeId(id)) {
+      const prev = await st.get(`scripts/${id}`, { type: "json" });
+      await Promise.all(((prev && prev.files) || []).map((f) => deleteFile(f.id)));
       await st.delete(`scripts/${id}`);
       const { blobs } = await st.list({ prefix: `sent/script/${id}/` });
       await Promise.all(blobs.map((b) => st.delete(b.key)));
       return json({ ok: true });
+    }
+  }
+
+  if (parts[0] === "files") {
+    const fid = parts[1];
+    const fs = fileStore();
+    if (method === "POST" && !fid) return json({ ok: true, id: newId("f"), chunkSize: CHUNK });
+    if (!safeId(fid)) return fail("Arquivo não encontrado.", 404);
+    if (method === "POST" && isChunk) {
+      const n = Number(parts[3]);
+      if (!Number.isInteger(n) || n < 0 || n >= MAX_CHUNKS) return fail("Arquivo grande demais. O limite é 20 MB.", 413);
+      const buf = await req.arrayBuffer();
+      if (buf.byteLength > CHUNK) return fail("Parte do arquivo grande demais.", 413);
+      await fs.set(`f/${fid}/${n}`, buf);
+      return json({ ok: true });
+    }
+    if (method === "POST" && parts[2] === "done") {
+      const chunks = Math.min(MAX_CHUNKS, Math.max(1, +body.chunks || 1));
+      const meta = { name: str(body.name, 120) || "arquivo", type: str(body.type, 80) || "application/octet-stream", size: +body.size || 0, chunks, by: me.id, at: Date.now() };
+      await fs.setJSON(`f/${fid}/meta`, meta);
+      return json({ ok: true, file: { id: fid, name: meta.name, size: meta.size, type: meta.type } });
+    }
+    if (method === "DELETE") {
+      const scripts = await listJSON(st, "scripts/");
+      if (!scripts.some((s) => (s.files || []).some((f) => f.id === fid))) await deleteFile(fid);
+      return json({ ok: true });
+    }
+    if (method === "GET") {
+      const meta = await fs.get(`f/${fid}/meta`, { type: "json" });
+      if (!meta) return fail("Arquivo não encontrado.", 404);
+      let i = 0;
+      const stream = new ReadableStream({
+        async pull(ctrl) {
+          if (i >= meta.chunks) { ctrl.close(); return; }
+          const part = await fs.get(`f/${fid}/${i++}`, { type: "arrayBuffer" });
+          if (part) ctrl.enqueue(new Uint8Array(part));
+        },
+      });
+      const safeType = /^[\w.+-]+\/[\w.+-]+$/.test(meta.type) ? meta.type : "application/octet-stream";
+      return new Response(stream, { headers: {
+        "content-type": safeType, "cache-control": "private, no-store", "x-content-type-options": "nosniff",
+        "content-disposition": `${safeType === "application/pdf" || safeType.startsWith("image/") ? "inline" : "attachment"}; filename*=UTF-8''${encodeURIComponent(meta.name)}`,
+      } });
     }
   }
 

@@ -109,9 +109,7 @@ export function eventMessage(e, member, now = Date.now()) {
 }
 export function scriptMessage(s, member) {
   const first = String(member?.name || "").split(" ")[0];
-  const lines = [`Olá${first ? ", " + first : ""}! Roteiro novo disponível no FLUX APP.`, "", `"${s.title}"${s.client ? ` para ${s.client}` : ""}`];
-  if (s.recordDate) lines.push(`Gravação: ${longDate(s.recordDate)}`);
-  lines.push("Abra a aba Roteiros para ver cenas, legenda e referências.");
+  const lines = [`Olá${first ? ", " + first : ""}! Roteiro novo disponível no FLUX APP: "${s.title}".`, "", "Abra a aba Roteiros para ver o PDF e os links."];
   return lines.join("\n");
 }
 

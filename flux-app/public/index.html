@@ -245,6 +245,21 @@ dialog::backdrop{background:rgba(5,4,2,.66)}
 body{margin:0}
 [hidden]{display:none!important}
 img{max-width:100%}
+/* Arquivos */
+.files{display:flex;flex-direction:column;gap:6px}
+.file{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);color:var(--fg);text-decoration:none;min-width:0}
+a.file:hover{border-color:var(--gold-lo)}
+.file svg{width:17px;height:17px;flex:none;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.file span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;font-size:13px}
+.file small{color:var(--muted);font-size:11.5px;white-space:nowrap}
+.file .btn{padding:3px 6px}
+.drop{display:flex;flex-direction:column;align-items:center;gap:4px;padding:20px 14px;border:1.5px dashed var(--line);border-radius:10px;text-align:center;cursor:pointer;background:var(--bg)}
+.drop:hover,.drop.over{border-color:var(--gold)}
+.drop input{position:absolute;width:1px;height:1px;opacity:0}
+.drop:focus-within{outline:2px solid var(--gold-hi);outline-offset:2px}
+.drop b{display:inline-flex;align-items:center;gap:6px;color:var(--gold)}
+.drop b svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2}
+.drop small{color:var(--muted);font-size:12px}
 /* Login */
 .auth{min-height:100%;display:grid;place-items:center;padding-block:40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));background:radial-gradient(120% 80% at 50% 0%,color-mix(in srgb,var(--gold) 14%,var(--bg)),var(--bg) 60%)}
 .auth-card{width:min(420px,100%);display:flex;flex-direction:column;gap:22px}
@@ -363,6 +378,7 @@ const icons = {
   x: '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>',
   copy: '<svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>',
   wa: '<svg viewBox="0 0 24 24"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c.5 2.5 2.5 4.5 5 5l1.2-1.2 2 1-.4 1.6c-3.8.4-8.6-4.4-8.2-8.2l1.6-.4 1 2z"/></svg>',
+  link: '<svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>',
   key: '<svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M15 8l2 2"/></svg>'
 };
 const store = { get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k, v){ try { localStorage.setItem(k, v); } catch {} } };
@@ -418,15 +434,10 @@ function groupMsg(e){
   return lines.join("\n");
 }
 function scriptMsg(s, uid){
-  const lines = [`Olá, ${memberName(uid).split(" ")[0]}! Roteiro novo disponível no FLUX APP.`, ``, `"${s.title}"${s.client ? ` para ${s.client}` : ""}`];
-  if (s.recordDate) lines.push(`Gravação: ${fmtLong(parseYmd(s.recordDate))}`);
-  lines.push(`Abra a aba Roteiros para ver cenas, legenda e referências.`);
-  return lines.join("\n");
+  return [`Olá, ${memberName(uid).split(" ")[0]}! Roteiro novo disponível no FLUX APP: "${s.title}".`, ``, `Abra a aba Roteiros para ver o PDF e os links.`].join("\n");
 }
-function scriptText(s){
-  return [`${s.title}${s.client ? ` | ${s.client}` : ""}`, s.recordDate ? `Gravação: ${fmtBR(parseYmd(s.recordDate))}` : "", s.format ? `Formato: ${s.format}` : "",
-    s.hook ? `\nGANCHO\n${s.hook}` : "", s.scenes ? `\nROTEIRO\n${s.scenes}` : "", s.caption ? `\nLEGENDA\n${s.caption}` : "", s.cta ? `\nCTA\n${s.cta}` : "", s.refs ? `\nREFERÊNCIAS\n${s.refs}` : ""].filter(Boolean).join("\n");
-}
+const fmtSize = b => b >= 1048576 ? (b/1048576).toFixed(1).replace(".", ",") + " MB" : Math.max(1, Math.round(b/1024)) + " KB";
+const linkList = s => String(s.links || "").split(/\n+/).map(l => l.trim()).filter(Boolean);
 function gcalLink(e){
   const f = (dstr, m) => `${dstr.replace(/-/g, "")}T${pad(Math.floor(m/60))}${pad(m%60)}00`;
   const p = new URLSearchParams({ action:"TEMPLATE", text:`${TYPE[e.type]}: ${e.title}`, dates:`${f(e.date, toMin(e.start))}/${f(e.date, evEndMin(e))}`, details: groupMsg(e), location: e.location || "", ctz: "America/Sao_Paulo" });
@@ -625,53 +636,39 @@ function vAgenda(type){
 }
 function vRoteiros(){
   const [yy, mm] = S.sMonth.split("-").map(Number);
-  const list = S.scripts.filter(s => s.month === S.sMonth).sort((a,b) => (a.recordDate||"9").localeCompare(b.recordDate||"9") || String(a.title).localeCompare(String(b.title)));
-  const count = k => list.filter(s => s.status === k).length;
+  const list = S.scripts.filter(s => s.month === S.sMonth).sort((a,b) => (b.releasedAt||0) - (a.releasedAt||0));
   const seen = +(store.get("flux-seen-" + S.me.id) || 0);
   const cards = list.map(s => {
-    const [lbl, cls] = STATUS[s.status] || STATUS.rascunho;
-    const isNew = s.status !== "rascunho" && s.releasedAt > seen && scriptTargets(s).includes(S.me.id);
-    const vms = (s.videomakers||[]).filter(id => S.members[id]).map(memberName).join(", ");
-    const refs = String(s.refs||"").split(/\n+/).filter(Boolean).map(r => /^https:\/\//i.test(r.trim()) ? `<a href="${esc(r.trim())}" target="_blank" rel="noopener">${esc(r.trim())}</a>` : esc(r)).join("<br>");
+    const gravado = s.status === "gravado";
+    const isNew = !gravado && s.releasedAt > seen && scriptTargets(s).includes(S.me.id);
+    const files = (s.files||[]).map(f => `<a class="file" href="/api/files/${esc(f.id)}" target="_blank" rel="noopener">${icons.doc}<span>${esc(f.name)}</span><small>${esc(fmtSize(f.size||0))}</small></a>`).join("");
+    const links = linkList(s).map(l => /^https:\/\//i.test(l) ? `<a class="file" href="${esc(l)}" target="_blank" rel="noopener">${icons.link}<span>${esc(l.replace(/^https:\/\//i, ""))}</span></a>` : `<span class="file">${icons.link}<span>${esc(l)}</span></span>`).join("");
     return `<article class="panel script">
-      <header><div style="min-width:0"><div class="client">${esc(s.client || "Sem cliente")}</div><h3>${esc(s.title)}</h3></div>
-        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end">${isNew ? `<span class="new-tag">NOVO</span>` : ""}<span class="pill ${cls}">${lbl}</span></div></header>
-      <div class="kv">
-        <span>Gravação <b>${s.recordDate ? esc(fmtDay(parseYmd(s.recordDate))) : "a definir"}</b></span>
-        ${s.format ? `<span>Formato <b>${esc(s.format)}</b></span>` : ""}
-        <span>Videomaker <b>${esc(vms || "Videomaker do time")}</b></span>
-      </div>
-      ${s.hook ? `<div class="block" style="margin:0"><label>Gancho</label><p>${esc(s.hook)}</p></div>` : ""}
-      <details class="body"><summary>Ver roteiro completo</summary>
-        ${s.scenes ? `<div class="block"><label>Roteiro e cenas</label><p>${esc(s.scenes)}</p></div>` : ""}
-        ${s.caption ? `<div class="block"><label>Legenda</label><p>${esc(s.caption)}</p></div>` : ""}
-        ${s.cta ? `<div class="block"><label>CTA</label><p>${esc(s.cta)}</p></div>` : ""}
-        ${refs ? `<div class="block"><label>Referências</label><p>${refs}</p></div>` : ""}
-      </details>
+      <header><div style="min-width:0"><h3>${esc(s.title)}</h3><div class="none">Adicionado em ${esc(fmtWhen(s.releasedAt || s.updatedAt))} por ${esc(memberName(s.createdBy))}</div></div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end">${isNew ? `<span class="new-tag">NOVO</span>` : ""}<span class="pill ${gravado ? "ok" : "gold"}">${gravado ? "Gravado" : "Para gravar"}</span></div></header>
+      ${files ? `<div class="files">${files}</div>` : ""}
+      ${links ? `<div class="files">${links}</div>` : ""}
       <div class="actions">
-        <button class="btn sm" data-action="copy-script" data-id="${esc(s.id)}">${icons.copy}Copiar</button>
         <button class="btn sm" data-action="edit-script" data-id="${esc(s.id)}">Editar</button>
-        ${s.status === "rascunho" ? `<button class="btn sm primary" data-action="script-status" data-st="lancado" data-id="${esc(s.id)}">Lançar roteiro</button>` : ""}
-        ${s.status === "lancado" ? `<button class="btn sm" data-action="script-status" data-st="gravado" data-id="${esc(s.id)}">Marcar como gravado</button>` : ""}
+        ${gravado ? `<button class="btn sm ghost" data-action="script-status" data-st="lancado" data-id="${esc(s.id)}">Voltar para gravar</button>` : `<button class="btn sm" data-action="script-status" data-st="gravado" data-id="${esc(s.id)}">Marcar como gravado</button>`}
       </div>
     </article>`;
   }).join("");
+  const done = list.filter(s => s.status === "gravado").length;
   return `
   <section class="view-head">
-    <div><p class="eyebrow">Roteiros de Reels</p><h1>${cap(MONTHS[mm-1])} ${yy}</h1><p class="sub">Ao lançar um roteiro, o videomaker recebe o aviso no WhatsApp na hora.</p></div>
+    <div><p class="eyebrow">Roteiros de Reels</p><h1>${cap(MONTHS[mm-1])} ${yy}</h1><p class="sub">Ao adicionar um roteiro, o videomaker recebe o aviso no WhatsApp na hora.</p></div>
     <div class="actions">
       <button class="btn icon" data-action="s-prev" aria-label="Mês anterior">${icons.l}</button>
       <button class="btn icon" data-action="s-next" aria-label="Próximo mês">${icons.r}</button>
-      <button class="btn primary" data-action="new-script">${icons.plus}Novo roteiro</button>
+      <button class="btn primary" data-action="new-script">${icons.plus}Adicionar roteiro</button>
     </div>
   </section>
   <div class="stats">
-    <div class="stat"><b class="tnum">${list.length}</b><span>roteiros no mês</span></div>
-    <div class="stat"><b class="tnum">${count("rascunho")}</b><span>em rascunho</span></div>
-    <div class="stat"><b class="tnum">${count("lancado")}</b><span>prontos para gravar</span></div>
-    <div class="stat"><b class="tnum">${count("gravado")}</b><span>gravados</span></div>
+    <div class="stat"><b class="tnum">${list.length - done}</b><span>para gravar</span></div>
+    <div class="stat"><b class="tnum">${done}</b><span>gravados</span></div>
   </div>
-  ${list.length ? `<div class="scripts">${cards}</div>` : `<div class="empty">Nenhum roteiro em ${MONTHS[mm-1]}. Use <b>Novo roteiro</b> para cadastrar o planejamento de Reels do mês. Salve como rascunho e lance quando estiver aprovado.</div>`}`;
+  ${list.length ? `<div class="scripts">${cards}</div>` : `<div class="empty">Nenhum roteiro em ${MONTHS[mm-1]}. Use <b>Adicionar roteiro</b> para subir o PDF e colar o link do Claude.</div>`}`;
 }
 function vTime(){
   const ms = membersSorted(), adm = isAdmin();
@@ -869,34 +866,53 @@ function eventDetail(id){
       <div class="actions"><button class="btn primary" data-action="edit-event" data-id="${esc(e.id)}">Editar</button></div>
     </div>`);
 }
+let draftFiles = [];
+function renderDraftFiles(){
+  const box = $("#s-files"); if (!box) return;
+  box.innerHTML = draftFiles.map((f, i) => `<div class="file">${icons.doc}<span>${esc(f.name)}</span><small>${f.uploading ? esc(f.progress || "Enviando…") : esc(fmtSize(f.size||0))}</small>${f.uploading ? "" : `<button type="button" class="btn sm ghost" data-action="rm-file" data-i="${i}" aria-label="Remover ${esc(f.name)}">${icons.x}</button>`}</div>`).join("");
+}
 function scriptDlg(id){
   const s = id ? S.scripts.find(x => x.id === id) : null;
-  const v = s || { month: S.sMonth, status: "rascunho", videomakers: Object.values(S.members).filter(m => /videomaker/i.test(m.role||"")).map(m => m.id) };
-  openDlg(`<form id="f-script" data-id="${esc(s ? s.id : "")}">${head(s ? "Editar roteiro" : "Novo roteiro")}
+  draftFiles = s ? (s.files || []).map(f => ({ ...f })) : [];
+  openDlg(`<form id="f-script" data-id="${esc(s ? s.id : "")}" data-month="${esc(s ? s.month : S.sMonth)}">${head(s ? "Editar roteiro" : "Adicionar roteiro")}
     <div class="dlg-body">
-      <div class="row2">
-        <label class="f"><span>Cliente</span><input id="s-client" maxlength="60" value="${esc(v.client||"")}"></label>
-        <label class="f"><span>Título do Reels</span><input id="s-title" required maxlength="100" value="${esc(v.title||"")}"></label>
+      <div class="f"><span>Arquivos</span>
+        <label class="drop" id="s-drop"><input type="file" id="s-input" multiple accept=".pdf,application/pdf,image/*,.doc,.docx,.txt"><b>${icons.plus}Adicionar arquivos</b><small>PDF do roteiro, até 20 MB cada. Toque ou arraste para cá.</small></label>
+        <div class="files" id="s-files"></div>
       </div>
-      <div class="row3">
-        <label class="f"><span>Mês</span><input id="s-month" type="month" required value="${esc(v.month)}"></label>
-        <label class="f"><span>Data de gravação</span><input id="s-rec" type="date" value="${esc(v.recordDate||"")}"></label>
-        <label class="f"><span>Formato</span><input id="s-format" maxlength="40" value="${esc(v.format||"")}" placeholder="Reels 30s"></label>
-      </div>
-      <label class="f"><span>Gancho</span><textarea id="s-hook" maxlength="600" style="min-height:60px" placeholder="Os 3 primeiros segundos">${esc(v.hook||"")}</textarea></label>
-      <label class="f"><span>Roteiro e cenas</span><textarea id="s-scenes" maxlength="8000" style="min-height:180px" placeholder="Cena 1: plano aberto da fachada&#10;Fala: ...">${esc(v.scenes||"")}</textarea></label>
-      <label class="f"><span>Legenda</span><textarea id="s-caption" maxlength="2200">${esc(v.caption||"")}</textarea></label>
-      <div class="row2">
-        <label class="f"><span>CTA</span><input id="s-cta" maxlength="160" value="${esc(v.cta||"")}"></label>
-        <label class="f"><span>Referências (um link por linha)</span><textarea id="s-refs" maxlength="2000" style="min-height:44px">${esc(v.refs||"")}</textarea></label>
-      </div>
-      <div class="f"><span>Videomaker responsável</span><div class="checks" id="s-vm">${membersSorted().map(m => `<label><input type="checkbox" value="${esc(m.id)}" ${(v.videomakers||[]).includes(m.id) ? "checked" : ""}>${esc(m.name)}</label>`).join("")}</div></div>
+      <label class="f"><span>Links</span><textarea id="s-links" maxlength="5000" placeholder="https://claude.ai/... (um link por linha)">${esc(s ? s.links || "" : "")}</textarea></label>
     </div>
     <div class="dlg-foot">
       ${s ? `<button type="button" class="btn danger" data-action="del-script" data-id="${esc(s.id)}">Excluir</button>` : "<span></span>"}
-      <div class="actions"><button class="btn" type="submit" data-mode="save">${s && s.status !== "rascunho" ? "Salvar" : "Salvar rascunho"}</button>
-        ${!s || s.status === "rascunho" ? `<button class="btn primary" type="submit" data-mode="release">Lançar roteiro</button>` : ""}</div>
+      <div class="actions"><button type="button" class="btn ghost" data-action="close">Cancelar</button><button class="btn primary" type="submit">${s ? "Salvar" : "Salvar e avisar o videomaker"}</button></div>
     </div></form>`);
+  renderDraftFiles();
+  const drop = $("#s-drop");
+  drop.addEventListener("dragover", ev => { ev.preventDefault(); drop.classList.add("over"); });
+  drop.addEventListener("dragleave", () => drop.classList.remove("over"));
+  drop.addEventListener("drop", ev => { ev.preventDefault(); drop.classList.remove("over"); uploadFiles(ev.dataTransfer.files); });
+  $("#s-input").addEventListener("change", ev => { uploadFiles(ev.target.files); ev.target.value = ""; });
+}
+async function uploadFiles(list){
+  for (const file of Array.from(list || [])){
+    if (file.size > 20 * 1048576) { toast(`${file.name} passa de 20 MB.`); continue; }
+    const item = { name: file.name, size: file.size, type: file.type, uploading: true };
+    draftFiles.push(item); renderDraftFiles();
+    try {
+      const { id, chunkSize } = await api("files", { body: {} });
+      const total = Math.max(1, Math.ceil(file.size / chunkSize));
+      for (let n = 0; n < total; n++){
+        item.progress = `Enviando ${Math.round((n / total) * 100)}%`; renderDraftFiles();
+        const r = await fetch(`/api/files/${id}/chunk/${n}`, { method: "POST", credentials: "same-origin", headers: { "content-type": "application/octet-stream" }, body: file.slice(n * chunkSize, (n + 1) * chunkSize) });
+        if (!r.ok) { let m = ""; try { m = (await r.json()).error; } catch {} throw new Error(m || "Falha ao enviar o arquivo."); }
+      }
+      const done = await api(`files/${id}/done`, { body: { name: file.name, type: file.type, size: file.size, chunks: total } });
+      Object.assign(item, done.file, { uploading: false, progress: "" });
+    } catch (e) {
+      draftFiles = draftFiles.filter(f => f !== item); toast(`${file.name}: ${e.message}`);
+    }
+    renderDraftFiles();
+  }
 }
 
 /* ---------- events ---------- */
@@ -938,8 +954,8 @@ document.addEventListener("click", async ev => {
     case "s-prev": case "s-next": { const [y,m] = S.sMonth.split("-").map(Number); S.sMonth = ymOf(new Date(y, m-1 + (a === "s-next" ? 1 : -1), 1)); render(); break; }
     case "new-script": scriptDlg(null); break;
     case "edit-script": scriptDlg(id); break;
-    case "copy-script": { const s = S.scripts.find(x => x.id === id); if (s) copy(scriptText(s), "Roteiro copiado"); break; }
-    case "script-status": { const s = S.scripts.find(x => x.id === id); if (s) await act(() => api("scripts/" + id, { body: { ...s, status: el.dataset.st } }), el.dataset.st === "lancado" ? "Roteiro lançado. O videomaker vai receber o aviso." : "Marcado como gravado"); break; }
+    case "script-status": { const s = S.scripts.find(x => x.id === id); if (s) await act(() => api("scripts/" + id, { body: { ...s, status: el.dataset.st } }), el.dataset.st === "gravado" ? "Marcado como gravado" : "Voltou para gravar"); break; }
+    case "rm-file": { const f = draftFiles[+el.dataset.i]; draftFiles.splice(+el.dataset.i, 1); renderDraftFiles(); const sid = $("#f-script")?.dataset.id; const saved = sid && (S.scripts.find(x => x.id === sid)?.files || []).some(x => x.id === f.id); if (f && f.id && !saved) api("files/" + f.id, { method: "DELETE" }).catch(() => {}); break; }
     case "del-script": armDelete(el, async () => { if (await act(() => api("scripts/" + id, { method: "DELETE" }), "Roteiro excluído")) closeDlg(); }); break;
     case "goto-script": S.sMonth = el.dataset.month; setView("roteiros"); break;
     case "new-member": memberDlg(null); break;
@@ -988,13 +1004,11 @@ dlg.addEventListener("submit", async ev => {
       if (ok) { S.day = body.date; const d = parseYmd(body.date); S.cal = new Date(d.getFullYear(), d.getMonth(), 1); }
     }
     if (f.id === "f-script"){
+      if (draftFiles.some(x => x.uploading)) { toast("Espere o envio dos arquivos terminar."); return; }
       const id = f.dataset.id, prev = id ? S.scripts.find(x => x.id === id) : null;
-      const release = ev.submitter && ev.submitter.dataset.mode === "release";
-      const body = { client: v("s-client"), title: v("s-title"), month: v("s-month"), recordDate: v("s-rec"), format: v("s-format"), hook: v("s-hook"),
-        scenes: v("s-scenes"), caption: v("s-caption"), cta: v("s-cta"), refs: v("s-refs"), videomakers: $$("#s-vm input:checked").map(i => i.value),
-        status: release ? "lancado" : (prev ? prev.status : "rascunho") };
-      ok = await act(() => api(id ? "scripts/" + id : "scripts", { body }), release ? "Roteiro lançado. O videomaker vai receber o aviso." : "Roteiro salvo");
-      if (ok) S.sMonth = body.month;
+      const body = { month: f.dataset.month, files: draftFiles.map(({ id, name, size, type }) => ({ id, name, size, type })), links: v("s-links"), status: prev ? prev.status : "lancado" };
+      if (!body.files.length && !body.links) { toast("Adicione um arquivo ou um link."); return; }
+      ok = await act(() => api(id ? "scripts/" + id : "scripts", { body }), id ? "Roteiro salvo" : "Roteiro adicionado. O videomaker vai receber o aviso.");
     }
   } finally { btns.forEach(b => { b.disabled = false; }); }
   if (ok) { closeDlg(); render(); }
