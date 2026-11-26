@@ -1,0 +1,1187 @@
+<title>FLUX APP</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<script type="application/json" id="claude-artifacts-manifest">{"permissions": ["notifications"]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,600;125,800&family=Montserrat:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: app shell. Side rail on desktop, bottom tab bar on phone. Black lacquer + brushed gold, like the FLUX mark. */
+:root{
+  --bg:#0B0A08; --surface:#14120E; --surface-2:#1C1914; --line:#2C271F;
+  --fg:#F1E9DC; --muted:#A79C88; --gold:#C1945B; --gold-hi:#E6C892; --gold-lo:#8C6332;
+  --capt:#D9835A; --ok:#8FB07A; --warn:#E0B054; --danger:#E06A5A;
+  --on-gold:#17120A;
+  --display:"Archivo","Arial Black",system-ui,sans-serif;
+  --body:"Montserrat",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:10px;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#F4EFE6; --surface:#FBF8F2; --surface-2:#EFE8DB; --line:#DCD2C0;
+  --fg:#17140F; --muted:#6E6453; --gold:#9A6E36; --gold-hi:#B98A4C; --gold-lo:#7A5626;
+  --capt:#B95E36; --ok:#4F7A3C; --warn:#A87612; --danger:#B53B2C; --on-gold:#FFF9EE; color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#F4EFE6; --surface:#FBF8F2; --surface-2:#EFE8DB; --line:#DCD2C0;
+  --fg:#17140F; --muted:#6E6453; --gold:#9A6E36; --gold-hi:#B98A4C; --gold-lo:#7A5626;
+  --capt:#B95E36; --ok:#4F7A3C; --warn:#A87612; --danger:#B53B2C; --on-gold:#FFF9EE; color-scheme:light}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--gold-hi);outline-offset:2px}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* Shell */
+.app{display:grid;grid-template-columns:232px 1fr;min-height:100%}
+.rail{position:sticky;top:env(safe-area-inset-top,0px);height:100vh;border-right:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;gap:28px;padding:22px 14px 22px max(14px,env(safe-area-inset-left,0px))}
+.brand{display:flex;align-items:center;gap:10px;padding:0 6px}
+.brand svg.mark{width:30px;height:36px;flex:none}
+.brand .rule{width:1px;height:34px;background:linear-gradient(var(--gold-hi),var(--gold-lo))}
+.word{display:flex;flex-direction:column;line-height:.9}
+.word b{font-family:var(--display);font-stretch:125%;font-weight:800;font-size:22px;letter-spacing:.01em;color:var(--fg)}
+.word span{align-self:flex-end;font-family:var(--body);font-weight:700;font-size:9px;letter-spacing:.42em;color:var(--gold);margin-top:3px;margin-right:-.42em}
+nav.tabs{display:flex;flex-direction:column;gap:2px}
+.tab{display:flex;align-items:center;gap:12px;border:0;background:none;padding:10px 10px;border-radius:8px;color:var(--muted);font-weight:600;text-align:left;position:relative}
+.tab svg{width:19px;height:19px;flex:none;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.tab:hover{color:var(--fg);background:var(--surface-2)}
+.tab[aria-current="page"]{color:var(--fg);background:var(--surface-2)}
+.tab[aria-current="page"]::before{content:"";position:absolute;left:-14px;top:9px;bottom:9px;width:3px;border-radius:0 3px 3px 0;background:linear-gradient(var(--gold-hi),var(--gold-lo))}
+.badge{margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--gold);color:var(--on-gold);font-size:11px;font-weight:700;display:inline-grid;place-items:center}
+.badge[hidden]{display:none}
+.rail-foot{margin-top:auto;display:flex;flex-direction:column;gap:10px}
+.me{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;background:none;text-align:left;width:100%}
+.me small{display:block;color:var(--muted);font-size:11px}
+.me strong{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+
+main{min-width:0;padding-block:28px 60px;padding-left:max(28px,env(safe-area-inset-left,0px));padding-right:max(28px,env(safe-area-inset-right,0px))}
+.topbar{display:none}
+
+.view-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:20px}
+.eyebrow{margin:0 0 4px;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+h1{margin:0;font-family:var(--display);font-stretch:125%;font-weight:800;font-size:clamp(22px,3.2vw,32px);line-height:1.05;letter-spacing:-.005em;text-wrap:balance}
+h2{margin:0;font-family:var(--display);font-stretch:125%;font-weight:600;font-size:15px;letter-spacing:.01em}
+h3{margin:0;font-size:15px;font-weight:700}
+.sub{margin:6px 0 0;color:var(--muted);max-width:60ch}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 14px;font-weight:600;font-size:13px;text-decoration:none;color:var(--fg);white-space:nowrap}
+.btn:hover{border-color:var(--gold-lo)}
+.btn.primary{background:linear-gradient(180deg,var(--gold-hi),var(--gold) 55%,var(--gold-lo));border-color:transparent;color:var(--on-gold)}
+.btn.primary:hover{filter:brightness(1.06)}
+.btn.ghost{background:none;border-color:transparent;color:var(--muted)}
+.btn.ghost:hover{color:var(--fg)}
+.btn.danger{color:var(--danger);border-color:color-mix(in srgb,var(--danger) 40%,var(--line))}
+.btn.danger.armed{background:var(--danger);color:#fff;border-color:var(--danger)}
+.btn.wa{background:#1F7A4D;border-color:#1F7A4D;color:#fff}
+.btn.sm{padding:5px 10px;font-size:12px}
+.btn.icon{padding:7px 9px}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.chip{border:1px solid var(--line);background:none;border-radius:999px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--muted);display:inline-flex;align-items:center;gap:7px}
+.chip[aria-pressed="true"]{color:var(--fg);border-color:var(--gold);background:color-mix(in srgb,var(--gold) 12%,transparent)}
+.dot{width:8px;height:8px;border-radius:50%;flex:none;display:inline-block}
+.dot.reuniao{background:var(--gold)}
+.dot.captacao{background:var(--capt)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.banner{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:12px 16px;margin-bottom:18px;border:1px solid color-mix(in srgb,var(--gold) 45%,var(--line));background:color-mix(in srgb,var(--gold) 9%,var(--surface));border-radius:12px}
+.banner p{margin:0;max-width:62ch}
+.notice{padding:12px 16px;border-radius:12px;border:1px dashed var(--line);color:var(--muted);margin-bottom:18px}
+
+/* Agenda */
+.agenda{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(280px,1fr);gap:20px;align-items:start}
+.month{padding:10px}
+.wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.wk.head div{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:6px 8px}
+.cell{min-height:96px;border:1px solid transparent;border-radius:8px;background:var(--surface-2);padding:6px;text-align:left;display:flex;flex-direction:column;gap:3px;min-width:0}
+.cell:hover{border-color:var(--line)}
+.cell.out{background:none;opacity:.45}
+.cell.today .n{background:var(--gold);color:var(--on-gold)}
+.cell[aria-pressed="true"]{border-color:var(--gold)}
+.cell .n{font-size:12px;font-weight:700;width:24px;height:24px;border-radius:50%;display:grid;place-items:center}
+.ev-mini{font-size:11px;line-height:1.25;padding:2px 5px;border-radius:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-left:2px solid var(--gold);background:color-mix(in srgb,var(--gold) 13%,transparent)}
+.ev-mini.captacao{border-color:var(--capt);background:color-mix(in srgb,var(--capt) 14%,transparent)}
+.more{font-size:11px;color:var(--muted);padding-left:5px}
+.dots{display:none;gap:3px;flex-wrap:wrap;padding-left:2px}
+
+.side{display:flex;flex-direction:column;gap:16px;min-width:0}
+.side .panel{padding:16px}
+.side h2{margin-bottom:12px}
+.list{display:flex;flex-direction:column;gap:8px}
+.ev{display:grid;grid-template-columns:4px 1fr;gap:12px;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px 10px 0;overflow:hidden;color:var(--fg)}
+.ev:hover{border-color:var(--gold-lo)}
+.ev .stripe{background:var(--gold);border-radius:0 3px 3px 0}
+.ev.captacao .stripe{background:var(--capt)}
+.ev .t{font-size:12px;color:var(--muted);font-weight:600}
+.ev .ttl{font-weight:700;margin:1px 0}
+.ev .meta{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center}
+.faces{display:inline-flex}
+.face{width:22px;height:22px;border-radius:50%;display:inline-grid;place-items:center;font-size:9px;font-weight:700;background:var(--surface-2);border:1.5px solid var(--surface);color:var(--fg);margin-left:-6px}
+.face:first-child{margin-left:0}
+.face.lg{width:36px;height:36px;font-size:12px;margin:0;border:0}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.pill.gold{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 50%,transparent)}
+.pill.capt{color:var(--capt);border-color:color-mix(in srgb,var(--capt) 50%,transparent)}
+.pill.ok{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 50%,transparent)}
+.pill.warn{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 50%,transparent)}
+.empty{color:var(--muted);font-size:13px;padding:14px;border:1px dashed var(--line);border-radius:10px}
+
+/* Roteiros */
+.stats{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+.stat{padding:10px 16px;border:1px solid var(--line);border-radius:10px;background:var(--surface);min-width:120px}
+.stat b{display:block;font-family:var(--display);font-stretch:125%;font-size:22px;font-weight:800}
+.stat span{font-size:12px;color:var(--muted)}
+.scripts{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr));gap:14px}
+.script{padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.script header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.script .client{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.script h3{font-size:17px;margin-top:2px}
+.kv{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--muted)}
+.kv b{color:var(--fg);font-weight:600}
+details.body{border-top:1px solid var(--line);padding-top:10px}
+details.body summary{cursor:pointer;font-weight:600;font-size:13px;color:var(--gold);list-style:none}
+details.body summary::-webkit-details-marker{display:none}
+.block{margin-top:12px}
+.block label{display:block;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.block p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.block a{color:var(--gold);overflow-wrap:anywhere}
+.new-tag{font-size:10px;font-weight:800;letter-spacing:.14em;background:var(--gold);color:var(--on-gold);padding:2px 7px;border-radius:4px}
+
+/* Disponibilidade */
+.board-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table.board{border-collapse:collapse;width:100%;min-width:860px}
+.board th,.board td{border-bottom:1px solid var(--line);padding:10px;vertical-align:top;text-align:left}
+.board th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;white-space:nowrap}
+.board th.today{color:var(--gold)}
+.board td.who{width:170px;white-space:nowrap}
+.board td.who strong{display:block;font-size:13px}
+.board td.who small{color:var(--muted);font-size:11px}
+.slot{display:block;font-size:11.5px;font-weight:600;padding:3px 6px;border-radius:5px;background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--fg);margin-bottom:3px;white-space:nowrap}
+.busy{display:block;font-size:11px;color:var(--muted);margin-bottom:3px;white-space:nowrap}
+.none{color:var(--muted);font-size:12px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:18px}
+.finder{padding:16px;display:flex;flex-direction:column;gap:12px}
+.results{display:flex;flex-direction:column;gap:6px}
+.result{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border-radius:8px;background:var(--surface-2);font-size:13px}
+
+/* Alertas */
+.alerts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start}
+.al{display:flex;gap:12px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.al .ic{width:34px;height:34px;border-radius:50%;flex:none;display:grid;place-items:center;background:color-mix(in srgb,var(--gold) 16%,transparent);color:var(--gold)}
+.al .ic.capt{background:color-mix(in srgb,var(--capt) 16%,transparent);color:var(--capt)}
+.al .ic svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.al p{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+.al .row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.disp{padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);display:flex;flex-direction:column;gap:8px}
+.disp .who{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-top:8px;border-top:1px solid var(--line)}
+.disp .who:first-of-type{border-top:0;padding-top:0}
+
+/* Equipe */
+.team{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:12px}
+.member{padding:14px;display:flex;gap:12px;align-items:flex-start}
+.member p{margin:2px 0 0;font-size:12px;color:var(--muted)}
+
+/* Dialog + forms */
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--fg);padding:0;width:min(640px,calc(100vw - 24px));max-height:calc(100dvh - 32px)}
+dialog::backdrop{background:rgba(5,4,2,.66)}
+.dlg{display:flex;flex-direction:column;max-height:calc(100dvh - 34px)}
+.dlg-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--line)}
+.dlg-body{padding:18px 20px;overflow:auto;display:flex;flex-direction:column;gap:14px}
+.dlg-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;padding:14px 20px;border-top:1px solid var(--line)}
+.dlg-foot .actions{margin-left:auto}
+.f{display:flex;flex-direction:column;gap:5px;min-width:0}
+.f > span{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.f input,.f select,.f textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 11px;min-width:0}
+.f textarea{resize:vertical;min-height:80px;line-height:1.5}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--gold);outline:none}
+.row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.checks{display:flex;flex-wrap:wrap;gap:6px}
+.checks label{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:5px 12px 5px 8px;font-size:12.5px;cursor:pointer}
+.checks input{accent-color:var(--gold)}
+.checks label:has(input:checked){border-color:var(--gold);background:color-mix(in srgb,var(--gold) 12%,transparent)}
+.warnbox{font-size:12.5px;color:var(--warn);border:1px solid color-mix(in srgb,var(--warn) 40%,transparent);border-radius:8px;padding:8px 12px}
+.warnbox:empty{display:none}
+.dayrow{display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:start;padding:8px 0;border-bottom:1px solid var(--line)}
+.dayrow b{padding-top:7px;font-size:13px}
+.ranges{display:flex;flex-direction:column;gap:6px}
+.range{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.range input{background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:6px 8px;width:110px}
+.detail-grid{display:grid;grid-template-columns:110px 1fr;gap:8px 12px;font-size:13.5px}
+.detail-grid dt{color:var(--muted);font-size:12px;padding-top:1px}
+.detail-grid dd{margin:0;overflow-wrap:anywhere;white-space:pre-wrap}
+
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(24px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;font-size:13px;z-index:60;max-width:calc(100vw - 32px);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.loading{display:flex;gap:10px;align-items:center;color:var(--muted);padding:40px 0}
+.spin{width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:sp 0.9s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+@media (max-width:1080px){
+  .agenda,.alerts,.grid2{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .rail{position:fixed;inset:auto 0 0 0;top:auto;height:auto;flex-direction:row;padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px));border-right:0;border-top:1px solid var(--line);z-index:20;gap:0}
+  .rail .brand,.rail-foot{display:none}
+  nav.tabs{flex-direction:row;width:100%;justify-content:space-around}
+  .tab{flex-direction:column;gap:3px;font-size:10px;padding:6px 4px;flex:1;align-items:center}
+  .tab[aria-current="page"]::before{left:25%;right:25%;top:-6px;bottom:auto;width:auto;height:3px;border-radius:0 0 3px 3px}
+  .tab .badge{position:absolute;top:0;right:calc(50% - 22px);margin:0;min-width:17px;height:17px;font-size:10px}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:env(safe-area-inset-top,0px);z-index:15;background:var(--bg);padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line)}
+  .topbar .brand{padding:0}
+  .topbar .me{width:auto;padding:4px}
+  .topbar .me > div{display:none}
+  main{padding-block:18px calc(96px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+}
+@media (max-width:640px){
+  .cell{min-height:54px;padding:4px}
+  .cell .ev-mini,.cell .more{display:none}
+  .cell .dots{display:flex}
+  .row2,.row3{grid-template-columns:minmax(0,1fr)}
+  .dayrow{grid-template-columns:minmax(0,1fr)}
+  .detail-grid{grid-template-columns:minmax(0,1fr)}
+  .detail-grid dt{padding-top:6px}
+  .wk.head div{padding:4px 2px;text-align:center;letter-spacing:.06em}
+}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="g-gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E9CE98"/><stop offset=".45" stop-color="#C1945B"/><stop offset="1" stop-color="#7E5527"/>
+    </linearGradient>
+  </defs>
+  <symbol id="flux-mark" viewBox="0 0 40 48">
+    <path fill="url(#g-gold)" d="M3 46V17C3 8.2 9.2 3 17.5 3H38l-5.2 9.6H18.6c-4.1 0-6.4 2.3-6.4 6.4V40.5C9.6 42.8 6.6 44.6 3 46Z"/>
+    <path fill="url(#g-gold)" d="M12.2 31.5v-2.2c0-5 3.1-8 8.1-8H34l-5 9.2H12.2Z" opacity=".92"/>
+  </symbol>
+</svg>
+
+<div class="app">
+  <aside class="rail">
+    <div class="brand">
+      <svg class="mark"><use href="#flux-mark"/></svg>
+      <div class="rule"></div>
+      <div class="word"><b>FLUX</b><span>APP</span></div>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="Seções">
+      <button class="tab" data-view="agenda"><svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg><span>Agenda</span></button>
+      <button class="tab" data-view="roteiros"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10.5 5-3v9l-5-3"/></svg><span>Roteiros</span><span class="badge" id="b-roteiros" hidden></span></button>
+      <button class="tab" data-view="disponibilidade"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Horários</span></button>
+      <button class="tab" data-view="alertas"><svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 1 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span>Alertas</span><span class="badge" id="b-alertas" hidden></span></button>
+      <button class="tab" data-view="equipe"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17.5" cy="9" r="2.6"/><path d="M17 14.6c2.4.2 4 1.8 4.6 4.4"/></svg><span>Equipe</span></button>
+    </nav>
+    <div class="rail-foot">
+      <button class="me" id="me-btn-rail" data-action="profile"></button>
+    </div>
+  </aside>
+
+  <div style="min-width:0">
+    <header class="topbar">
+      <div class="brand">
+        <svg class="mark"><use href="#flux-mark"/></svg>
+        <div class="rule"></div>
+        <div class="word"><b>FLUX</b><span>APP</span></div>
+      </div>
+      <button class="me" id="me-btn-top" data-action="profile"></button>
+    </header>
+    <main id="main" aria-live="polite">
+      <div class="loading"><div class="spin"></div>Carregando a agenda da equipe…</div>
+    </main>
+  </div>
+</div>
+
+<dialog id="dlg"><div class="dlg" id="dlg-inner"></div></dialog>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(() => {
+"use strict";
+
+/* ---------- helpers ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad = n => String(n).padStart(2, "0");
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const ymOf = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}`;
+const parseYmd = s => { const [y,m,d] = String(s).split("-").map(Number); return new Date(y, (m||1)-1, d||1); };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
+const mondayOf = d => { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); const w = (x.getDay()+6)%7; return addDays(x, -w); };
+const toMin = t => { if (!t) return null; const [h,m] = t.split(":").map(Number); return h*60 + (m||0); };
+const fromMin = m => `${pad(Math.floor(m/60))}:${pad(m%60)}`;
+const MONTHS = ["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"];
+const WD_SHORT = ["dom","seg","ter","qua","qui","sex","sáb"];
+const WD_LONG = ["domingo","segunda","terça","quarta","quinta","sexta","sábado"];
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const fmtDay = d => `${WD_SHORT[d.getDay()]}, ${d.getDate()} ${MONTHS[d.getMonth()].slice(0,3)}`;
+const fmtLong = d => `${WD_LONG[d.getDay()]}, ${d.getDate()} de ${MONTHS[d.getMonth()]}`;
+const fmtBR = d => `${pad(d.getDate())}/${pad(d.getMonth()+1)}`;
+const TYPE = { reuniao: "Reunião de alinhamento", captacao: "Captação" };
+const ROLES = ["Direção","Atendimento / CRM","Social media","Videomaker","Designer","Tráfego","Copywriter","Outro"];
+const STATUS = { rascunho: ["Rascunho",""], lancado: ["Lançado","gold"], gravado: ["Gravado","ok"] };
+const uidSafe = v => /^[A-Za-z0-9_\-.~:@+]+$/.test(String(v||""));
+const initials = n => (String(n||"?").trim().split(/\s+/).map(p => p[0]).slice(0,2).join("") || "?").toUpperCase();
+const hue = id => { let h = 0; for (const c of String(id)) h = (h*31 + c.charCodeAt(0)) % 360; return h; };
+const faceStyle = id => `background:hsl(${30 + hue(id)%40} ${28 + hue(id)%20}% ${30 + hue(id)%14}%);color:#F6EEDF`;
+const icons = {
+  cal: '<svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg>',
+  cam: '<svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10.5 5-3v9l-5-3"/></svg>',
+  doc: '<svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg>',
+  plus: '<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+  l: '<svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></svg>',
+  r: '<svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>',
+  x: '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  copy: '<svg viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>',
+  wa: '<svg viewBox="0 0 24 24"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c.5 2.5 2.5 4.5 5 5l1.2-1.2 2 1-.4 1.6c-3.8.4-8.6-4.4-8.2-8.2l1.6-.4 1 2z"/></svg>',
+  bell: '<svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 1 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>'
+};
+
+const use = n => (window.claude && typeof window.claude.use === "function") ? window.claude.use(n).catch(() => null) : Promise.resolve(null);
+const store = {
+  get(k){ try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v){ try { localStorage.setItem(k, v); } catch {} }
+};
+
+/* ---------- state ---------- */
+const today = new Date();
+const S = {
+  db: null, user: null, desktop: null, uid: null, canWrite: true, offline: false, slow: false, ready: false,
+  members: {}, events: [], scripts: [], avail: {}, ustate: {}, got: { members:false, events:false, scripts:false, avail:false },
+  view: (["agenda","roteiros","disponibilidade","alertas","equipe"].includes(location.hash.slice(1)) ? location.hash.slice(1) : null) || store.get("flux-view") || "agenda",
+  cal: new Date(today.getFullYear(), today.getMonth(), 1),
+  day: ymd(today), filter: "todos",
+  sMonth: ymOf(today), week: mondayOf(today),
+  finder: { ids: [], dur: 60 }
+};
+
+/* ---------- derived ---------- */
+const memberName = id => S.members[id]?.name || "Membro";
+const membersSorted = () => Object.values(S.members).sort((a,b) => String(a.name).localeCompare(String(b.name), "pt-BR"));
+const evStart = e => { const d = parseYmd(e.date); const m = toMin(e.start) ?? 540; d.setHours(Math.floor(m/60), m%60, 0, 0); return d; };
+const evEndMin = e => toMin(e.end) ?? ((toMin(e.start) ?? 540) + 60);
+const eventsOn = (dstr) => S.events.filter(e => e.date === dstr && (S.filter === "todos" || e.type === S.filter)).sort((a,b) => (a.start||"").localeCompare(b.start||""));
+const hoursUntil = e => (evStart(e) - Date.now()) / 36e5;
+const waNumber = raw => { let d = String(raw||"").replace(/\D/g, ""); if (!d) return ""; if (d.length <= 11) d = "55" + d; return d; };
+const waLink = (num, text) => `https://wa.me/${waNumber(num)}?text=${encodeURIComponent(text)}`;
+const timeRange = e => e.end ? `${e.start} às ${e.end}` : (e.start || "Dia todo");
+
+function eventMsg(e, uid, win){
+  const d = evStart(e);
+  const first = uid ? `Olá, ${memberName(uid).split(" ")[0]}!` : "Olá, equipe!";
+  const when = win === "24" ? "é amanhã, daqui a 24h" : "acontece em 48h";
+  const lines = [
+    `${first} Lembrete FLUX APP.`,
+    `${e.type === "captacao" ? "A captação" : "A reunião de alinhamento"} "${e.title}"${e.client ? ` com ${e.client}` : ""} ${when}.`,
+    ``,
+    `Data: ${fmtLong(d)} (${fmtBR(d)})`,
+    `Horário: ${timeRange(e)}`
+  ];
+  if (e.location) lines.push(`Local: ${e.location}`);
+  if (e.scriptId) { const s = S.scripts.find(x => x.id === e.scriptId); if (s) lines.push(`Roteiro: ${s.title}`); }
+  if (e.notes) lines.push(``, e.notes);
+  return lines.join("\n");
+}
+function groupMsg(e){
+  const d = evStart(e);
+  const lines = [
+    `${TYPE[e.type]}: ${e.title}${e.client ? ` (${e.client})` : ""}`,
+    `${cap(fmtLong(d))}, ${timeRange(e)}`
+  ];
+  if (e.location) lines.push(`Local: ${e.location}`);
+  if ((e.participants||[]).length) lines.push(`Equipe: ${(e.participants).map(memberName).join(", ")}`);
+  if (e.notes) lines.push(``, e.notes);
+  return lines.join("\n");
+}
+function scriptMsg(s, uid){
+  const first = uid ? `Olá, ${memberName(uid).split(" ")[0]}!` : "Olá!";
+  const lines = [`${first} Roteiro novo disponível no FLUX APP.`, ``, `"${s.title}"${s.client ? ` para ${s.client}` : ""}`];
+  if (s.recordDate) lines.push(`Gravação: ${fmtLong(parseYmd(s.recordDate))}`);
+  lines.push(`Abra a aba Roteiros para ver cenas, legenda e referências.`);
+  return lines.join("\n");
+}
+function scriptText(s){
+  return [
+    `${s.title}${s.client ? ` | ${s.client}` : ""}`,
+    s.recordDate ? `Gravação: ${fmtBR(parseYmd(s.recordDate))}` : "",
+    s.format ? `Formato: ${s.format}` : "",
+    s.hook ? `\nGANCHO\n${s.hook}` : "",
+    s.scenes ? `\nROTEIRO\n${s.scenes}` : "",
+    s.caption ? `\nLEGENDA\n${s.caption}` : "",
+    s.cta ? `\nCTA\n${s.cta}` : "",
+    s.refs ? `\nREFERÊNCIAS\n${s.refs}` : ""
+  ].filter(Boolean).join("\n");
+}
+function gcalLink(e){
+  const s = evStart(e); const endM = evEndMin(e);
+  const en = parseYmd(e.date); en.setHours(Math.floor(endM/60), endM%60, 0, 0);
+  const f = d => `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+  const p = new URLSearchParams({ action:"TEMPLATE", text:`${TYPE[e.type]}: ${e.title}`, dates:`${f(s)}/${f(en)}`, details: groupMsg(e), location: e.location || "", ctz: Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Sao_Paulo" });
+  return `https://calendar.google.com/calendar/render?${p}`;
+}
+
+/* Reminders due right now (48h and 24h windows) */
+function dueReminders(){
+  const out = [];
+  for (const e of S.events){
+    const h = hoursUntil(e);
+    if (h <= 0 || h > 48) continue;
+    const win = h <= 24 ? "24" : "48";
+    const people = (e.participants||[]).filter(id => S.members[id]);
+    const rows = people.map(id => ({ id, sent: !!(e.sent && e.sent[`${id}_${win}`]) }));
+    out.push({ kind:"event", e, win, h, rows });
+  }
+  return out.sort((a,b) => a.h - b.h);
+}
+function scriptTargets(s){
+  const vm = (s.videomakers||[]).filter(id => S.members[id]);
+  if (vm.length) return vm;
+  return Object.values(S.members).filter(m => m.role === "Videomaker").map(m => m.id);
+}
+function dueScriptDispatch(){
+  const week = Date.now() - 7*864e5;
+  return S.scripts.filter(s => s.status === "lancado" && (s.releasedAt||0) > week)
+    .map(s => ({ kind:"script", s, rows: scriptTargets(s).map(id => ({ id, sent: !!(s.sent && s.sent[id]) })) }))
+    .sort((a,b) => (b.s.releasedAt||0) - (a.s.releasedAt||0));
+}
+function myAlerts(){
+  const out = [];
+  if (!S.uid) return out;
+  for (const e of S.events){
+    const h = hoursUntil(e);
+    if (h > 0 && h <= 48 && (e.participants||[]).includes(S.uid)) out.push({ kind:"event", e, win: h <= 24 ? "24" : "48", h });
+  }
+  const seen = S.ustate.lastSeenScripts || 0;
+  for (const s of S.scripts){
+    if (s.status === "rascunho" || !s.releasedAt) continue;
+    const mine = scriptTargets(s).includes(S.uid) || !(s.videomakers||[]).length;
+    if (mine && s.releasedAt > seen) out.push({ kind:"script", s });
+  }
+  return out;
+}
+const unseenScripts = () => myAlerts().filter(a => a.kind === "script").length;
+
+/* Free windows for one member on one date */
+function freeFor(id, date){
+  const a = S.avail[id];
+  if (!a) return { set:false, free:[], busy:[] };
+  const dstr = ymd(date);
+  let free = ((a.weekly||{})[String(date.getDay())] || []).map(r => [toMin(r.s), toMin(r.e)]).filter(([s,e]) => s!=null && e!=null && e>s).sort((x,y)=>x[0]-y[0]);
+  const busy = [];
+  for (const e of S.events) if (e.date === dstr && (e.participants||[]).includes(id)) busy.push({ s: toMin(e.start) ?? 0, e: evEndMin(e), label: e.title });
+  for (const b of (a.blocks||[])) if (b.date === dstr) busy.push({ s: toMin(b.s) ?? 0, e: toMin(b.e) ?? 1440, label: b.note || "Ausência" });
+  for (const b of busy){
+    const next = [];
+    for (const [s,e] of free){
+      if (b.e <= s || b.s >= e) { next.push([s,e]); continue; }
+      if (b.s > s) next.push([s, b.s]);
+      if (b.e < e) next.push([b.e, e]);
+    }
+    free = next;
+  }
+  return { set:true, free: free.filter(([s,e]) => e - s >= 30), busy: busy.sort((x,y)=>x.s-y.s) };
+}
+function commonSlots(ids, dur){
+  const out = [];
+  for (let i = 0; i < 7; i++){
+    const d = addDays(S.week, i);
+    if (ymd(d) < ymd(today)) continue;
+    let acc = null;
+    for (const id of ids){
+      const f = freeFor(id, d).free;
+      if (acc === null) { acc = f; continue; }
+      const next = [];
+      for (const [a1,a2] of acc) for (const [b1,b2] of f){ const s = Math.max(a1,b1), e = Math.min(a2,b2); if (e > s) next.push([s,e]); }
+      acc = next;
+    }
+    for (const [s,e] of (acc||[])) {
+      let st = s;
+      if (ymd(d) === ymd(new Date())) { const nowM = new Date().getHours()*60 + new Date().getMinutes(); st = Math.max(st, Math.ceil(nowM/30)*30); }
+      if (e - st >= dur) out.push({ d, s: st, e });
+    }
+  }
+  return out;
+}
+
+/* ---------- writes ---------- */
+function toast(msg){
+  const t = $("#toast"); t.textContent = msg; t.hidden = false;
+  clearTimeout(toast._t); toast._t = setTimeout(() => { t.hidden = true; }, 2800);
+}
+async function write(fn, ok){
+  if (!S.db) { toast("Abra o app pelo link do claude.ai para salvar."); return false; }
+  try { await fn(); if (ok) toast(ok); return true; }
+  catch (err) {
+    const code = err && err.code;
+    if (code === "invalid_argument") { S.canWrite = false; toast("Seu acesso é só de leitura. Peça ao dono do app acesso de Colaborador."); render(); }
+    else if (code === "quota_exceeded") toast("O espaço do app está cheio. Exclua itens antigos para liberar.");
+    else toast("Não foi possível salvar agora. Tente de novo em instantes.");
+    return false;
+  }
+}
+async function copy(text, ok = "Copiado"){
+  try { await navigator.clipboard.writeText(text); toast(ok); }
+  catch {
+    const ta = document.createElement("textarea"); ta.value = text; ta.setAttribute("readonly",""); ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    let done = false; try { done = document.execCommand("copy"); } catch {}
+    ta.remove(); toast(done ? ok : "Selecione e copie o texto manualmente.");
+  }
+}
+async function markScriptsSeen(){
+  if (!S.db || !S.uid || !unseenScripts()) return;
+  const ref = S.db.doc(`data/users/${S.uid}/state`);
+  try { await ref.set({ ...S.ustate, lastSeenScripts: Date.now() }); } catch {}
+}
+
+/* ---------- render: shell ---------- */
+function renderMe(){
+  const m = S.uid && S.members[S.uid];
+  const html = m
+    ? `<span class="face lg" style="${faceStyle(m.id)}">${esc(initials(m.name))}</span><div><strong>${esc(m.name)}</strong><small>${esc(m.role||"Equipe")}</small></div>`
+    : `<span class="face lg" style="background:var(--surface-2)">?</span><div><strong>Seu perfil</strong><small>Toque para completar</small></div>`;
+  $("#me-btn-rail").innerHTML = html; $("#me-btn-top").innerHTML = html;
+}
+function renderNav(){
+  $$(".tab").forEach(t => t.setAttribute("aria-current", t.dataset.view === S.view ? "page" : "false"));
+  const ns = unseenScripts(); const b1 = $("#b-roteiros"); b1.textContent = ns; b1.hidden = !ns;
+  const pend = dueReminders().reduce((n,r) => n + r.rows.filter(x => !x.sent).length, 0) + dueScriptDispatch().reduce((n,r) => n + r.rows.filter(x => !x.sent).length, 0);
+  const na = myAlerts().filter(a => a.kind === "event").length + pend;
+  const b2 = $("#b-alertas"); b2.textContent = na; b2.hidden = !na;
+}
+function banners(){
+  let h = "";
+  if (S.offline) h += `<div class="notice">Este app guarda a agenda da equipe no claude.ai. Abra pelo link compartilhado, com sua conta, para ver e editar os dados.</div>`;
+  else if (!S.uid) h += `<div class="notice">Entre na sua conta do claude.ai para editar a agenda e receber seus alertas.</div>`;
+  else if (!S.canWrite) h += `<div class="notice">Você está com acesso de leitura. Para editar a agenda, peça ao dono do app acesso de Colaborador.</div>`;
+  else if (S.got.members && !S.members[S.uid]) h += `<div class="banner"><p><b>Complete seu perfil.</b> Com nome, função e WhatsApp você aparece na agenda, recebe os lembretes e entra no quadro de horários do CRM.</p><button class="btn primary" data-action="profile">Completar perfil</button></div>`;
+  if (S.slow && !S.got.events) h += `<div class="notice">A agenda está demorando para carregar. Os dados podem estar desatualizados.</div>`;
+  return h;
+}
+function render(){
+  renderMe(); renderNav();
+  const main = $("#main");
+  if (!S.ready) return;
+  const v = { agenda: vAgenda, roteiros: vRoteiros, disponibilidade: vDisp, alertas: vAlertas, equipe: vEquipe }[S.view] || vAgenda;
+  main.innerHTML = banners() + v();
+}
+
+/* ---------- views ---------- */
+function evCard(e, showDate){
+  const d = evStart(e);
+  const faces = (e.participants||[]).filter(id => S.members[id]).slice(0,5).map(id => `<span class="face" style="${faceStyle(id)}" title="${esc(memberName(id))}">${esc(initials(memberName(id)))}</span>`).join("");
+  const h = hoursUntil(e);
+  let st = "";
+  if (h > 0 && h <= 48){
+    const win = h <= 24 ? "24" : "48";
+    const ppl = (e.participants||[]).filter(id => S.members[id]);
+    const sent = ppl.filter(id => e.sent && e.sent[`${id}_${win}`]).length;
+    st = `<span class="pill ${sent === ppl.length && ppl.length ? "ok" : "warn"}">Lembrete ${win}h ${sent}/${ppl.length}</span>`;
+  }
+  return `<button class="ev ${esc(e.type)}" data-action="open-event" data-id="${esc(e.id)}">
+    <span class="stripe"></span>
+    <span style="min-width:0">
+      <span class="t tnum">${showDate ? esc(fmtDay(d)) + " · " : ""}${esc(timeRange(e))}</span>
+      <div class="ttl">${esc(e.title)}</div>
+      <span class="meta"><span class="pill ${e.type === "captacao" ? "capt" : "gold"}">${esc(e.type === "captacao" ? "Captação" : "Alinhamento")}</span>${e.client ? `<span>${esc(e.client)}</span>` : ""}${faces ? `<span class="faces">${faces}</span>` : ""}${st}</span>
+    </span>
+  </button>`;
+}
+function vAgenda(){
+  const y = S.cal.getFullYear(), m = S.cal.getMonth();
+  const start = mondayOf(new Date(y, m, 1));
+  let cells = "";
+  for (let i = 0; i < 42; i++){
+    const d = addDays(start, i);
+    if (i === 35 && d.getMonth() !== m) break;
+    const ds = ymd(d), evs = eventsOn(ds);
+    cells += `<button class="cell${d.getMonth() !== m ? " out" : ""}${ds === ymd(today) ? " today" : ""}" data-action="pick-day" data-day="${ds}" aria-pressed="${ds === S.day}" aria-label="${esc(fmtLong(d))}, ${evs.length} evento(s)">
+      <span class="n tnum">${d.getDate()}</span>
+      ${evs.slice(0,3).map(e => `<span class="ev-mini ${esc(e.type)}">${esc(e.start||"")} ${esc(e.title)}</span>`).join("")}
+      ${evs.length > 3 ? `<span class="more">+${evs.length-3}</span>` : ""}
+      <span class="dots">${evs.slice(0,4).map(e => `<span class="dot ${esc(e.type)}"></span>`).join("")}</span>
+    </button>`;
+  }
+  const dayEv = eventsOn(S.day);
+  const now = Date.now();
+  const next = S.events.filter(e => { const t = evStart(e).getTime(); return t >= now && t <= now + 14*864e5 && (S.filter === "todos" || e.type === S.filter); }).sort((a,b) => evStart(a) - evStart(b)).slice(0, 8);
+  const monthCount = t => S.events.filter(e => e.date.startsWith(ymOf(S.cal)) && e.type === t).length;
+  return `
+  <section class="view-head">
+    <div><p class="eyebrow">Agenda integrada</p><h1>${cap(MONTHS[m])} ${y}</h1>
+      <p class="sub">${(n => n === 1 ? "1 reunião de alinhamento" : n + " reuniões de alinhamento")(monthCount("reuniao"))} e ${(n => n === 1 ? "1 captação" : n + " captações")(monthCount("captacao"))} neste mês.</p></div>
+    <div class="actions">
+      <button class="btn icon" data-action="cal-prev" aria-label="Mês anterior">${icons.l}</button>
+      <button class="btn" data-action="cal-today">Hoje</button>
+      <button class="btn icon" data-action="cal-next" aria-label="Próximo mês">${icons.r}</button>
+      <button class="btn primary" data-action="new-event" ${S.canWrite && S.uid ? "" : "disabled"}>${icons.plus}Novo evento</button>
+    </div>
+  </section>
+  <div class="chips" role="group" aria-label="Filtrar">
+    ${[["todos","Tudo",""],["reuniao","Reuniões de alinhamento","reuniao"],["captacao","Captações","captacao"]].map(([k,l,dc]) => `<button class="chip" data-action="filter" data-f="${k}" aria-pressed="${S.filter === k}">${dc ? `<span class="dot ${dc}"></span>` : ""}${l}</button>`).join("")}
+  </div>
+  <div class="agenda">
+    <div class="panel month">
+      <div class="wk head">${["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"].map(d => `<div>${d}</div>`).join("")}</div>
+      <div class="wk">${cells}</div>
+    </div>
+    <div class="side">
+      <div class="panel">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px">
+          <h2 style="margin:0">${esc(cap(fmtLong(parseYmd(S.day))))}</h2>
+          ${S.canWrite && S.uid ? `<button class="btn sm" data-action="new-event" data-date="${S.day}">${icons.plus}Adicionar</button>` : ""}
+        </div>
+        <div class="list">${dayEv.length ? dayEv.map(e => evCard(e)).join("") : `<div class="empty">Nada marcado neste dia.</div>`}</div>
+      </div>
+      <div class="panel">
+        <h2>Próximos 14 dias</h2>
+        <div class="list">${next.length ? next.map(e => evCard(e, true)).join("") : `<div class="empty">Nenhuma reunião ou captação nos próximos 14 dias. Use <b>Novo evento</b> para agendar a primeira.</div>`}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function vRoteiros(){
+  const [yy, mm] = S.sMonth.split("-").map(Number);
+  const list = S.scripts.filter(s => s.month === S.sMonth).sort((a,b) => (a.recordDate||"9").localeCompare(b.recordDate||"9") || String(a.title).localeCompare(String(b.title)));
+  const count = k => list.filter(s => s.status === k).length;
+  const seen = S.ustate.lastSeenScripts || 0;
+  const cards = list.map(s => {
+    const [lbl, cls] = STATUS[s.status] || STATUS.rascunho;
+    const isNew = s.status !== "rascunho" && s.releasedAt > seen;
+    const vms = (s.videomakers||[]).filter(id => S.members[id]).map(memberName).join(", ");
+    const refs = String(s.refs||"").split(/\n+/).filter(Boolean).map(r => /^https:\/\//i.test(r.trim()) ? `<a href="${esc(r.trim())}" target="_blank" rel="noopener">${esc(r.trim())}</a>` : esc(r)).join("<br>");
+    const can = S.canWrite && S.uid;
+    return `<article class="panel script">
+      <header><div style="min-width:0"><div class="client">${esc(s.client || "Sem cliente")}</div><h3>${esc(s.title)}</h3></div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end">${isNew ? `<span class="new-tag">NOVO</span>` : ""}<span class="pill ${cls}">${lbl}</span></div></header>
+      <div class="kv">
+        ${s.recordDate ? `<span>Gravação <b>${esc(fmtDay(parseYmd(s.recordDate)))}</b></span>` : `<span>Gravação <b>a definir</b></span>`}
+        ${s.format ? `<span>Formato <b>${esc(s.format)}</b></span>` : ""}
+        <span>Videomaker <b>${esc(vms || "toda a equipe de vídeo")}</b></span>
+      </div>
+      ${s.hook ? `<div class="block" style="margin:0"><label>Gancho</label><p>${esc(s.hook)}</p></div>` : ""}
+      <details class="body"><summary>Ver roteiro completo</summary>
+        ${s.scenes ? `<div class="block"><label>Roteiro e cenas</label><p>${esc(s.scenes)}</p></div>` : ""}
+        ${s.caption ? `<div class="block"><label>Legenda</label><p>${esc(s.caption)}</p></div>` : ""}
+        ${s.cta ? `<div class="block"><label>CTA</label><p>${esc(s.cta)}</p></div>` : ""}
+        ${refs ? `<div class="block"><label>Referências</label><p>${refs}</p></div>` : ""}
+      </details>
+      <div class="actions">
+        <button class="btn sm" data-action="copy-script" data-id="${esc(s.id)}">${icons.copy}Copiar</button>
+        ${can ? `<button class="btn sm" data-action="edit-script" data-id="${esc(s.id)}">Editar</button>` : ""}
+        ${can && s.status === "rascunho" ? `<button class="btn sm primary" data-action="release-script" data-id="${esc(s.id)}">Lançar roteiro</button>` : ""}
+        ${can && s.status === "lancado" ? `<button class="btn sm" data-action="script-status" data-st="gravado" data-id="${esc(s.id)}">Marcar como gravado</button>` : ""}
+      </div>
+    </article>`;
+  }).join("");
+  return `
+  <section class="view-head">
+    <div><p class="eyebrow">Roteiros de Reels</p><h1>${cap(MONTHS[mm-1])} ${yy}</h1>
+      <p class="sub">Roteiros lançados ficam visíveis para o videomaker e disparam um aviso de roteiro disponível.</p></div>
+    <div class="actions">
+      <button class="btn icon" data-action="s-prev" aria-label="Mês anterior">${icons.l}</button>
+      <button class="btn icon" data-action="s-next" aria-label="Próximo mês">${icons.r}</button>
+      <button class="btn primary" data-action="new-script" ${S.canWrite && S.uid ? "" : "disabled"}>${icons.plus}Novo roteiro</button>
+    </div>
+  </section>
+  <div class="stats">
+    <div class="stat"><b class="tnum">${list.length}</b><span>roteiros no mês</span></div>
+    <div class="stat"><b class="tnum">${count("rascunho")}</b><span>em rascunho</span></div>
+    <div class="stat"><b class="tnum">${count("lancado")}</b><span>prontos para gravar</span></div>
+    <div class="stat"><b class="tnum">${count("gravado")}</b><span>gravados</span></div>
+  </div>
+  ${list.length ? `<div class="scripts">${cards}</div>` : `<div class="empty">Nenhum roteiro em ${MONTHS[mm-1]}. Use <b>Novo roteiro</b> para cadastrar o planejamento de Reels do mês. Salve como rascunho e lance quando estiver aprovado.</div>`}`;
+}
+
+function vDisp(){
+  const days = Array.from({length:7}, (_,i) => addDays(S.week, i));
+  const ms = membersSorted();
+  const rows = ms.map(m => {
+    const tds = days.map(d => {
+      const f = freeFor(m.id, d);
+      if (!f.set) return `<td><span class="none">Sem horários</span></td>`;
+      const free = f.free.map(([s,e]) => `<span class="slot tnum">${fromMin(s)} às ${fromMin(e)}</span>`).join("");
+      const busy = f.busy.map(b => `<span class="busy tnum" title="${esc(b.label)}">Ocupado ${fromMin(b.s)}${b.e < 1440 ? "-" + fromMin(b.e) : ""}</span>`).join("");
+      return `<td>${free || `<span class="none">Indisponível</span>`}${busy}</td>`;
+    }).join("");
+    return `<tr><td class="who"><strong>${esc(m.name)}${m.id === S.uid ? " (você)" : ""}</strong><small>${esc(m.role||"")}</small></td>${tds}</tr>`;
+  }).join("");
+  const sel = S.finder.ids.filter(id => S.members[id]);
+  const res = sel.length ? commonSlots(sel, S.finder.dur) : [];
+  const resHtml = !sel.length ? `<div class="empty">Escolha quem participa para ver os horários livres em comum nesta semana.</div>`
+    : res.length ? res.slice(0, 12).map(r => `<div class="result tnum"><span>${esc(cap(fmtDay(r.d)))}</span><b>${fromMin(r.s)} às ${fromMin(r.e)}</b></div>`).join("")
+    : `<div class="empty">Sem horário em comum com essa duração nesta semana. Tente outra semana ou menos pessoas.</div>`;
+  const label = `${days[0].getDate()} ${MONTHS[days[0].getMonth()].slice(0,3)} a ${days[6].getDate()} ${MONTHS[days[6].getMonth()].slice(0,3)}`;
+  return `
+  <section class="view-head">
+    <div><p class="eyebrow">Disponibilidade da equipe</p><h1>Semana de ${esc(label)}</h1>
+      <p class="sub">Cada pessoa cadastra seus horários fixos e ausências. Reuniões e captações já marcadas saem do horário livre automaticamente.</p></div>
+    <div class="actions">
+      <button class="btn icon" data-action="w-prev" aria-label="Semana anterior">${icons.l}</button>
+      <button class="btn" data-action="w-today">Esta semana</button>
+      <button class="btn icon" data-action="w-next" aria-label="Próxima semana">${icons.r}</button>
+      <button class="btn primary" data-action="edit-avail" ${S.canWrite && S.uid ? "" : "disabled"}>Meus horários</button>
+    </div>
+  </section>
+  ${ms.length ? `<div class="board-wrap"><table class="board">
+    <thead><tr><th>Equipe</th>${days.map(d => `<th class="${ymd(d) === ymd(today) ? "today" : ""}">${esc(fmtDay(d))}</th>`).join("")}</tr></thead>
+    <tbody>${rows}</tbody></table></div>` : `<div class="empty">Ninguém da equipe completou o perfil ainda. Cada membro abre o app, completa o perfil e cadastra seus horários.</div>`}
+  <div class="grid2">
+    <div class="panel finder">
+      <div><p class="eyebrow">Para o CRM</p><h2>Encontrar horário com o cliente</h2></div>
+      <div class="checks" role="group" aria-label="Participantes">${ms.map(m => `<label><input type="checkbox" data-action="finder-toggle" value="${esc(m.id)}" ${sel.includes(m.id) ? "checked" : ""}>${esc(m.name)}</label>`).join("") || `<span class="none">Sem membros cadastrados.</span>`}</div>
+      <label class="f" style="max-width:220px"><span>Duração</span>
+        <select id="finder-dur" data-action="finder-dur">${[30,60,90,120,180,240].map(n => `<option value="${n}" ${S.finder.dur === n ? "selected" : ""}>${n < 60 ? n + " min" : (n/60) + (n === 60 ? " hora" : " horas")}</option>`).join("")}</select></label>
+      <div class="results">${resHtml}</div>
+      ${res.length ? `<div><button class="btn" data-action="copy-slots">${icons.copy}Copiar horários para o CRM</button></div>` : ""}
+    </div>
+    <div class="panel finder">
+      <div><p class="eyebrow">Resumo</p><h2>Quem ainda não cadastrou horários</h2></div>
+      <div class="list">${ms.filter(m => !S.avail[m.id]).map(m => `<div class="result"><span>${esc(m.name)}</span><span class="none">${esc(m.role||"")}</span></div>`).join("") || `<div class="empty">Todos os membros já cadastraram seus horários.</div>`}</div>
+    </div>
+  </div>`;
+}
+
+function vAlertas(){
+  const mine = myAlerts();
+  const mineHtml = mine.length ? mine.map(a => {
+    if (a.kind === "event"){
+      const e = a.e, d = evStart(e);
+      return `<div class="al"><span class="ic ${e.type === "captacao" ? "capt" : ""}">${e.type === "captacao" ? icons.cam : icons.cal}</span>
+        <div style="min-width:0"><b>${a.win === "24" ? "Amanhã" : "Em 48h"}: ${esc(e.title)}</b>
+        <p>${esc(TYPE[e.type])}${e.client ? " · " + esc(e.client) : ""} · ${esc(cap(fmtDay(d)))}, ${esc(timeRange(e))}</p>
+        <div class="row"><button class="btn sm" data-action="open-event" data-id="${esc(e.id)}">Ver detalhes</button><a class="btn sm" href="${esc(gcalLink(e))}" target="_blank" rel="noopener">${icons.cal}Google Agenda</a></div></div></div>`;
+    }
+    const s = a.s;
+    return `<div class="al"><span class="ic">${icons.doc}</span><div style="min-width:0"><b>Roteiro disponível: ${esc(s.title)}</b>
+      <p>${esc(s.client||"")}${s.recordDate ? " · gravação " + esc(fmtDay(parseYmd(s.recordDate))) : ""}</p>
+      <div class="row"><button class="btn sm" data-action="goto-script" data-month="${esc(s.month)}">Abrir roteiro</button></div></div></div>`;
+  }).join("") : `<div class="empty">Nada para você nas próximas 48h. Quando uma reunião ou captação sua chegar perto, ou um roteiro for lançado, o aviso aparece aqui.</div>`;
+
+  const ev = dueReminders(), sc = dueScriptDispatch();
+  const rowHtml = (row, text, kind, key, ownerId) => {
+    const m = S.members[row.id];
+    const has = waNumber(m && m.whatsapp);
+    return `<div class="who"><span><b>${esc(memberName(row.id))}</b> ${row.sent ? `<span class="pill ok">Enviado</span>` : ""}</span>
+      <span class="actions">
+        ${has ? `<a class="btn sm wa" href="${esc(waLink(m.whatsapp, text))}" target="_blank" rel="noopener" data-action="mark-sent" data-kind="${kind}" data-id="${esc(ownerId)}" data-key="${esc(key)}">${icons.wa}${row.sent ? "Reenviar" : "Enviar no WhatsApp"}</a>` : `<span class="none">Sem WhatsApp no perfil</span><button class="btn sm" data-action="copy-text" data-text="${esc(text)}">${icons.copy}Copiar</button>`}
+        ${!row.sent ? `<button class="btn sm ghost" data-action="mark-sent" data-kind="${kind}" data-id="${esc(ownerId)}" data-key="${esc(key)}">Marcar enviado</button>` : ""}
+      </span></div>`;
+  };
+  const evHtml = ev.map(r => {
+    const e = r.e;
+    return `<div class="disp"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-start">
+        <div><span class="pill ${r.win === "24" ? "warn" : "gold"}">Lembrete ${r.win}h</span> <b style="margin-left:4px">${esc(e.title)}</b>
+        <div class="none tnum">${esc(cap(fmtDay(evStart(e))))}, ${esc(timeRange(e))}${e.client ? " · " + esc(e.client) : ""}</div></div>
+        <button class="btn sm" data-action="copy-text" data-text="${esc(groupMsg(e))}">${icons.copy}Mensagem do grupo</button></div>
+      ${r.rows.length ? r.rows.map(row => rowHtml(row, eventMsg(e, row.id, r.win), "event", `${row.id}_${r.win}`, e.id)).join("") : `<span class="none">Nenhum participante marcado neste evento.</span>`}
+    </div>`;
+  }).join("");
+  const scHtml = sc.map(r => {
+    const s = r.s;
+    return `<div class="disp"><div><span class="pill gold">Roteiro disponível</span> <b style="margin-left:4px">${esc(s.title)}</b><div class="none">${esc(s.client||"")}</div></div>
+      ${r.rows.length ? r.rows.map(row => rowHtml(row, scriptMsg(s, row.id), "script", row.id, s.id)).join("") : `<span class="none">Defina um videomaker no roteiro ou cadastre alguém com a função Videomaker.</span>`}
+    </div>`;
+  }).join("");
+  const dk = S.desktop;
+  let desk;
+  if (dk && dk.notification) desk = `<p class="sub" style="margin:0">Notificações do computador ativas neste app instalado. Os lembretes de 48h, 24h e roteiros novos aparecem mesmo com a janela em segundo plano.</p><div><button class="btn sm" data-action="test-notif">Testar notificação</button></div>`;
+  else if (S.canInstall) desk = `<p class="sub" style="margin:0">Instale o FLUX APP no computador para receber notificações nativas de 48h, 24h e roteiros novos.</p><div><button class="btn sm primary" data-action="install">Instalar no computador</button></div>`;
+  else desk = `<p class="sub" style="margin:0">Para notificações nativas no computador, abra este app no Claude para desktop e use <b>Instalar como app</b>. No celular, os avisos chegam pelo WhatsApp disparado aqui.</p>`;
+  return `
+  <section class="view-head"><div><p class="eyebrow">Alertas</p><h1>Lembretes e disparos</h1>
+    <p class="sub">Os lembretes entram na fila 48h e 24h antes de cada reunião e captação. Roteiros lançados geram aviso para o videomaker.</p></div></section>
+  <div class="alerts">
+    <div class="side">
+      <div class="panel" style="padding:16px"><h2 style="margin-bottom:12px">Para você</h2><div class="list">${mineHtml}</div></div>
+      <div class="panel" style="padding:16px;display:flex;flex-direction:column;gap:10px"><h2>No computador</h2>${desk}</div>
+    </div>
+    <div class="panel" style="padding:16px">
+      <h2 style="margin-bottom:4px">Disparos de WhatsApp</h2>
+      <p class="sub" style="margin:0 0 14px">Cada botão abre o WhatsApp com a mensagem pronta para a pessoa. Depois de enviar, o item fica marcado para toda a equipe.</p>
+      <div class="list">${evHtml}${scHtml}${(!ev.length && !sc.length) ? `<div class="empty">Nenhum disparo pendente agora. A fila se atualiza sozinha conforme os eventos se aproximam.</div>` : ""}</div>
+    </div>
+  </div>`;
+}
+
+function vEquipe(){
+  const ms = membersSorted();
+  return `
+  <section class="view-head"><div><p class="eyebrow">Equipe</p><h1>Quem está no FLUX</h1>
+    <p class="sub">Cada membro abre o app com a própria conta e completa o perfil. O WhatsApp é usado nos lembretes.</p></div>
+    <div class="actions"><button class="btn primary" data-action="profile" ${S.uid && S.canWrite ? "" : "disabled"}>${S.members[S.uid] ? "Editar meu perfil" : "Completar meu perfil"}</button></div></section>
+  ${ms.length ? `<div class="team">${ms.map(m => {
+    const a = S.avail[m.id];
+    const days = a ? Object.entries(a.weekly||{}).filter(([,r]) => r && r.length).map(([k]) => WD_SHORT[+k]).join(", ") : "";
+    const next = S.events.filter(e => (e.participants||[]).includes(m.id) && evStart(e) > new Date()).sort((x,y) => evStart(x)-evStart(y))[0];
+    return `<div class="panel member"><span class="face lg" style="${faceStyle(m.id)}">${esc(initials(m.name))}</span>
+      <div style="min-width:0"><h3>${esc(m.name)}${m.id === S.uid ? ` <span class="pill gold">você</span>` : ""}</h3>
+      <p>${esc(m.role||"Equipe")}${m.whatsapp ? " · " + esc(m.whatsapp) : " · sem WhatsApp"}</p>
+      <p>${days ? "Atende " + esc(days) : "Horários não cadastrados"}</p>
+      ${next ? `<p>Próximo: ${esc(next.title)} (${esc(fmtDay(evStart(next)))})</p>` : ""}</div></div>`;
+  }).join("")}</div>` : `<div class="empty">Ninguém completou o perfil ainda. Comece pelo seu e compartilhe o link do app com a equipe.</div>`}`;
+}
+
+/* ---------- dialogs ---------- */
+const dlg = $("#dlg"), inner = $("#dlg-inner");
+function openDlg(html){ inner.innerHTML = html; if (!dlg.open) { try { dlg.showModal(); } catch { dlg.setAttribute("open",""); } } const f = inner.querySelector("input,select,textarea"); if (f) f.focus(); }
+function closeDlg(){ try { dlg.close(); } catch { dlg.removeAttribute("open"); } inner.innerHTML = ""; }
+const head = t => `<div class="dlg-head"><h2>${esc(t)}</h2><button class="btn icon ghost" data-action="close" aria-label="Fechar">${icons.x}</button></div>`;
+
+function profileDlg(){
+  if (!S.uid) { toast("Entre na sua conta do claude.ai para criar seu perfil."); return; }
+  const m = S.members[S.uid] || {};
+  openDlg(`<form id="f-profile">${head("Meu perfil")}
+    <div class="dlg-body">
+      <label class="f"><span>Nome</span><input id="p-name" required maxlength="60" value="${esc(m.name || S.myName || "")}"></label>
+      <div class="row2">
+        <label class="f"><span>Função</span><select id="p-role">${ROLES.map(r => `<option ${m.role === r ? "selected" : ""}>${r}</option>`).join("")}</select></label>
+        <label class="f"><span>WhatsApp com DDD</span><input id="p-wa" inputmode="tel" placeholder="(11) 98765-4321" maxlength="20" value="${esc(m.whatsapp||"")}"></label>
+      </div>
+      <p class="sub" style="margin:0">Seu WhatsApp aparece só para a equipe e é usado nos lembretes de 48h e 24h e nos avisos de roteiro.</p>
+    </div>
+    <div class="dlg-foot"><span></span><div class="actions"><button type="button" class="btn ghost" data-action="close">Cancelar</button><button class="btn primary" type="submit">Salvar perfil</button></div></div></form>`);
+}
+
+function eventDlg(id, date){
+  const e = id ? S.events.find(x => x.id === id) : null;
+  const v = e || { type:"reuniao", date: date || S.day, start:"10:00", end:"11:00", participants: S.uid && S.members[S.uid] ? [S.uid] : [] };
+  const ms = membersSorted();
+  const scripts = S.scripts.filter(s => s.status !== "rascunho" || s.id === v.scriptId);
+  openDlg(`<form id="f-event" data-id="${esc(e ? e.id : "")}">${head(e ? "Editar evento" : "Novo evento")}
+    <div class="dlg-body">
+      <div class="checks" role="radiogroup" aria-label="Tipo">
+        <label><input type="radio" name="ev-type" value="reuniao" ${v.type === "reuniao" ? "checked" : ""}><span class="dot reuniao"></span>Reunião de alinhamento</label>
+        <label><input type="radio" name="ev-type" value="captacao" ${v.type === "captacao" ? "checked" : ""}><span class="dot captacao"></span>Captação</label>
+      </div>
+      <div class="row2">
+        <label class="f"><span>Título</span><input id="e-title" required maxlength="90" value="${esc(v.title||"")}" placeholder="Alinhamento de dezembro"></label>
+        <label class="f"><span>Cliente</span><input id="e-client" maxlength="60" value="${esc(v.client||"")}"></label>
+      </div>
+      <div class="row3">
+        <label class="f"><span>Data</span><input id="e-date" type="date" required value="${esc(v.date)}"></label>
+        <label class="f"><span>Início</span><input id="e-start" type="time" required value="${esc(v.start||"")}"></label>
+        <label class="f"><span>Término</span><input id="e-end" type="time" value="${esc(v.end||"")}"></label>
+      </div>
+      <label class="f"><span>Local ou link</span><input id="e-loc" maxlength="160" value="${esc(v.location||"")}" placeholder="Estúdio, endereço do cliente ou link do Meet"></label>
+      <div class="f"><span>Equipe</span><div class="checks" id="e-people">${ms.map(m => `<label><input type="checkbox" value="${esc(m.id)}" ${(v.participants||[]).includes(m.id) ? "checked" : ""}>${esc(m.name)}</label>`).join("") || `<span class="none">Nenhum membro com perfil ainda.</span>`}</div></div>
+      <div class="warnbox" id="e-warn"></div>
+      <label class="f" id="e-script-wrap" ${v.type === "captacao" ? "" : "hidden"}><span>Roteiro desta captação</span>
+        <select id="e-script"><option value="">Nenhum</option>${scripts.map(s => `<option value="${esc(s.id)}" ${v.scriptId === s.id ? "selected" : ""}>${esc((s.client ? s.client + ": " : "") + s.title)}</option>`).join("")}</select></label>
+      <label class="f"><span>Observações</span><textarea id="e-notes" maxlength="1500" placeholder="Pauta, figurino, equipamentos">${esc(v.notes||"")}</textarea></label>
+    </div>
+    <div class="dlg-foot">
+      ${e ? `<button type="button" class="btn danger" data-action="del-event" data-id="${esc(e.id)}">Excluir</button>` : "<span></span>"}
+      <div class="actions"><button type="button" class="btn ghost" data-action="close">Cancelar</button><button class="btn primary" type="submit">${e ? "Salvar" : "Agendar"}</button></div>
+    </div></form>`);
+  checkConflicts();
+}
+function checkConflicts(){
+  const box = $("#e-warn"); if (!box) return;
+  const id = $("#f-event").dataset.id, date = $("#e-date").value, s = toMin($("#e-start").value), en = toMin($("#e-end").value) ?? (s != null ? s + 60 : null);
+  if (!date || s == null) { box.textContent = ""; return; }
+  const ppl = $$("#e-people input:checked").map(i => i.value);
+  const msgs = [];
+  for (const p of ppl){
+    for (const e of S.events){
+      if (e.id === id || e.date !== date || !(e.participants||[]).includes(p)) continue;
+      const es = toMin(e.start) ?? 0, ee = evEndMin(e);
+      if (s < ee && en > es) msgs.push(`${memberName(p)} já tem "${e.title}" das ${e.start} às ${fromMin(ee)}.`);
+    }
+    const f = freeFor(p, parseYmd(date));
+    if (f.set && !f.free.some(([a,b]) => s >= a && en <= b) && !msgs.some(m => m.startsWith(memberName(p)))) msgs.push(`${memberName(p)} não marcou esse horário como disponível.`);
+  }
+  box.textContent = msgs.join(" ");
+}
+
+function eventDetail(id){
+  const e = S.events.find(x => x.id === id); if (!e) return;
+  const d = evStart(e);
+  const sc = e.scriptId && S.scripts.find(s => s.id === e.scriptId);
+  const loc = e.location ? (/^https:\/\//i.test(e.location.trim()) ? `<a href="${esc(e.location.trim())}" target="_blank" rel="noopener" style="color:var(--gold)">${esc(e.location)}</a>` : esc(e.location)) : "";
+  const h = hoursUntil(e);
+  const sentInfo = (e.participants||[]).filter(p => S.members[p]).map(p => {
+    const s48 = e.sent && e.sent[`${p}_48`], s24 = e.sent && e.sent[`${p}_24`];
+    return `${esc(memberName(p))}: 48h ${s48 ? "enviado" : "pendente"}, 24h ${s24 ? "enviado" : "pendente"}`;
+  }).join("\n");
+  openDlg(`${head(TYPE[e.type])}
+    <div class="dlg-body">
+      <div><div class="eyebrow">${esc(e.client || "Equipe interna")}</div><h1 style="font-size:24px">${esc(e.title)}</h1></div>
+      <dl class="detail-grid">
+        <dt>Quando</dt><dd class="tnum">${esc(cap(fmtLong(d)))}, ${esc(timeRange(e))}${h > 0 ? ` <span class="pill">${h < 24 ? "em " + Math.max(1, Math.round(h)) + "h" : "em " + Math.round(h/24) + " dia(s)"}</span>` : ""}</dd>
+        ${loc ? `<dt>Local</dt><dd>${loc}</dd>` : ""}
+        <dt>Equipe</dt><dd>${esc((e.participants||[]).filter(p => S.members[p]).map(memberName).join(", ") || "Ninguém marcado")}</dd>
+        ${sc ? `<dt>Roteiro</dt><dd>${esc(sc.title)}</dd>` : ""}
+        ${e.notes ? `<dt>Observações</dt><dd>${esc(e.notes)}</dd>` : ""}
+        ${sentInfo ? `<dt>Lembretes</dt><dd>${sentInfo}</dd>` : ""}
+      </dl>
+    </div>
+    <div class="dlg-foot">
+      <div class="actions" style="margin:0">
+        <a class="btn sm" href="${esc(gcalLink(e))}" target="_blank" rel="noopener">${icons.cal}Google Agenda</a>
+        <button class="btn sm" data-action="copy-text" data-text="${esc(groupMsg(e))}">${icons.copy}Copiar resumo</button>
+      </div>
+      ${S.canWrite && S.uid ? `<div class="actions"><button class="btn primary" data-action="edit-event" data-id="${esc(e.id)}">Editar</button></div>` : ""}
+    </div>`);
+}
+
+function scriptDlg(id){
+  const s = id ? S.scripts.find(x => x.id === id) : null;
+  const v = s || { month: S.sMonth, status: "rascunho", videomakers: Object.values(S.members).filter(m => m.role === "Videomaker").map(m => m.id) };
+  const ms = membersSorted();
+  openDlg(`<form id="f-script" data-id="${esc(s ? s.id : "")}">${head(s ? "Editar roteiro" : "Novo roteiro")}
+    <div class="dlg-body">
+      <div class="row2">
+        <label class="f"><span>Cliente</span><input id="s-client" maxlength="60" value="${esc(v.client||"")}"></label>
+        <label class="f"><span>Título do Reels</span><input id="s-title" required maxlength="100" value="${esc(v.title||"")}"></label>
+      </div>
+      <div class="row3">
+        <label class="f"><span>Mês</span><input id="s-month" type="month" required value="${esc(v.month)}"></label>
+        <label class="f"><span>Data de gravação</span><input id="s-rec" type="date" value="${esc(v.recordDate||"")}"></label>
+        <label class="f"><span>Formato</span><input id="s-format" maxlength="40" value="${esc(v.format||"")}" placeholder="Reels 30s"></label>
+      </div>
+      <label class="f"><span>Gancho</span><textarea id="s-hook" maxlength="600" style="min-height:60px" placeholder="Os 3 primeiros segundos">${esc(v.hook||"")}</textarea></label>
+      <label class="f"><span>Roteiro e cenas</span><textarea id="s-scenes" maxlength="8000" style="min-height:180px" placeholder="Cena 1: plano aberto da fachada&#10;Fala: ...&#10;&#10;Cena 2: ...">${esc(v.scenes||"")}</textarea></label>
+      <label class="f"><span>Legenda</span><textarea id="s-caption" maxlength="2200">${esc(v.caption||"")}</textarea></label>
+      <div class="row2">
+        <label class="f"><span>CTA</span><input id="s-cta" maxlength="160" value="${esc(v.cta||"")}"></label>
+        <label class="f"><span>Referências (um link por linha)</span><textarea id="s-refs" maxlength="2000" style="min-height:44px">${esc(v.refs||"")}</textarea></label>
+      </div>
+      <div class="f"><span>Videomaker responsável</span><div class="checks" id="s-vm">${ms.map(m => `<label><input type="checkbox" value="${esc(m.id)}" ${(v.videomakers||[]).includes(m.id) ? "checked" : ""}>${esc(m.name)}</label>`).join("") || `<span class="none">Nenhum membro com perfil ainda.</span>`}</div></div>
+    </div>
+    <div class="dlg-foot">
+      ${s ? `<button type="button" class="btn danger" data-action="del-script" data-id="${esc(s.id)}">Excluir</button>` : "<span></span>"}
+      <div class="actions">
+        <button class="btn" type="submit" data-mode="save">${s && s.status !== "rascunho" ? "Salvar" : "Salvar rascunho"}</button>
+        ${!s || s.status === "rascunho" ? `<button class="btn primary" type="submit" data-mode="release">Lançar roteiro</button>` : ""}
+      </div>
+    </div></form>`);
+}
+
+function availDlg(){
+  if (!S.uid) return;
+  const a = S.avail[S.uid] || { weekly: {}, blocks: [] };
+  const order = [1,2,3,4,5,6,0];
+  const rangeRow = (r) => `<div class="range"><input type="time" class="r-s" value="${esc(r.s||"09:00")}" aria-label="Início"><span class="none">às</span><input type="time" class="r-e" value="${esc(r.e||"18:00")}" aria-label="Fim"><button type="button" class="btn sm ghost" data-action="rm-range" aria-label="Remover faixa">${icons.x}</button></div>`;
+  const blocks = (a.blocks||[]).filter(b => b.date >= ymd(today));
+  openDlg(`<form id="f-avail">${head("Meus horários")}
+    <div class="dlg-body">
+      <p class="sub" style="margin:0">Marque as faixas em que você pode atender clientes ou gravar. O CRM vê esses horários menos o que já estiver agendado.</p>
+      <div>${order.map(k => `<div class="dayrow" data-day="${k}"><b>${cap(WD_LONG[k])}</b>
+        <div class="ranges">${((a.weekly||{})[String(k)]||[]).map(rangeRow).join("")}
+          <div><button type="button" class="btn sm" data-action="add-range">${icons.plus}Adicionar faixa</button></div></div></div>`).join("")}</div>
+      <div>
+        <p class="eyebrow" style="margin-top:6px">Ausências e bloqueios</p>
+        <div id="blocks" class="list">${blocks.map(b => `<div class="result blk" data-date="${esc(b.date)}" data-s="${esc(b.s||"")}" data-e="${esc(b.e||"")}" data-note="${esc(b.note||"")}"><span class="tnum">${esc(cap(fmtDay(parseYmd(b.date))))}${b.s ? `, ${esc(b.s)} às ${esc(b.e||"")}` : ", dia todo"} ${b.note ? "· " + esc(b.note) : ""}</span><button type="button" class="btn sm ghost" data-action="rm-block">Remover</button></div>`).join("")}</div>
+        <div class="row3" style="margin-top:10px;align-items:end">
+          <label class="f"><span>Data</span><input type="date" id="b-date" min="${ymd(today)}"></label>
+          <label class="f"><span>De (vazio = dia todo)</span><input type="time" id="b-s"></label>
+          <label class="f"><span>Até</span><input type="time" id="b-e"></label>
+        </div>
+        <div class="row2" style="margin-top:10px;align-items:end">
+          <label class="f"><span>Motivo</span><input id="b-note" maxlength="60" placeholder="Folga, consulta, outro cliente"></label>
+          <div><button type="button" class="btn" data-action="add-block">${icons.plus}Adicionar ausência</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="dlg-foot"><span></span><div class="actions"><button type="button" class="btn ghost" data-action="close">Cancelar</button><button class="btn primary" type="submit">Salvar horários</button></div></div></form>`);
+  availDlg.rangeRow = rangeRow;
+}
+
+/* ---------- events ---------- */
+function setView(v){
+  S.view = v; store.set("flux-view", v);
+  try { history.replaceState(null, "", "#" + v); } catch {}
+  render(); window.scrollTo(0, 0);
+  if (v === "roteiros") markScriptsSeen();
+}
+$("#tabs").addEventListener("click", ev => { const b = ev.target.closest(".tab"); if (b) setView(b.dataset.view); });
+window.addEventListener("hashchange", () => { const v = location.hash.slice(1); if (v && v !== S.view && ["agenda","roteiros","disponibilidade","alertas","equipe"].includes(v)) setView(v); });
+
+function armDelete(btn, run){
+  if (btn.classList.contains("armed")) { run(); return; }
+  btn.classList.add("armed"); btn.textContent = "Confirmar exclusão";
+  setTimeout(() => { if (btn.isConnected) { btn.classList.remove("armed"); btn.textContent = "Excluir"; } }, 4000);
+}
+
+document.addEventListener("click", async ev => {
+  const el = ev.target.closest("[data-action]"); if (!el) return;
+  const a = el.dataset.action, id = el.dataset.id;
+  if (el.tagName === "INPUT" || el.tagName === "SELECT") return;
+  switch (a){
+    case "profile": profileDlg(); break;
+    case "close": closeDlg(); break;
+    case "cal-prev": S.cal = new Date(S.cal.getFullYear(), S.cal.getMonth()-1, 1); render(); break;
+    case "cal-next": S.cal = new Date(S.cal.getFullYear(), S.cal.getMonth()+1, 1); render(); break;
+    case "cal-today": S.cal = new Date(today.getFullYear(), today.getMonth(), 1); S.day = ymd(today); render(); break;
+    case "pick-day": S.day = el.dataset.day; { const d = parseYmd(S.day); if (d.getMonth() !== S.cal.getMonth()) S.cal = new Date(d.getFullYear(), d.getMonth(), 1); } render(); break;
+    case "filter": S.filter = el.dataset.f; render(); break;
+    case "new-event": eventDlg(null, el.dataset.date); break;
+    case "open-event": eventDetail(id); break;
+    case "edit-event": eventDlg(id); break;
+    case "del-event": armDelete(el, async () => { if (await write(() => S.db.collection("events").doc(id).delete(), "Evento excluído")) closeDlg(); }); break;
+    case "s-prev": case "s-next": { const [y,m] = S.sMonth.split("-").map(Number); S.sMonth = ymOf(new Date(y, m-1 + (a === "s-next" ? 1 : -1), 1)); render(); break; }
+    case "new-script": scriptDlg(null); break;
+    case "edit-script": scriptDlg(id); break;
+    case "copy-script": { const s = S.scripts.find(x => x.id === id); if (s) copy(scriptText(s), "Roteiro copiado"); break; }
+    case "release-script": await write(() => S.db.collection("scripts").doc(id).update({ status:"lancado", releasedAt: Date.now() }), "Roteiro lançado. O aviso entrou na fila de disparos."); break;
+    case "script-status": await write(() => S.db.collection("scripts").doc(id).update({ status: el.dataset.st }), "Roteiro marcado como gravado"); break;
+    case "del-script": armDelete(el, async () => { if (await write(() => S.db.collection("scripts").doc(id).delete(), "Roteiro excluído")) closeDlg(); }); break;
+    case "goto-script": S.sMonth = el.dataset.month; setView("roteiros"); break;
+    case "w-prev": S.week = addDays(S.week, -7); render(); break;
+    case "w-next": S.week = addDays(S.week, 7); render(); break;
+    case "w-today": S.week = mondayOf(new Date()); render(); break;
+    case "edit-avail": availDlg(); break;
+    case "add-range": { const wrap = el.closest(".ranges"); el.parentElement.insertAdjacentHTML("beforebegin", availDlg.rangeRow({ s: "09:00", e: "18:00" })); wrap.querySelector(".range:last-of-type .r-s")?.focus(); break; }
+    case "rm-range": el.closest(".range").remove(); break;
+    case "add-block": {
+      const date = $("#b-date").value; if (!date) { toast("Escolha a data da ausência."); break; }
+      const s = $("#b-s").value, e = $("#b-e").value, note = $("#b-note").value.trim();
+      if (s && e && toMin(e) <= toMin(s)) { toast("O horário final precisa ser depois do inicial."); break; }
+      const row = document.createElement("div"); row.className = "result blk"; row.dataset.date = date; row.dataset.s = s; row.dataset.e = s ? (e || "23:59") : ""; row.dataset.note = note;
+      const sp = document.createElement("span"); sp.className = "tnum"; sp.textContent = `${cap(fmtDay(parseYmd(date)))}${s ? `, ${s} às ${e || "23:59"}` : ", dia todo"}${note ? " · " + note : ""}`;
+      const rm = document.createElement("button"); rm.type = "button"; rm.className = "btn sm ghost"; rm.dataset.action = "rm-block"; rm.textContent = "Remover";
+      row.append(sp, rm); $("#blocks").appendChild(row);
+      $("#b-date").value = ""; $("#b-s").value = ""; $("#b-e").value = ""; $("#b-note").value = "";
+      break;
+    }
+    case "rm-block": el.closest(".blk").remove(); break;
+    case "copy-slots": {
+      const sel = S.finder.ids.filter(i => S.members[i]);
+      const res = commonSlots(sel, S.finder.dur).slice(0, 12);
+      const txt = [`Horários livres (${sel.map(memberName).join(", ")}), duração ${S.finder.dur} min:`, ...res.map(r => `${cap(fmtDay(r.d))}: ${fromMin(r.s)} às ${fromMin(r.e)}`)].join("\n");
+      copy(txt, "Horários copiados"); break;
+    }
+    case "copy-text": copy(el.dataset.text, "Mensagem copiada"); break;
+    case "mark-sent": {
+      const key = el.dataset.key, kind = el.dataset.kind;
+      if (!S.canWrite || !S.uid) break;
+      const ref = S.db.collection(kind === "event" ? "events" : "scripts").doc(id);
+      write(() => ref.update({ sent: { [key]: Date.now() } }), el.tagName === "A" ? null : "Marcado como enviado");
+      break;
+    }
+    case "install": try { const r = await S.desktop.install.request(); if (r === "installed") toast("Instalando o FLUX APP no computador"); } catch { toast("Não foi possível instalar agora."); } break;
+    case "test-notif": try { await S.desktop.notification.show({ body: "FLUX APP: notificações ativas. Você recebe lembretes de 48h, 24h e roteiros novos." }); } catch { toast("O computador recusou a notificação. Verifique as permissões do app."); } break;
+  }
+});
+document.addEventListener("change", ev => {
+  const el = ev.target;
+  if (el.dataset.action === "finder-toggle"){ const set = new Set(S.finder.ids); el.checked ? set.add(el.value) : set.delete(el.value); S.finder.ids = [...set]; render(); }
+  if (el.dataset.action === "finder-dur"){ S.finder.dur = +el.value; render(); }
+  if (el.name === "ev-type"){ const w = $("#e-script-wrap"); if (w) w.hidden = el.value !== "captacao"; }
+  if (el.closest && el.closest("#f-event")) checkConflicts();
+});
+dlg.addEventListener("click", ev => { if (ev.target === dlg) closeDlg(); });
+dlg.addEventListener("cancel", ev => { ev.preventDefault(); closeDlg(); });
+
+dlg.addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const f = ev.target;
+  if (!S.db || !S.uid) { toast("Entre na sua conta do claude.ai para salvar."); return; }
+  if (f.id === "f-profile"){
+    const name = $("#p-name").value.trim(); if (!name) return;
+    const ok = await write(() => S.db.collection("members").doc(S.uid).set({ name, role: $("#p-role").value, whatsapp: $("#p-wa").value.trim(), updatedAt: Date.now() }), "Perfil salvo");
+    if (ok) closeDlg();
+  }
+  if (f.id === "f-event"){
+    const id = f.dataset.id;
+    const prev = id ? S.events.find(x => x.id === id) : null;
+    const start = $("#e-start").value, end = $("#e-end").value;
+    if (end && toMin(end) <= toMin(start)) { toast("O término precisa ser depois do início."); return; }
+    const type = (f.querySelector("input[name=ev-type]:checked") || {}).value || "reuniao";
+    const date = $("#e-date").value;
+    const data = {
+      type, title: $("#e-title").value.trim(), client: $("#e-client").value.trim(), date, start, end,
+      location: $("#e-loc").value.trim(), notes: $("#e-notes").value.trim(),
+      participants: $$("#e-people input:checked").map(i => i.value).filter(uidSafe),
+      scriptId: type === "captacao" ? ($("#e-script").value || "") : "",
+      createdBy: prev ? (prev.createdBy || S.uid) : S.uid, updatedBy: S.uid, updatedAt: Date.now(),
+      sent: prev && prev.date === date && prev.start === start ? (prev.sent || {}) : {}
+    };
+    const ref = id ? S.db.collection("events").doc(id) : S.db.collection("events").doc();
+    const ok = await write(() => ref.set(data), id ? "Evento atualizado" : "Evento agendado. Os lembretes de 48h e 24h já estão programados.");
+    if (ok) { closeDlg(); S.day = date; const d = parseYmd(date); S.cal = new Date(d.getFullYear(), d.getMonth(), 1); render(); }
+  }
+  if (f.id === "f-script"){
+    const id = f.dataset.id;
+    const prev = id ? S.scripts.find(x => x.id === id) : null;
+    const release = ev.submitter && ev.submitter.dataset.mode === "release";
+    const status = release ? "lancado" : (prev ? prev.status : "rascunho");
+    const data = {
+      client: $("#s-client").value.trim(), title: $("#s-title").value.trim(), month: $("#s-month").value,
+      recordDate: $("#s-rec").value, format: $("#s-format").value.trim(), hook: $("#s-hook").value.trim(),
+      scenes: $("#s-scenes").value.trim(), caption: $("#s-caption").value.trim(), cta: $("#s-cta").value.trim(), refs: $("#s-refs").value.trim(),
+      videomakers: $$("#s-vm input:checked").map(i => i.value).filter(uidSafe),
+      status, releasedAt: release ? Date.now() : (prev ? (prev.releasedAt || 0) : 0),
+      sent: release ? {} : (prev ? (prev.sent || {}) : {}),
+      createdBy: prev ? (prev.createdBy || S.uid) : S.uid, updatedAt: Date.now()
+    };
+    const ref = id ? S.db.collection("scripts").doc(id) : S.db.collection("scripts").doc();
+    const ok = await write(() => ref.set(data), release ? "Roteiro lançado. O aviso entrou na fila de disparos." : "Roteiro salvo");
+    if (ok) { closeDlg(); S.sMonth = data.month; render(); }
+  }
+  if (f.id === "f-avail"){
+    const weekly = {};
+    let bad = false;
+    $$(".dayrow", f).forEach(row => {
+      const rs = $$(".range", row).map(r => ({ s: $(".r-s", r).value, e: $(".r-e", r).value })).filter(r => r.s && r.e);
+      if (rs.some(r => toMin(r.e) <= toMin(r.s))) bad = true;
+      if (rs.length) weekly[row.dataset.day] = rs.sort((x,y) => x.s.localeCompare(y.s));
+    });
+    if (bad) { toast("Em cada faixa, o fim precisa ser depois do início."); return; }
+    const blocks = $$(".blk", f).map(b => ({ date: b.dataset.date, s: b.dataset.s, e: b.dataset.e, note: b.dataset.note })).filter(b => b.date >= ymd(today)).slice(0, 120);
+    const ok = await write(() => S.db.collection("availability").doc(S.uid).set({ weekly, blocks, updatedAt: Date.now() }), "Horários salvos");
+    if (ok) closeDlg();
+  }
+});
+
+/* ---------- desktop notifications ---------- */
+function desktopTick(){
+  const n = S.desktop && S.desktop.notification; if (!n || !S.uid) return;
+  for (const a of myAlerts()){
+    const key = a.kind === "event" ? `flux-n-${a.e.id}-${a.win}-${a.e.date}-${a.e.start}` : `flux-n-s-${a.s.id}-${a.s.releasedAt}`;
+    if (store.get(key)) continue;
+    const body = a.kind === "event"
+      ? `${a.win === "24" ? "Amanhã" : "Em 48h"}: ${TYPE[a.e.type]} "${a.e.title}", ${fmtDay(evStart(a.e))} às ${a.e.start}.`
+      : `Roteiro disponível: "${a.s.title}"${a.s.client ? " (" + a.s.client + ")" : ""}.`;
+    n.show({ body: body.slice(0, 300) }).then(() => store.set(key, "1")).catch(() => {});
+  }
+}
+
+/* ---------- boot ---------- */
+async function boot(){
+  const [db, user, desktop] = await Promise.all([use("db"), use("user"), use("desktop")]);
+  S.db = db; S.user = user; S.desktop = desktop;
+  if (desktop && desktop.install && !desktop.notification) { try { S.canInstall = (await desktop.install.state()) === "available"; } catch {} }
+  if (user) {
+    try { S.uid = await user.id(); } catch {}
+    try { const c = await user.can("data.write"); if (c === false) S.canWrite = false; } catch {}
+    try { S.myName = await user.name(); } catch {}
+  }
+  if (S.uid && !uidSafe(S.uid)) S.uid = null;
+  S.ready = true;
+  if (!db) { S.offline = true; render(); return; }
+  const slow = setTimeout(() => { S.slow = true; render(); }, 10000);
+  let pending = null;
+  const sched = () => { if (pending) return; pending = requestAnimationFrame(() => { pending = null; render(); desktopTick(); }); };
+  const done = k => snap => { S.got[k] = true; if (!snap.metadata.fromCache && k === "events") clearTimeout(slow); };
+  const onErr = () => { clearTimeout(slow); S.slow = true; sched(); };
+  db.collection("members").onSnapshot(sn => { const o = {}; sn.docs.forEach(d => { o[d.id] = { id: d.id, ...d.data() }; }); S.members = o; done("members")(sn); sched(); }, onErr);
+  db.collection("events").onSnapshot(sn => { S.events = sn.docs.map(d => ({ id: d.id, ...d.data() })).filter(e => e.date && e.title); done("events")(sn); sched(); }, onErr);
+  db.collection("scripts").onSnapshot(sn => { S.scripts = sn.docs.map(d => ({ id: d.id, ...d.data() })).filter(s => s.title && s.month); done("scripts")(sn); sched(); }, onErr);
+  db.collection("availability").onSnapshot(sn => { const o = {}; sn.docs.forEach(d => { o[d.id] = d.data(); }); S.avail = o; done("avail")(sn); sched(); }, onErr);
+  if (S.uid) db.doc(`data/users/${S.uid}/state`).onSnapshot(sn => { S.ustate = sn.exists ? { ...sn.data() } : {}; sched(); }, () => {});
+  render();
+  setInterval(() => { render(); desktopTick(); }, 5 * 60 * 1000);
+}
+render();
+boot().catch(() => { S.ready = true; S.offline = true; render(); });
+})();
+</script>
